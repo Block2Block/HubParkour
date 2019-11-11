@@ -1,0 +1,14 @@
+name: HubParkour
+main: me.Block2Block.HubParkour.Main
+version: 2.0-ALPHA
+author: Block2Block
+prefix: HubParkour
+softdepend: [HolographicDisplays]
+commands:
+  parkour:
+    aliases: [pk]
+    description: The plugins main commands.
+permissions:
+  hubparkour.admin:
+    default: op
+    description: Allows access to the admin commands of HubParkour.

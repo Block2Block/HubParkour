@@ -42,6 +42,7 @@ Messages:
   Commands:
     #The message that is displayed when a player includes no arguments with the /parkour command.
     Help: "Parkour Help:\n&a/parkour reset &7- Sends you back to the start.\n&a/parkour checkpoint &7- Teleports you to the last checkpoint you reached.\n&a/parkour leave &7- Makes you leave the parkour.\n&a/parkour list&r - Lists all active parkours."
+    Help-Admin: ""
 
     #When a player does not have permission to execute a certain sub-command (only applicable to the admin commands).
     No-Permission: "You do not have permission to execute this command."

@@ -1,4 +1,4 @@
-package me.Block2Block.HubParkour.Listeners;
+package me.block2block.hubparkour.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

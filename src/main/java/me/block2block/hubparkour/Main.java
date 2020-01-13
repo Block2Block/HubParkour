@@ -1,6 +1,6 @@
-package me.Block2Block.HubParkour;
+package me.block2block.hubparkour;
 
-import me.Block2Block.HubParkour.Managers.DatabaseManager;
+import me.block2block.hubparkour.managers.DatabaseManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -49,7 +49,8 @@ public class Main extends JavaPlugin {
         try {
             dbManager.setup(getConfig().getString("Settings.Database.Type").toLowerCase().equals("MySQL"));
         } catch (Exception e) {
-
+            getLogger().severe("There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:\n");
+            e.printStackTrace();
         }
 
     }

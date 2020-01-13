@@ -1,13 +1,10 @@
-package me.Block2Block.HubParkour.Commands;
+package me.block2block.hubparkour.commands;
 
-import me.Block2Block.HubParkour.Main;
+import me.block2block.hubparkour.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class CommandParkour implements CommandExecutor {
 
@@ -30,6 +27,8 @@ public class CommandParkour implements CommandExecutor {
                     case "leave":
 
                         break;
+                    case "setup":
+
                     default:
                         p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Help")));
                         break;

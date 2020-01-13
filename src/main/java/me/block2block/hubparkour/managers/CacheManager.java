@@ -1,7 +1,8 @@
-package me.Block2Block.HubParkour.Managers;
+package me.block2block.hubparkour.managers;
 
-import me.Block2Block.HubParkour.Entities.HubParkourPlayer;
-import me.Block2Block.HubParkour.Entities.Parkour;
+import me.block2block.hubparkour.entities.HubParkourPlayer;
+import me.block2block.hubparkour.entities.Parkour;
+import me.block2block.hubparkour.entities.StartPoint;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ import java.util.*;
 public class CacheManager {
 
     private static Map<UUID, HubParkourPlayer> players = new HashMap<>();
-    private static Map<Location, Parkour> startPoints = new HashMap<>();
+    private static Map<Location, StartPoint> startPoints = new HashMap<>();
     private static Map<Integer, Material> types = new HashMap<>();
     private static List<Parkour> parkours = new ArrayList<>();
     private static int setupStage = -1;
@@ -29,9 +30,13 @@ public class CacheManager {
         return p.equals(setupPlayer);
     }
 
+    public static void setSetupPlayer(Player p) {setupPlayer = p;}
+
     public static int getSetupStage() {
         return setupStage;
     }
+
+    public static void nextStage() {setupStage++;}
 
     public static void addParkour(Parkour parkour) {
         parkours.add(parkour);
@@ -52,4 +57,9 @@ public class CacheManager {
     public static boolean isStartPoint(Location location) {
         return startPoints.containsKey(location);
     }
+
+    public static void removePlayer(Player p) {
+        players.remove(p.getUniqueId());
+    }
+
 }

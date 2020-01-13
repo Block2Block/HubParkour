@@ -1,4 +1,4 @@
-package me.Block2Block.HubParkour.Managers.Database;
+package me.block2block.hubparkour.managers.database;
 
 import org.bukkit.Bukkit;
 

@@ -1,11 +1,14 @@
-package me.block2block.hubparkour.entities;
+package me.block2block.hubparkour.entities.plates;
 
+import me.block2block.hubparkour.entities.Parkour;
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 public abstract class PressurePlate {
 
     protected Location location;
     protected Parkour parkour;
+    protected static Material material;
 
     public PressurePlate(Location location) {
         this.location =  location;
@@ -20,4 +23,12 @@ public abstract class PressurePlate {
     }
 
     public abstract int getType();
+
+    public static Material getMaterial() {
+        return material;
+    };
+
+    public void placeMaterial() {
+        location.getBlock().setType(material);
+    };
 }

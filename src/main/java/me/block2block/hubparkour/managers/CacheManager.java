@@ -2,7 +2,7 @@ package me.block2block.hubparkour.managers;
 
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.Parkour;
-import me.block2block.hubparkour.entities.StartPoint;
+import me.block2block.hubparkour.entities.plates.StartPoint;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,6 +1,10 @@
 package me.block2block.hubparkour.entities;
 
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import me.block2block.hubparkour.entities.plates.Checkpoint;
+import me.block2block.hubparkour.entities.plates.EndPoint;
+import me.block2block.hubparkour.entities.plates.PressurePlate;
+import me.block2block.hubparkour.entities.plates.StartPoint;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -82,6 +86,10 @@ public class Parkour {
         pressurePlates.add(endPoint);
         pressurePlates.add(start);
         return pressurePlates;
+    }
+
+    public void generateHolograms() {
+
     }
 
 }

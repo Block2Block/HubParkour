@@ -2,28 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/Checkpoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/EndPoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/PressurePlate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/StartPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/Checkpoint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/EndPoint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/PressurePlate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/StartPoint.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Listeners/SetupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Managers/Database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/database/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Managers/Database/MySQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/database/MySQL.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Managers/Database/SQLite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/database/SQLite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/Managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/Checkpoint.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/EndPoint.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/PressurePlate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/StartPoint.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,10 +104,10 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Problems" />
     <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -158,8 +151,23 @@
       <workItem from="1578931615591" duration="79000" />
       <workItem from="1578931700468" duration="1081000" />
       <workItem from="1578932865402" duration="1693000" />
-      <workItem from="1578934583658" duration="618000" />
+      <workItem from="1578934583658" duration="1802000" />
+      <workItem from="1579179923214" duration="122000" />
+      <workItem from="1579199387196" duration="2000" />
+      <workItem from="1579533495518" duration="2804000" />
+      <workItem from="1579608614252" duration="1070000" />
+      <workItem from="1580377768388" duration="717000" />
+      <workItem from="1580381745383" duration="17000" />
+      <workItem from="1580381770395" duration="432000" />
     </task>
+    <task id="LOCAL-00001" summary="Did some database stuff">
+      <created>1578935241432</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1578935241432</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,6 +186,10 @@
       </map>
     </option>
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Did some database stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="Did some database stuff" />
+  </component>
   <component name="WindowStateProjectService">
     <state x="320" y="88" key="#SQL_Dialects" timestamp="1578499442910">
       <screen x="0" y="23" width="1440" height="800" />
@@ -187,21 +199,33 @@
       <screen x="0" y="23" width="1440" height="800" />
     </state>
     <state x="320" y="88" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.800@0.23.1440.800" timestamp="1578499492013" />
-    <state x="533" y="139" key="#com.intellij.ide.util.MemberChooser" timestamp="1578934196068">
+    <state x="343" y="117" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog" timestamp="1579548198147">
       <screen x="0" y="23" width="1440" height="799" />
     </state>
-    <state x="533" y="139" key="#com.intellij.ide.util.MemberChooser/0.23.1440.799@0.23.1440.799" timestamp="1578934196068" />
+    <state x="343" y="117" key="#com.intellij.ide.fileTemplates.ui.ConfigureTemplatesDialog/0.23.1440.799@0.23.1440.799" timestamp="1579548198147" />
+    <state x="533" y="139" key="#com.intellij.ide.util.MemberChooser" timestamp="1579548232884">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state x="533" y="139" key="#com.intellij.ide.util.MemberChooser/0.23.1440.799@0.23.1440.799" timestamp="1579548232884" />
     <state x="569" y="319" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1576674544538">
       <screen x="0" y="23" width="1440" height="800" />
     </state>
     <state x="569" y="319" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.23.1440.800@0.23.1440.800" timestamp="1576674544538" />
-    <state x="233" y="25" key="CommitChangelistDialog2" timestamp="1578932064400">
+    <state x="233" y="25" key="CommitChangelistDialog2" timestamp="1578935241195">
       <screen x="0" y="23" width="1440" height="799" />
     </state>
-    <state x="233" y="25" key="CommitChangelistDialog2/0.23.1440.799@0.23.1440.799" timestamp="1578932064400" />
-    <state x="221" y="61" key="SettingsEditor" timestamp="1578932918915">
+    <state x="233" y="25" key="CommitChangelistDialog2/0.23.1440.799@0.23.1440.799" timestamp="1578935241195" />
+    <state x="221" y="23" key="SettingsEditor" timestamp="1580468504922">
       <screen x="0" y="23" width="1440" height="799" />
     </state>
-    <state x="221" y="61" key="SettingsEditor/0.23.1440.799@0.23.1440.799" timestamp="1578932918915" />
+    <state x="221" y="23" key="SettingsEditor/0.23.1440.799@0.23.1440.799" timestamp="1580468504922" />
+    <state x="320" y="162" key="Vcs.Push.Dialog.v2" timestamp="1578935243519">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state x="320" y="162" key="Vcs.Push.Dialog.v2/0.23.1440.799@0.23.1440.799" timestamp="1578935243519" />
+    <state x="378" y="179" width="683" height="486" key="find.popup" timestamp="1579608619784">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state x="378" y="179" width="683" height="486" key="find.popup/0.23.1440.799@0.23.1440.799" timestamp="1579608619784" />
   </component>
 </project>

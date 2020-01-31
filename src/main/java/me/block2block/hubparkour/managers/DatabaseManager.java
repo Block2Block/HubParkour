@@ -1,8 +1,11 @@
 package me.block2block.hubparkour.managers;
 
-import com.sun.tools.javac.comp.Check;
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.entities.*;
+import me.block2block.hubparkour.entities.plates.Checkpoint;
+import me.block2block.hubparkour.entities.plates.EndPoint;
+import me.block2block.hubparkour.entities.plates.PressurePlate;
+import me.block2block.hubparkour.entities.plates.StartPoint;
 import me.block2block.hubparkour.managers.database.MySQL;
 import me.block2block.hubparkour.managers.database.SQLite;
 import org.bukkit.Bukkit;
@@ -111,7 +114,7 @@ public class DatabaseManager {
 
 
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error creating the tables. Database functionality has been disabled until the server is restarted. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error loading parkours. Database functionality has been disabled until the server is restarted. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
             return -1;

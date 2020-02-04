@@ -31,4 +31,12 @@ public abstract class PressurePlate {
     public void placeMaterial() {
         location.getBlock().setType(material);
     };
+
+    public void removeMaterial() {
+        location.getBlock().setType(Material.AIR);
+    }
+
+    public Parkour getParkour() {
+        return parkour;
+    }
 }

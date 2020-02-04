@@ -1,6 +1,12 @@
 package me.block2block.hubparkour;
 
+import me.block2block.hubparkour.entities.HubParkourPlayer;
+import me.block2block.hubparkour.entities.Parkour;
+import me.block2block.hubparkour.listeners.PressurePlateListener;
+import me.block2block.hubparkour.listeners.SetupListener;
+import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.managers.DatabaseManager;
+import me.block2block.hubparkour.utils.HubParkourExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -53,16 +59,36 @@ public class Main extends JavaPlugin {
             e.printStackTrace();
         }
 
+        if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
+            for (Parkour parkour : CacheManager.getParkours()) {
+                parkour.generateHolograms();
+            }
+        }
+
+        Bukkit.getPluginManager().registerEvents(new SetupListener(), this);
+
+        Bukkit.getPluginManager().registerEvents(new PressurePlateListener(), this);
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new HubParkourExpansion(this).register();
+        }
     }
 
     @Override
     public void onDisable() {
-
+        if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
+            for (Parkour parkour : CacheManager.getParkours()) {
+                parkour.removeHolograms();
+            }
+        }
+        dbManager.closeConnection();
     }
 
     public static Main getInstance() {
         return instance;
     }
+
+    public DatabaseManager getDbManager() {return dbManager;}
 
     private void copy(InputStream in, File file) {
         try {
@@ -86,5 +112,7 @@ public class Main extends JavaPlugin {
     public static String c(boolean prefix, String message) {
         return ChatColor.translateAlternateColorCodes('&',((prefix)?Main.getInstance().getConfig().getString("Messages.Prefix"):"&r") + message);
     }
+
+    public static boolean isHolograms(){return holograms;}
 
 }

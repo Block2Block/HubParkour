@@ -3,25 +3,42 @@ package me.block2block.hubparkour.entities;
 
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.entities.plates.Checkpoint;
+import me.block2block.hubparkour.entities.plates.PressurePlate;
 import me.block2block.hubparkour.managers.CacheManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HubParkourPlayer {
 
     private Player player;
     private Parkour parkour;
-    private List<Checkpoint> checkpoints;
+    private List<Checkpoint> checkpoints = new ArrayList<>();
+    private int lastReached = 0;
     private long startTime;
+    private long previous = -2;
 
     public HubParkourPlayer(Player p, Parkour parkour) {
         this.parkour = parkour;
         this.player = p;
         startTime = System.currentTimeMillis();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                previous = Main.getInstance().getDbManager().getTime(p, parkour);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
     }
 
-    public long end(boolean fly) {
+    public void checkpoint(Checkpoint checkpoint) {
+        lastReached = checkpoint.getCheckpointNo();
+        checkpoints.add(checkpoint);
+    }
+
+    public void end(boolean fly) {
         if (fly) {
             player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Not-Enough-Checkpoints")));
             CacheManager.removePlayer(player);
@@ -30,17 +47,76 @@ public class HubParkourPlayer {
                 if (checkpoints.size() != parkour.getNoCheckpoints()) {
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Not-Enough-Checkpoints")));
                     CacheManager.removePlayer(player);
+                    return;
                 }
             }
 
             long finishMili = System.currentTimeMillis() - startTime;
             float finishTime = finishMili/1000f;
+            if (previous > 0) {
+                if (finishMili < previous) {
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Beat-Previous-Personal-Best").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            Main.getInstance().getDbManager().newTime(player, finishMili, true, parkour);
+                        }
+                    }.runTaskAsynchronously(Main.getInstance());
+                } else {
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Not-Beat-Previous-Personal-Best").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));
+                }
+            } else {
+                if (previous == -1) {
+                    if (parkour.getEndCommand() != null) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand());
+                    }
+                    if (parkour.getCheckpointCommand() != null) {
+                        for (int i = 0;i < checkpoints.size();i++) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand());
+                        }
+                    }
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.First-Time").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            Main.getInstance().getDbManager().newTime(player, finishMili, false, parkour);
+                        }
+                    }.runTaskAsynchronously(Main.getInstance());
+                } else {
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Too-Quick")));
+                }
+            }
 
+            parkour.playerEnd(this);
+            CacheManager.removePlayer(player);
 
-
-
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName())));
+                }
+            }.runTaskAsynchronously(Main.getInstance());
         }
-        return -1;
     }
 
+    public int getLastReached() {
+        return lastReached;
+    }
+
+    public Parkour getParkour() {
+        return parkour;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void restart() {
+        startTime = System.currentTimeMillis();
+    }
+
+    public long getPrevious() {
+        return previous;
+    }
 }

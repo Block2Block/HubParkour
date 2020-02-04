@@ -2,10 +2,7 @@ package me.block2block.hubparkour.managers;
 
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.entities.*;
-import me.block2block.hubparkour.entities.plates.Checkpoint;
-import me.block2block.hubparkour.entities.plates.EndPoint;
-import me.block2block.hubparkour.entities.plates.PressurePlate;
-import me.block2block.hubparkour.entities.plates.StartPoint;
+import me.block2block.hubparkour.entities.plates.*;
 import me.block2block.hubparkour.managers.database.MySQL;
 import me.block2block.hubparkour.managers.database.SQLite;
 import org.bukkit.Bukkit;
@@ -65,8 +62,8 @@ public class DatabaseManager {
             }
     }
 
-    public int addParkour(Parkour parkour) {
-        if (error) return -1;
+    public Parkour addParkour(Parkour parkour) {
+        if (error) return null;
         try {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_parkours(`name`,`finish_reward`,`checkpoint_reward`) VALUES (?,?,?)");
             statement.setString(1, parkour.getName());
@@ -83,10 +80,10 @@ public class DatabaseManager {
             statement = connection.prepareStatement("INSERT INTO hp_locations VALUES (?, ?, ?, ?, ?, ?, ?)");
             statement.setInt(1, id);
             statement.setInt(2, 2);
-            statement.setInt(3, parkour.getRestartPoint().getBlockX());
-            statement.setInt(4, parkour.getRestartPoint().getBlockY());
-            statement.setInt(5, parkour.getRestartPoint().getBlockZ());
-            statement.setString(7, parkour.getRestartPoint().getWorld().getName());
+            statement.setInt(3, parkour.getRestartPoint().getLocation().getBlockX());
+            statement.setInt(4, parkour.getRestartPoint().getLocation().getBlockY());
+            statement.setInt(5, parkour.getRestartPoint().getLocation().getBlockZ());
+            statement.setString(7, parkour.getRestartPoint().getLocation().getWorld().getName());
             statement.setNull(6, Types.INTEGER);
 
             statement.execute();
@@ -110,48 +107,37 @@ public class DatabaseManager {
                 statement.execute();
             }
 
-            return id;
+            parkour = new Parkour(parkour, id);
+
+            return parkour;
 
 
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "There has been an error loading parkours. Database functionality has been disabled until the server is restarted. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
-            return -1;
+            return null;
         }
 
     }
 
-    public HashMap<Integer, List<String>> getLeaderboard(Parkour parkour) {
+    public HashMap<Integer, List<String>> getLeaderboard(Parkour parkour, int limit) {
         HashMap<Integer, List<String>> leaderboard = new HashMap<>();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC ");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC" + ((limit!=-1)?" LIMIT " + limit:""));
             statement.setInt(1, parkour.getId());
 
             ResultSet results = statement.executeQuery();
-            if (results.next()) {
+            int counter = 1;
+            while (results.next()) {
                 List<String> record = new ArrayList<>();
                 record.add(results.getString(3));
                 record.add(results.getString(2));
                 record.add(results.getString(1));
-                leaderboard.put(1, record);
+                leaderboard.put(counter, record);
+                counter++;
             }
-            if (results.next()) {
-                List<String> record = new ArrayList<>();
-                record.add(results.getString(3));
-                record.add(results.getString(2));
-                record.add(results.getString(1));
-                leaderboard.put(2, record);
-            }
-            if (results.next()) {
-                List<String> record = new ArrayList<>();
-                record.add(results.getString(3));
-                record.add(results.getString(2));
-                record.add(results.getString(1));
-                leaderboard.put(3, record);
-            }
-
 
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
@@ -159,6 +145,26 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return leaderboard;
+    }
+
+    public int leaderboardPosition(Player player, Parkour parkour) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC ");
+            statement.setInt(1, parkour.getId());
+
+            ResultSet results = statement.executeQuery();
+            int counter = 1;
+            while (results.next()) {
+                if (results.getString(1).equals(player.getUniqueId().toString())) {
+                    return counter;
+                } else {
+                    counter++;
+                }
+            }
+        } catch (SQLException e) {
+            return -1;
+        }
+        return -1;
     }
 
     public List<List<String>> getLocations(Parkour parkour) {
@@ -190,7 +196,7 @@ public class DatabaseManager {
         return locations;
     }
 
-    public boolean beatBefore(Player player, Parkour parkour) {
+    public long getTime(Player player, Parkour parkour) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? WHERE uuid = ?");
             statement.setString(1, player.getUniqueId().toString());
@@ -199,37 +205,15 @@ public class DatabaseManager {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return true;
+                return resultSet.getLong(2);
+            } else {
+                return -1;
             }
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            error = true;
             e.printStackTrace();
         }
-        return false;
-    }
-
-    public boolean beatOldRecord(Player player, long time, Parkour parkour) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("SELECT time FROM hp_playertimes WHERE uuid = ? AND parkour_id = ?");
-            statement.setString(1, player.getUniqueId().toString());
-            statement.setInt(2, parkour.getId());
-
-            ResultSet resultSet = statement.executeQuery();
-
-            if (!resultSet.next()) {
-                return false;
-            }
-
-            if (resultSet.getLong(1) > time) {
-                return true;
-            }
-        } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            error = true;
-            e.printStackTrace();
-        }
-        return false;
+        return -1;
     }
 
     public void newTime(Player player, long time, boolean beatBefore, Parkour parkour) {
@@ -279,7 +263,7 @@ public class DatabaseManager {
                 StartPoint start = null;
                 EndPoint end = null;
                 List<Checkpoint> checkpoints = new ArrayList<>();
-                Location restart = null;
+                RestartPoint restart = null;
                 String endCommand = result.getString(3);
                 String checkCommand = result.getString(4);
 
@@ -293,7 +277,7 @@ public class DatabaseManager {
                             end = new EndPoint(new Location(Bukkit.getWorld(parkourPoints.getString(7)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5)));
                             break;
                         case 2:
-                            restart = new Location(Bukkit.getWorld(parkourPoints.getString(7)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5));
+                            restart = new RestartPoint(new Location(Bukkit.getWorld(parkourPoints.getString(7)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5)));
                             break;
                         case 3:
                             checkpoints.add(new Checkpoint(new Location(Bukkit.getWorld(parkourPoints.getString(7)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5)), parkourPoints.getInt(6)));

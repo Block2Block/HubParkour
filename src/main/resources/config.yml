@@ -41,8 +41,15 @@ Messages:
   #Command related messages. Default values are recommended, but they can all be changed. Server must be restarted for changes to apply.
   Commands:
     #The message that is displayed when a player includes no arguments with the /parkour command.
-    Help: "Parkour Help:\n&a/parkour reset &7- Sends you back to the start.\n&a/parkour checkpoint &7- Teleports you to the last checkpoint you reached.\n&a/parkour leave &7- Makes you leave the parkour.\n&a/parkour list&r - Lists all active parkours."
-    Help-Admin: ""
+    Help:
+      - "Parkour Help:"
+      - "&a/parkour reset &r- Sends you back to the start."
+      - "&a/parkour checkpoint &r- Teleports you to the last checkpoint you reached."
+      - "&a/parkour leave &r- Makes you leave the parkour."
+    Help-Admin:
+      - "&a/parkour setup&r - Enter setup mode and begin parkour setup."
+      - "&a/parkour delete [id] &r- Delete the parkour with the specific ID."
+      - "&a/parkour list&r - Lists all active parkours."
 
     #When a player does not have permission to execute a certain sub-command (only applicable to the admin commands).
     No-Permission: "You do not have permission to execute this command."
@@ -61,8 +68,11 @@ Messages:
       Not-Started-Parkour: "You must start a parkour in order to teleport to a checkpoint!"
 
     #The message format for when a player looks at the top 3 leaderboard.
-    Top3:
-      Message: "The top 3 times are:\n&a#1 &r- &a{player1-name} &r- &a{player1-time} &rseconds.\n&a#2 &r- &a{player2-name} &r- &a{player2-time} &rseconds.\n&a#3 &r- &a{player3-name} &r- &a{player3-time} &rseconds."
+    Leaderboard:
+      Message:
+        Header: "The top 3 times are:"
+        Line: "&a#{place} &r- &a{player-name} &r- &a{player-time} &rseconds."
+        Footer: ""
       Not-Valid-Parkour: "That is not a valid parkour. If you wish to see a list of all parkours, do /parkour list"
 
     #Messages sent when the user uses /parkour leave.
@@ -72,35 +82,55 @@ Messages:
 
     #Admin command messages.
     Admin:
+      No-Permission: "You do not have permission to perform this command."
       Reload:
         Successful: "Reload successful! If you have changed database or hologram settings, you will need to restart the server in order for those changes to apply."
         Failed: "The reload failed. Please make sure that you have formatted the file correctly."
+      List:
+        Header: "All active parkours:"
+        Line: "&a#{id} &r- &a{parkour-name} &r- &a{parkour-players} &ractive players."
+        Footer: ""
+      Delete:
+        Not-Valid-Parkour: "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list"
+        Success: "Parkour deleted successfully."
+        Player-Kicked-From-Parkour: "The parkour you were doing was deleted. You have left the parkour."
       Setup:
         Given-Setup-Stick: "You have been given the setup stick."
-        Please-Set-Start: "Welcome to the parkour setup wizard! In order to start, please start off by clicking the start pressure plate with the stick. If you wish to cancel at any time, enter 'cancel'."
-        Please-Set-End: "Start point set! Now, click the end point with your stick."
+        Please-Set-Start: "Welcome to the parkour setup wizard! In order to start, please start off by clicking where you would like your start pressure plate with the stick. Do not worry about placing any pressure plates, the plugin will do that for you! If you wish to cancel at any time, enter 'cancel'."
+        Please-Set-End: "Start point set! Now, click where you would like your end pressure plate with your stick."
         Please-Set-Respawn: "End point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point. Please ensure you are looking in the direction you want them to spawn facing."
         Please-Set-Checkpoints: "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done'."
-        Please-Set-Name: "Finally, you need to set a name for your parkour! Please enter a name for your parkour."
+        Checkpoint-Added: "Checkpoint successfully added."
+        Please-Set-Name: "Now, you need to set a name for your parkour! Please enter a name for your parkour. It must be one word and not a duplicate."
+        Please-Set-End-Command: "The name has been set! Please now type out your reward command for the end of your parkour. If you don't want one, just type 'none'."
+        Please-Set-Checkpoint-Command: "The End Command has been set! Please now type out your reward command for checkpoints of your parkour. This command will only be executed for each reached checkpoint after they finish the parkour to prevent exploitation. If you don't want one, just type 'none'."
+        Name-Too-Long: "That name is too long. It must be 1 word."
+        Name-Taken: "That name is already taken. Please try again."
 
         Setup-Complete: "Parkour setup complete!"
         Setup-Cancelled: "Parkour setup was cancelled. Any points that were setup have been deleted."
+
+        Already-Someone-In-Setup: "Someone is already setting up a parkour. Please wait for them to finish in order to setup another parkour."
+
+        Must-Not-Be-In-Parkour: "You must not be in a parkour in order to set up a parkour. "
 
   #Messages displayed while the user is doing parkour.
   Parkour:
     Started: "You have started the {parkour-name} parkour!"
     Restarted: "You have restarted the parkour! Your time has been reset to 0!"
+    Already-In-Parkour: "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave."
     Checkpoints:
-      Reached: "You have reached checkpoint #{checkpoint}! You have received $100 as a reward!"
+      Reached: "You have reached checkpoint #{checkpoint}!"
       Not-Started: "You must start a parkour in order to reach checkpoints!"
     End:
       Beat-Previous-Personal-Best: "You beat your previous record and you managed to complete the {parkour-name} parkour in {time} seconds! You have received $100 for finishing the parkour!"
       Not-Beat-Previous-Personal-Best: "You didn't beat your previous record, but you managed to complete the {parkour-name} parkour in {time} seconds! You have received $100 for finishing the parkour!"
-      First-Time: "Well done! You completed the {parkour-name} parkour in {time} seconds! You received $1000 as a reward for completing the parkour for the first time!"
+      First-Time: "Well done! You completed the {parkour-name} parkour in {time} seconds! Your reward will be applied shortly!"
       Not-Started: "You must start a parkour in order to finish it."
       Failed:
         Fly: "You are not allowed to fly while doing the parkour. Parkour failed!"
         Not-Enough-Checkpoints: "You did not reach enough checkpoints, parkour failed!"
+        Too-Quick: "You completed the parkour too quickly, parkour failed!"
 
     #Messages displayed when a user finishes the parkour. Basically tells them if they are still on/move onto the leaderboard or not.
     Leaderboard:
@@ -113,6 +143,10 @@ Settings:
   Version-Checker:
     Enabled: true
     On-Join: true
+
+  Leaderboard:
+    #The limit on how many spaces on the leaderboard to load.
+    Limit: 10
 
   #MySQL/SQLite settings. Adds support for cross server player times and leaderboards.
   #Note: The pressure plates must be in exactly the same location (including the types) in all servers in order for this to work.
@@ -134,19 +168,11 @@ Settings:
 
   #Specifies the type of pressure plates that the plugin uses. Values CANNOT be the same. The plugin will disable itself
   #if an invalid or duplicate value is detected. Modify with caution.
-  #Valid values: Gold, Iron, Wood, Stone.
+  #Valid values: Any type of pressure plate listed in the Spigot API Materials Enum. Google "Spigot API Material" to see a full list.
+  #Obviously if this is being used on a legacy server (anything between 1.8-1.12 I consider to be legacy) not all of the pressure
+  #plates in the newer Spigot API are in the older versions, so you need to plan accordingly. If you are in a legacy version, these values
+  #will register as invalid at first. You must change these values.
   Pressure-Plates:
-    Start: "Wood"
-    Checkpoint: "Gold"
-    End: "Iron"
-
-  #Rewards commands, placeholders: {player-name} for the player's name, {player-uuid} for the player's UUID.
-  Rewards:
-    Checkpoint-Reward:
-      Enabled: true
-      Command: "money give {player-name} 100"
-    Finish-Reward:
-      Enabled: true
-      First-Time-Only: false
-      First-Time-Command: "money give {player-name} 1000"
-      After-Completed-Command: "money give {player-name} 100"
+    Start: "OAK_PRESSURE_PLATE"
+    Checkpoint: "LIGHT_WEIGHTED_PRESSURE_PLATE"
+    End: "HEAVY_WEIGHTED_PRESSURE_PLATE"

@@ -1,7 +1,7 @@
 package me.block2block.hubparkour.managers;
 
 import me.block2block.hubparkour.Main;
-import me.block2block.hubparkour.entities.*;
+import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.entities.plates.*;
 import me.block2block.hubparkour.managers.database.MySQL;
 import me.block2block.hubparkour.managers.database.SQLite;

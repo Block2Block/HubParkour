@@ -1,7 +1,6 @@
 package me.block2block.hubparkour.entities.plates;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 
 public class Checkpoint extends PressurePlate {
 

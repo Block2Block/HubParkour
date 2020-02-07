@@ -1,0 +1,12 @@
+langauge: java
+script: mvn package
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: "target/HubParkour-*.jar"
+  skip_cleanup: true
+  on:
+    tags: true
+branches:
+  only:
+    - master

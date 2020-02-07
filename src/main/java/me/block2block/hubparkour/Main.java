@@ -1,6 +1,6 @@
 package me.block2block.hubparkour;
 
-import me.block2block.hubparkour.entities.HubParkourPlayer;
+import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.listeners.PressurePlateListener;
 import me.block2block.hubparkour.listeners.SetupListener;
@@ -68,6 +68,8 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SetupListener(), this);
 
         Bukkit.getPluginManager().registerEvents(new PressurePlateListener(), this);
+
+        getCommand("parkour").setExecutor(new CommandParkour());
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new HubParkourExpansion(this).register();

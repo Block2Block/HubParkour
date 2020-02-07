@@ -3,7 +3,7 @@ main: me.Block2Block.HubParkour.Main
 version: 2.0-ALPHA
 author: Block2Block
 prefix: HubParkour
-api-version: 1.13
+api-version: "1.13"
 softdepend: [HolographicDisplays, PlaceholderAPI]
 commands:
   parkour:

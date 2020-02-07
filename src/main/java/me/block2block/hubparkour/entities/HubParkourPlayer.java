@@ -3,7 +3,6 @@ package me.block2block.hubparkour.entities;
 
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.entities.plates.Checkpoint;
-import me.block2block.hubparkour.entities.plates.PressurePlate;
 import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

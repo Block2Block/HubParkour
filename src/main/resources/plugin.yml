@@ -1,8 +1,9 @@
 name: HubParkour
-main: me.Block2Block.HubParkour.Main
+main: me.block2block.hubparkour.Main
 version: 2.0-ALPHA
 author: Block2Block
 prefix: HubParkour
+load: POSTWORLD
 api-version: "1.13"
 softdepend: [HolographicDisplays, PlaceholderAPI]
 commands:

@@ -26,7 +26,7 @@ public class SetupListener implements Listener {
             switch (CacheManager.getSetupStage()) {
                 case 4:
                     e.setCancelled(true);
-                    if (e.getMessage().split("").length == 1 && !e.getMessage().equalsIgnoreCase("cancel")) {
+                    if (e.getMessage().split(" ").length == 1 && !e.getMessage().equalsIgnoreCase("cancel")) {
                         if (CacheManager.getParkour(e.getMessage()) == null) {
                             commandData.add(e.getMessage());
                             CacheManager.nextStage();
@@ -42,6 +42,7 @@ public class SetupListener implements Listener {
                         CacheManager.exitSetup();
                         e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Cancelled")));
                     }
+                    break;
                 case 5:
                     if (!e.getMessage().equalsIgnoreCase("cancel")) {
                         String command = e.getMessage();
@@ -52,12 +53,14 @@ public class SetupListener implements Listener {
                         commandData.add(command);
                         CacheManager.nextStage();
                         e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-Checkpoint-Command")));
+                        e.setCancelled(true);
                     } else {
                         e.setCancelled(true);
                         data = new ArrayList<>();
                         CacheManager.exitSetup();
                         e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Cancelled")));
                     }
+                    break;
                 case 6:
                     if (!e.getMessage().equalsIgnoreCase("cancel")) {
                         StartPoint startPoint = (StartPoint) data.remove(0);
@@ -67,26 +70,38 @@ public class SetupListener implements Listener {
                         for (PressurePlate pp : data) {
                             checkpoints.add((Checkpoint) pp);
                         }
-                        new BukkitRunnable(){
+                        e.setCancelled(true);
+
+                        String command = e.getMessage();
+                        if (e.getMessage().equalsIgnoreCase("none")) {
+                            command = null;
+                        }
+                        final Parkour parkour = new Parkour(-1, commandData.get(0), startPoint, endPoint, checkpoints, restartPoint, command, commandData.get(1));
+                        new BukkitRunnable() {
                             @Override
                             public void run() {
-                                String command = e.getMessage();
-                                if (e.getMessage().equalsIgnoreCase("none")) {
-                                    command = null;
+                                for (PressurePlate pp : parkour.getAllPoints()) {
+                                    pp.placeMaterial();
+                                    if (pp.getType() != 2) {
+                                        CacheManager.addPoint(pp);
+                                    }
                                 }
-                                Parkour parkour = new Parkour(-1, commandData.get(0), startPoint, endPoint, checkpoints, restartPoint, command, commandData.get(1));
-                                parkour = Main.getInstance().getDbManager().addParkour(parkour);
-                                CacheManager.addParkour(parkour);
+
                                 if (Main.getInstance().getConfig().getBoolean("Settings.Holograms") && Main.isHolograms()) {
                                     parkour.generateHolograms();
                                 }
-                                for (PressurePlate pp : parkour.getAllPoints()) {
-                                    pp.placeMaterial();
-                                }
-                                CacheManager.exitSetup();
-                                e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Complete")));
+
+                                new BukkitRunnable(){
+                                    @Override
+                                    public void run() {
+                                        Parkour newParkour = Main.getInstance().getDbManager().addParkour(parkour);
+                                        CacheManager.addParkour(newParkour);
+                                        CacheManager.exitSetup();
+                                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Complete")));
+                                    }
+                                }.runTaskAsynchronously(Main.getInstance());
                             }
-                        }.runTaskAsynchronously(Main.getInstance());
+                        }.runTask(Main.getInstance());
                         break;
                     } else {
                         e.setCancelled(true);

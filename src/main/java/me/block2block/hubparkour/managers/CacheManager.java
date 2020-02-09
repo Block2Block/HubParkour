@@ -1,8 +1,10 @@
 package me.block2block.hubparkour.managers;
 
+import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.entities.plates.PressurePlate;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -55,7 +57,7 @@ public class CacheManager {
 
     public static Parkour getParkour(String name) {
         for (Parkour parkour : parkours) {
-            if (name.equalsIgnoreCase(parkour.getName())) {
+            if (ChatColor.stripColor(Main.c(false, name)).equalsIgnoreCase(ChatColor.stripColor(Main.c(false, parkour.getName())))) {
                 return parkour;
             }
         }
@@ -87,12 +89,21 @@ public class CacheManager {
         return points.get(location);
     }
 
-    public static void removePlayer(Player p) {
-        players.remove(p.getUniqueId());
+    public static void removePlate(PressurePlate p) {
+        p.removeMaterial();
+        points.remove(p.getLocation());
     }
 
-    public static void removePlate(PressurePlate p) {
-        points.remove(p.getLocation());
+    public static void addPoint(PressurePlate p) {
+        points.put(p.getLocation(), p);
+    }
+
+    public static void playerStart(HubParkourPlayer p) {
+        players.put(p.getPlayer().getUniqueId(), p);
+    }
+
+    public static void playerEnd(HubParkourPlayer p) {
+        players.remove(p.getPlayer().getUniqueId());
     }
 
 }

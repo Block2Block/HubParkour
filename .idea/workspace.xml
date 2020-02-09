@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Added travis CI, optimised imports">
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/listeners/BreakListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/Checkpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/Checkpoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/EndPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/EndPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/StartPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/StartPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/PressurePlate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/Block2Block/HubParkour/entities/plates/PressurePlate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,6 +53,20 @@
         <item name="database.db" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+        <item name="hp_locations: table" type="3d80ac25:SqliteImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="database.db" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+        <item name="hp_parkours: table" type="3d80ac25:SqliteImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="database.db" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
         <item name="hp_playertimes: table" type="3d80ac25:SqliteImplModel$Table" />
       </path>
     </expand>
@@ -64,6 +81,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="6c4b65e2-4f14-44c9-8e8e-a6b8c712fbaa" />
   </component>
   <component name="IgnoredFileRootStore">
     <option name="generatedRoots">
@@ -103,6 +123,11 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean package" />
+    </option>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -166,7 +191,11 @@
       <workItem from="1580848258042" duration="355000" />
       <workItem from="1580848645756" duration="2106000" />
       <workItem from="1581066866124" duration="25000" />
-      <workItem from="1581066902753" duration="186000" />
+      <workItem from="1581066902753" duration="832000" />
+      <workItem from="1581070617329" duration="261000" />
+      <workItem from="1581070888661" duration="9005000" />
+      <workItem from="1581081828729" duration="39000" />
+      <workItem from="1581082109008" duration="2133000" />
     </task>
     <task id="LOCAL-00001" summary="Did some database stuff">
       <created>1578935241432</created>
@@ -196,7 +225,14 @@
       <option name="project" value="LOCAL" />
       <updated>1580848756300</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added travis CI, optimised imports">
+      <created>1581070072254</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1581070072254</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,7 +255,8 @@
     <MESSAGE value="Did some database stuff" />
     <MESSAGE value="Moved a few things" />
     <MESSAGE value="Finished off the plugin ready for testing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished off the plugin ready for testing" />
+    <MESSAGE value="Added travis CI, optimised imports" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added travis CI, optimised imports" />
   </component>
   <component name="WindowStateProjectService">
     <state x="320" y="88" key="#SQL_Dialects" timestamp="1578499442910">
@@ -246,25 +283,49 @@
       <screen x="-257" y="-1057" width="1920" height="1057" />
     </state>
     <state x="455" y="-798" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.23.1440.799/-257.-1057.1920.1057@-257.-1057.1920.1057" timestamp="1580474374174" />
-    <state x="233" y="25" key="CommitChangelistDialog2" timestamp="1580848756170">
+    <state x="233" y="25" key="CommitChangelistDialog2" timestamp="1581071387739">
       <screen x="0" y="23" width="1440" height="799" />
     </state>
-    <state x="233" y="25" key="CommitChangelistDialog2/0.23.1440.799@0.23.1440.799" timestamp="1580848756170" />
-    <state x="562" y="354" key="Github.Dialog.Accounts.Choose" timestamp="1580848765208">
+    <state x="233" y="25" key="CommitChangelistDialog2/0.23.1440.799@0.23.1440.799" timestamp="1581071387739" />
+    <state x="562" y="354" key="Github.Dialog.Accounts.Choose" timestamp="1581070082489">
       <screen x="0" y="23" width="1440" height="799" />
     </state>
-    <state x="562" y="354" key="Github.Dialog.Accounts.Choose/0.23.1440.799@0.23.1440.799" timestamp="1580848765208" />
+    <state x="562" y="354" key="Github.Dialog.Accounts.Choose/0.23.1440.799@0.23.1440.799" timestamp="1581070082489" />
+    <state width="1398" height="204" key="GridCell.Tab.0.bottom" timestamp="1581211405761">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state width="1398" height="204" key="GridCell.Tab.0.bottom/0.23.1440.799@0.23.1440.799" timestamp="1581211405761" />
+    <state width="1398" height="204" key="GridCell.Tab.0.center" timestamp="1581211405760">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state width="1398" height="204" key="GridCell.Tab.0.center/0.23.1440.799@0.23.1440.799" timestamp="1581211405760" />
+    <state width="1398" height="204" key="GridCell.Tab.0.left" timestamp="1581211405760">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state width="1398" height="204" key="GridCell.Tab.0.left/0.23.1440.799@0.23.1440.799" timestamp="1581211405760" />
+    <state width="1398" height="204" key="GridCell.Tab.0.right" timestamp="1581211405761">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state width="1398" height="204" key="GridCell.Tab.0.right/0.23.1440.799@0.23.1440.799" timestamp="1581211405761" />
     <state x="221" y="23" key="SettingsEditor" timestamp="1580468504922">
       <screen x="0" y="23" width="1440" height="799" />
     </state>
     <state x="221" y="23" key="SettingsEditor/0.23.1440.799@0.23.1440.799" timestamp="1580468504922" />
-    <state x="320" y="162" key="Vcs.Push.Dialog.v2" timestamp="1580848759859">
+    <state x="320" y="162" key="Vcs.Push.Dialog.v2" timestamp="1581070073777">
       <screen x="0" y="23" width="1440" height="799" />
     </state>
-    <state x="320" y="162" key="Vcs.Push.Dialog.v2/0.23.1440.799@0.23.1440.799" timestamp="1580848759859" />
+    <state x="320" y="162" key="Vcs.Push.Dialog.v2/0.23.1440.799@0.23.1440.799" timestamp="1581070073777" />
     <state x="378" y="179" width="683" height="486" key="find.popup" timestamp="1579608619784">
       <screen x="0" y="23" width="1440" height="799" />
     </state>
     <state x="378" y="179" width="683" height="486" key="find.popup/0.23.1440.799@0.23.1440.799" timestamp="1579608619784" />
+    <state x="385" y="191" width="670" height="675" key="run.anything.popup" timestamp="1581085717127">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state x="385" y="191" width="670" height="675" key="run.anything.popup/0.23.1440.799@0.23.1440.799" timestamp="1581085717127" />
+    <state x="385" y="146" width="670" height="58" key="search.everywhere.popup" timestamp="1581073604559">
+      <screen x="0" y="23" width="1440" height="799" />
+    </state>
+    <state x="385" y="146" width="670" height="58" key="search.everywhere.popup/0.23.1440.799@0.23.1440.799" timestamp="1581073604559" />
   </component>
 </project>

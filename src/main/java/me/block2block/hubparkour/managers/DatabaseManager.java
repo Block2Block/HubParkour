@@ -32,7 +32,7 @@ public class DatabaseManager {
     }
 
     public void setup(boolean isMySql) throws SQLException, ClassNotFoundException {
-        this.isMysql = isMySql;
+        isMysql = isMySql;
         if (isMysql) {
             dbMySql = new MySQL(Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Hostname"), Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Port"),Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Database"), Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Username"), Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Password"));
             connection = dbMySql.openConnection();
@@ -49,7 +49,7 @@ public class DatabaseManager {
                 PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_playertimes (`uuid` varchar(36) NOT NULL, `parkour_id` " + ((isMysql)?"INT":"INTEGER") +  " NOT NULL,`time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
                 boolean set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_parkours (`id` " + ((isMysql)?"INT NOT NULL AUTO_INCREMENT":"INTEGER PRIMARY KEY AUTOINCREMENT") +  ",`name` TEXT NOT NULL,`finish_reward` TEXT NOT NULL,`checkpoint_reward` TEXT NOT NULL" + ((isMysql)?", PRIMARY KEY (id)":"") + ")");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_parkours (`id` " + ((isMysql)?"INT NOT NULL AUTO_INCREMENT":"INTEGER PRIMARY KEY AUTOINCREMENT") +  ",`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL" + ((isMysql)?", PRIMARY KEY (id)":"") + ")");
                 set = statement.execute();
 
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_locations (`parkour_id` " + ((isMysql)?"INT":"INTEGER") +  ",`type` tinyint(3) NOT NULL,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `checkno` tinyint(64) NULL, `world` varchar(64) NOT NULL)");
@@ -132,8 +132,8 @@ public class DatabaseManager {
             int counter = 1;
             while (results.next()) {
                 List<String> record = new ArrayList<>();
+                record.add(results.getString(4));
                 record.add(results.getString(3));
-                record.add(results.getString(2));
                 record.add(results.getString(1));
                 leaderboard.put(counter, record);
                 counter++;
@@ -198,9 +198,9 @@ public class DatabaseManager {
 
     public long getTime(Player player, Parkour parkour) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? WHERE uuid = ?");
-            statement.setString(1, player.getUniqueId().toString());
-            statement.setInt(2, parkour.getId());
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? AND uuid = ?");
+            statement.setString(2, player.getUniqueId().toString());
+            statement.setInt(1, parkour.getId());
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -294,6 +294,26 @@ public class DatabaseManager {
             e.printStackTrace();
         }
 
+    }
+
+    public void deleteParkour(Parkour parkour) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `parkour_id` = ?");
+            statement.setInt(1, parkour.getId());
+            boolean result = statement.execute();
+
+            statement = connection.prepareStatement("DELETE FROM hp_locations WHERE `parkour_id` = ?");
+            statement.setInt(1, parkour.getId());
+            result = statement.execute();
+
+            statement = connection.prepareStatement("DELETE FROM hp_parkours WHERE `id` = ?");
+            statement.setInt(1, parkour.getId());
+            result = statement.execute();
+        } catch (Exception e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            error = true;
+            e.printStackTrace();
+        }
     }
 
     public void closeConnection() {

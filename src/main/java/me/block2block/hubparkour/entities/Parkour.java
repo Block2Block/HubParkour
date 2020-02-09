@@ -115,12 +115,16 @@ public class Parkour {
             switch (p.getType()) {
                 case 0:
                     configKey = "Start";
+                    break;
                 case 1:
                     configKey = "End";
+                    break;
                 case 2:
                     continue;
                 case 3:
                     configKey = "Checkpoint";
+                    break;
+                default:
             }
             Location l = p.getLocation().clone();
             l.setX(l.getX() + 0.5);
@@ -129,8 +133,8 @@ public class Parkour {
             Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), l);
             int counter = 0;
             for (String s : Main.getInstance().getConfig().getStringList("Messages.Holograms." + configKey)) {
-                TextLine textLine = hologram.appendTextLine(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getConfig().getString("Messages.Holograms.Start").replace("{parkour-name}",name).replace("{checkpoint}",((p instanceof Checkpoint)?((Checkpoint)p).getCheckpointNo() + "":""))));
-                holograms.put(start, hologram);
+                TextLine textLine = hologram.appendTextLine(ChatColor.translateAlternateColorCodes('&', s.replace("{parkour-name}",name).replace("{checkpoint}",((p instanceof Checkpoint)?((Checkpoint)p).getCheckpointNo() + "":""))));
+                holograms.put(p, hologram);
                 counter++;
             }
         }

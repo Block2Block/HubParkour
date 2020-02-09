@@ -35,7 +35,7 @@ public class CommandParkour implements CommandExecutor {
                             p.teleport(l);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Successful")));
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Not-In-Parkour")));
+                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Not-Started-Parkour")));
                         }
                         break;
                     case "checkpoint":
@@ -51,7 +51,7 @@ public class CommandParkour implements CommandExecutor {
                             p.teleport(l);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Successful")));
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Not-In-Parkour")));
+                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Not-Started-Parkour")));
                         }
                         break;
                     case "top10":
@@ -62,15 +62,15 @@ public class CommandParkour implements CommandExecutor {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        StringBuilder sb = new StringBuilder(Main.getInstance().getConfig().getString("Messages.Leaderboard.Message.Header") + "\n");
+                                        StringBuilder sb = new StringBuilder(Main.getInstance().getConfig().getString("Messages.Commands.Leaderboard.Message.Header") + "\n");
                                         Map<Integer, List<String>> leaderboard = Main.getInstance().getDbManager().getLeaderboard(parkour, Main.getInstance().getConfig().getInt("Settings.Leaderboard.Limit"));
 
                                         for (int place : leaderboard.keySet()) {
                                             List<String> record = leaderboard.get(place);
-                                            sb.append(Main.getInstance().getConfig().getString("Messages.Leaderboard.Message.Line").replace("{player-name}", record.get(0)).replace("{player-time}", "" + Float.parseFloat(record.get(1)) / 1000f).replace("{place}", "" + place)).append("\n");
+                                            sb.append(Main.getInstance().getConfig().getString("Messages.Commands.Leaderboard.Message.Line").replace("{player-name}", record.get(0)).replace("{player-time}", "" + Float.parseFloat(record.get(1)) / 1000f).replace("{place}", "" + place)).append("\n");
                                         }
 
-                                        sb.append(Main.getInstance().getConfig().getString("Messages.Leaderboard.Message.Footer"));
+                                        sb.append(Main.getInstance().getConfig().getString("Messages.Commands.Leaderboard.Message.Footer"));
                                         p.sendMessage(Main.c(true, sb.toString().trim()));
                                     }
                                 }.runTaskAsynchronously(Main.getInstance());
@@ -85,7 +85,7 @@ public class CommandParkour implements CommandExecutor {
                         if (CacheManager.isParkour(p)) {
                             HubParkourPlayer player = CacheManager.getPlayer(p);
                             player.getParkour().playerEnd(player);
-                            CacheManager.removePlayer(p);
+                            CacheManager.playerEnd(player);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leave.Left")));
                         } else {
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leave.Not-In-Parkour")));
@@ -112,12 +112,12 @@ public class CommandParkour implements CommandExecutor {
                         break;
                     case "list":
                         if (p.hasPermission("hubparkour.admin")) {
-                            StringBuilder sb = new StringBuilder(Main.getInstance().getConfig().getString("Messages.Admin.List.Header") + "\n");
+                            StringBuilder sb = new StringBuilder(Main.getInstance().getConfig().getString("Messages.Commands.Admin.List.Header") + "\n");
                             for (Parkour parkour : CacheManager.getParkours()) {
-                                sb.append(Main.getInstance().getConfig().getString("Messages.Admin.List.Line").replace("{parkour-name}", parkour.getName()).replace("{parkour-players}", "" + parkour.getPlayers().size()).replace("{id}", "" + parkour.getId())).append("\n");
+                                sb.append(Main.getInstance().getConfig().getString("Messages.Commands.Admin.List.Line").replace("{parkour-name}", parkour.getName()).replace("{parkour-players}", "" + parkour.getPlayers().size()).replace("{id}", "" + parkour.getId())).append("\n");
                             }
 
-                            sb.append(Main.getInstance().getConfig().getString("Messages.Leaderboard.Message.Footer"));
+                            sb.append(Main.getInstance().getConfig().getString("Messages.Commands.Admin.List.Footer"));
                             p.sendMessage(Main.c(true, sb.toString().trim()));
                         } else {
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
@@ -137,13 +137,22 @@ public class CommandParkour implements CommandExecutor {
                                 if (parkour != null) {
                                     for (HubParkourPlayer player : parkour.getPlayers()) {
                                         player.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Delete.Player-Kicked-From-Parkour")));
-                                        CacheManager.removePlayer(player.getPlayer());
+                                        CacheManager.playerEnd(player);
                                     }
 
                                     parkour.removeHolograms();
                                     for (PressurePlate pp : parkour.getAllPoints()) {
                                         CacheManager.removePlate(pp);
                                     }
+
+                                    new BukkitRunnable(){
+                                        @Override
+                                        public void run() {
+                                            Main.getInstance().getDbManager().deleteParkour(parkour);
+                                            CacheManager.getParkours().remove(parkour);
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Delete.Success")));
+                                        }
+                                    }.runTaskAsynchronously(Main.getInstance());
                                 } else {
                                     p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Delete.Not-Valid-Parkour")));
                                 }
@@ -155,11 +164,31 @@ public class CommandParkour implements CommandExecutor {
                         }
                         break;
                     default:
-                        p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Help") + ((p.hasPermission("hubparkour.admin")?Main.getInstance().getConfig().getString("Messages.Commands.Help"):""))));
+                        StringBuilder sb = new StringBuilder();
+                        for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help")) {
+                            sb.append(s).append("\n");
+                        }
+                        if (p.hasPermission("hubparkour.admin")) {
+                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help-Admin")) {
+                                sb.append(s).append("\n");
+                            }
+                        }
+
+                        p.sendMessage(Main.c(true, sb.toString().trim()));
                         break;
                 }
             } else {
-                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Help")));
+                StringBuilder sb = new StringBuilder();
+                for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help")) {
+                    sb.append(s).append("\n");
+                }
+                if (p.hasPermission("hubparkour.admin")) {
+                    for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help-Admin")) {
+                        sb.append(s).append("\n");
+                    }
+                }
+
+                p.sendMessage(Main.c(true, sb.toString().trim()));
             }
         } else {
             sender.sendMessage("You cannot execute HubParkour commands from console.");

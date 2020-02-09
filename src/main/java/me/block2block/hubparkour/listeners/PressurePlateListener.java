@@ -41,6 +41,7 @@ public class PressurePlateListener implements Listener {
                             Parkour parkour = pp.getParkour();
                             HubParkourPlayer player = new HubParkourPlayer(p, parkour);
                             parkour.playerStart(player);
+                            CacheManager.playerStart(player);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Started").replace("{parkour-name}",parkour.getName())));
                         }
                         break;
@@ -69,7 +70,7 @@ public class PressurePlateListener implements Listener {
                                 //Checkpoint the parkour.
                                 Checkpoint checkpoint = (Checkpoint) pp;
                                 CacheManager.getPlayer(p).checkpoint(checkpoint);
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoint.Reached").replace("{checkpoint}","" + checkpoint.getCheckpointNo())));
+                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoints.Reached").replace("{checkpoint}","" + checkpoint.getCheckpointNo())));
                                 return;
                             } else {
                                 //Do nothing, is doing a different parkour.

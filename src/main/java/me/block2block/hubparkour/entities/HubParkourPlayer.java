@@ -40,12 +40,14 @@ public class HubParkourPlayer {
     public void end(boolean fly) {
         if (fly) {
             player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Not-Enough-Checkpoints")));
-            CacheManager.removePlayer(player);
+            parkour.playerEnd(this);
+            CacheManager.playerEnd(this);
         } else {
             if (Main.getInstance().getConfig().getBoolean("Settings.Must-Complete-All-Checkpoints")) {
                 if (checkpoints.size() != parkour.getNoCheckpoints()) {
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Not-Enough-Checkpoints")));
-                    CacheManager.removePlayer(player);
+                    parkour.playerEnd(this);
+                    CacheManager.playerEnd(this);
                     return;
                 }
             }
@@ -59,10 +61,22 @@ public class HubParkourPlayer {
                         @Override
                         public void run() {
                             Main.getInstance().getDbManager().newTime(player, finishMili, true, parkour);
+                            int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
+                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName())));
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Not-Beat-Previous-Personal-Best").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
+                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName()).replace("{suffix}",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))))));
+                        }
+                    }.runTaskAsynchronously(Main.getInstance());
+                    parkour.playerEnd(this);
+                    CacheManager.playerEnd(this);
+                    return;
                 }
             } else {
                 if (previous == -1) {
@@ -79,23 +93,20 @@ public class HubParkourPlayer {
                         @Override
                         public void run() {
                             Main.getInstance().getDbManager().newTime(player, finishMili, false, parkour);
+                            int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
+                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName())));
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Too-Quick")));
+                    parkour.playerEnd(this);
+                    CacheManager.playerEnd(this);
+                    return;
                 }
             }
 
             parkour.playerEnd(this);
-            CacheManager.removePlayer(player);
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName())));
-                }
-            }.runTaskAsynchronously(Main.getInstance());
+            CacheManager.playerEnd(this);
         }
     }
 

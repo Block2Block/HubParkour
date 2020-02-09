@@ -2,6 +2,8 @@ package me.block2block.hubparkour;
 
 import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.entities.Parkour;
+import me.block2block.hubparkour.entities.plates.PressurePlate;
+import me.block2block.hubparkour.listeners.BreakListener;
 import me.block2block.hubparkour.listeners.PressurePlateListener;
 import me.block2block.hubparkour.listeners.SetupListener;
 import me.block2block.hubparkour.managers.CacheManager;
@@ -9,6 +11,7 @@ import me.block2block.hubparkour.managers.DatabaseManager;
 import me.block2block.hubparkour.utils.HubParkourExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,7 +51,15 @@ public class Main extends JavaPlugin {
         }
         config.options().copyHeader(true);
 
+        if (!loadTypes()) {
+            return;
+        }
+
         holograms = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
+
+        if (holograms) {
+            getLogger().info("HolographicDisplays detected.");
+        }
 
         dbManager = new DatabaseManager();
 
@@ -59,21 +70,32 @@ public class Main extends JavaPlugin {
             e.printStackTrace();
         }
 
-        if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
-            for (Parkour parkour : CacheManager.getParkours()) {
+        Bukkit.getPluginManager().registerEvents(new SetupListener(), this);
+
+        Bukkit.getPluginManager().registerEvents(new PressurePlateListener(), this);
+        Bukkit.getPluginManager().registerEvents(new BreakListener(), this);
+
+        getCommand("parkour").setExecutor(new CommandParkour());
+
+        for (Parkour parkour : CacheManager.getParkours()) {
+            for (PressurePlate pp : parkour.getAllPoints()) {
+                pp.placeMaterial();
+                if (pp.getType() != 2) {
+                    CacheManager.addPoint(pp);
+                }
+            }
+
+            if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
+                getLogger().info("Generating holograms for parkour " + parkour.getName() + "...");
                 parkour.generateHolograms();
             }
         }
 
-        Bukkit.getPluginManager().registerEvents(new SetupListener(), this);
-
-        Bukkit.getPluginManager().registerEvents(new PressurePlateListener(), this);
-
-        getCommand("parkour").setExecutor(new CommandParkour());
-
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new HubParkourExpansion(this).register();
         }
+
+        getLogger().info("Plugin successfully enabled!");
     }
 
     @Override
@@ -116,5 +138,23 @@ public class Main extends JavaPlugin {
     }
 
     public static boolean isHolograms(){return holograms;}
+
+    private boolean loadTypes() {
+        Material start = ((getConfig().getString("Settings.Pressure-Plates.Start").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.Start")):null);
+        Material checkpoint = ((getConfig().getString("Settings.Pressure-Plates.Checkpoint").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.Checkpoint")):null);
+        Material end = ((getConfig().getString("Settings.Pressure-Plates.End").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.End")):null);;
+
+        if (start == null || checkpoint == null || end == null || start == checkpoint || start == end || checkpoint == end) {
+            getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. The plugin will now be disabled.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return false;
+        }
+
+        CacheManager.setType(0, start);
+        CacheManager.setType(1, end);
+        CacheManager.setType(2, Material.AIR);
+        CacheManager.setType(3, checkpoint);
+        return true;
+    }
 
 }

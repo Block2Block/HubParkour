@@ -62,7 +62,7 @@ public class HubParkourPlayer {
                         public void run() {
                             Main.getInstance().getDbManager().newTime(player, finishMili, true, parkour);
                             int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
-                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName())));
+                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName()).replace("{suffix}",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))))));
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {
@@ -94,7 +94,7 @@ public class HubParkourPlayer {
                         public void run() {
                             Main.getInstance().getDbManager().newTime(player, finishMili, false, parkour);
                             int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
-                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName())));
+                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName()).replace("{suffix}",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))))));
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {

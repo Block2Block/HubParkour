@@ -78,7 +78,7 @@ public class PressurePlateListener implements Listener {
                                 return;
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoint.Not-Started")));
+                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoints.Not-Started")));
                         }
                         break;
                 }

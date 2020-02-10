@@ -23,8 +23,6 @@
 
 Messages:
   Prefix: "&2Parkour>> &r"
-  #This is the message that appears when someone joins the server. It can be toggled off in the settings.
-  Join-Message: "This server uses &aHubParkour &rby &aBlock2Block."
 
   #When a pressure plate is broken, this is the message that is displayed
   Break-Disallowed: "You are not allowed to break HubParkour Pressure Plates. In order to remove HubParkour Pressure Plates, please delete the parkour with /parkour delete [id]."
@@ -66,7 +64,7 @@ Messages:
       Successful: "You have been teleported to the start."
       Not-Started-Parkour: "You must start a parkour in order to reset!"
 
-    #The /parkour reset related messages.
+    #The /parkour checkpoint related messages.
     Checkpoint:
       Successful: "You have been teleported to your last checkpoint."
       Not-Started-Parkour: "You must start a parkour in order to teleport to a checkpoint!"
@@ -143,7 +141,6 @@ Messages:
 Settings:
   Holograms: false
   Must-Complete-All-Checkpoints: true
-  Join-Message: true
   Version-Checker:
     Enabled: true
     On-Join: true

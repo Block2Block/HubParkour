@@ -39,6 +39,7 @@ public class SetupListener implements Listener {
                     } else {
                         e.setCancelled(true);
                         data = new ArrayList<>();
+                        commandData = new ArrayList<>();
                         CacheManager.exitSetup();
                         e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Cancelled")));
                     }
@@ -57,6 +58,7 @@ public class SetupListener implements Listener {
                     } else {
                         e.setCancelled(true);
                         data = new ArrayList<>();
+                        commandData = new ArrayList<>();
                         CacheManager.exitSetup();
                         e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Cancelled")));
                     }
@@ -98,6 +100,8 @@ public class SetupListener implements Listener {
                                         CacheManager.addParkour(newParkour);
                                         CacheManager.exitSetup();
                                         e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Complete")));
+                                        commandData = new ArrayList<>();
+                                        data = new ArrayList<>();
                                     }
                                 }.runTaskAsynchronously(Main.getInstance());
                             }
@@ -106,6 +110,7 @@ public class SetupListener implements Listener {
                     } else {
                         e.setCancelled(true);
                         data = new ArrayList<>();
+                        commandData = new ArrayList<>();
                         CacheManager.exitSetup();
                         e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Cancelled")));
                     }
@@ -113,6 +118,7 @@ public class SetupListener implements Listener {
                     if (e.getMessage().toLowerCase().equalsIgnoreCase("cancel")) {
                         e.setCancelled(true);
                         data = new ArrayList<>();
+                        commandData = new ArrayList<>();
                         CacheManager.exitSetup();
                         e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Setup-Cancelled")));
                     } else if (e.getMessage().equalsIgnoreCase("done")) {

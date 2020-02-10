@@ -109,6 +109,8 @@ Messages:
         Name-Too-Long: "That name is too long. It must be 1 word."
         Name-Taken: "That name is already taken. Please try again."
 
+        Invalid-Placement: "The place you are trying to setup that point is currently set for a different type of point. If this is a mistake, please type 'cancel' and re-setup your parkour."
+
         Setup-Complete: "Parkour setup complete!"
         Setup-Cancelled: "Parkour setup was cancelled. Any points that were setup have been deleted."
 

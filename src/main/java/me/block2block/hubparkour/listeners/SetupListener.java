@@ -145,6 +145,10 @@ public class SetupListener implements Listener {
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-End")));
                             break;
                         case 1:
+                            if (data.get(0).getLocation().equals(e.getPlayer().getLocation().getBlock().getLocation())) {
+                                e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Invalid-Placement")));
+                                return;
+                            }
                             data.add(new EndPoint(e.getPlayer().getLocation().getBlock().getLocation()));
                             CacheManager.nextStage();
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-Respawn")));
@@ -155,6 +159,12 @@ public class SetupListener implements Listener {
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-Checkpoints")));
                             break;
                         case 3:
+                            for (PressurePlate p : data) {
+                                if (p.getLocation().equals(e.getPlayer().getLocation().getBlock().getLocation()) && p.getType() != 2) {
+                                    e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Invalid-Placement")));
+                                    return;
+                                }
+                            }
                             data.add(new Checkpoint(e.getPlayer().getLocation().getBlock().getLocation(), data.size() - 2));
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Checkpoint-Added")));
                     }

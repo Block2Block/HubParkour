@@ -145,7 +145,6 @@ Settings:
   Must-Complete-All-Checkpoints: true
   Version-Checker:
     Enabled: true
-    On-Join: true
 
   Leaderboard:
     #The limit on how many spaces on the leaderboard to load.

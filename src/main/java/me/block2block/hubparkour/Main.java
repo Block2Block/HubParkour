@@ -5,6 +5,7 @@ import me.block2block.hubparkour.commands.ParkourTabComplete;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.entities.plates.PressurePlate;
 import me.block2block.hubparkour.listeners.BreakListener;
+import me.block2block.hubparkour.listeners.FlyListener;
 import me.block2block.hubparkour.listeners.PressurePlateListener;
 import me.block2block.hubparkour.listeners.SetupListener;
 import me.block2block.hubparkour.managers.CacheManager;
@@ -79,6 +80,7 @@ public class Main extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new PressurePlateListener(), this);
         Bukkit.getPluginManager().registerEvents(new BreakListener(), this);
+        Bukkit.getPluginManager().registerEvents(new FlyListener(), this);
 
         getCommand("parkour").setExecutor(new CommandParkour());
         getCommand("parkour").setTabCompleter(new ParkourTabComplete());

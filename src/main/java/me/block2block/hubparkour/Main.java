@@ -37,6 +37,8 @@ public class Main extends JavaPlugin {
     private static boolean holograms;
     private static DatabaseManager dbManager;
 
+    private static boolean pre1_13 = false;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -101,6 +103,19 @@ public class Main extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new HubParkourExpansion(this).register();
+
+            switch (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]) {
+                case "v1_13_R1":
+                case "v1_13_R2":
+                case "v1_14_R1":
+                case "v1_15_R1":
+                    pre1_13 = false;
+                    getLogger().info("1.13/1.14 server version detected.");
+                    break;
+                default:
+                    getLogger().info("Pre-1.13 server version detected.");
+                    pre1_13 = true;
+            }
         }
 
         getLogger().info("Plugin successfully enabled!");
@@ -224,6 +239,10 @@ public class Main extends JavaPlugin {
         }
 
         return null;
+    }
+
+    public static boolean isPre1_13() {
+        return pre1_13;
     }
 
 }

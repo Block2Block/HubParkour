@@ -123,6 +123,7 @@ Messages:
     Started: "You have started the &a{parkour-name} &rparkour!"
     Restarted: "You have restarted the parkour! Your time has been reset to 0!"
     Already-In-Parkour: "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave."
+    Fall: "You have been teleported to your last checkpoint."
     Checkpoints:
       Reached: "You have reached checkpoint &a#{checkpoint}&r!"
       Not-Started: "You must start a parkour in order to reach checkpoints!"
@@ -145,6 +146,8 @@ Settings:
   Must-Complete-All-Checkpoints: true
   Version-Checker:
     Enabled: true
+  #Do you want to teleport a player to their last checkpoint upon receiving fall or void damage?
+  Teleport-On-Fall: true
 
   Leaderboard:
     #The limit on how many spaces on the leaderboard to load.

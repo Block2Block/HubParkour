@@ -4,10 +4,7 @@ import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.entities.plates.PressurePlate;
-import me.block2block.hubparkour.listeners.BreakListener;
-import me.block2block.hubparkour.listeners.FlyListener;
-import me.block2block.hubparkour.listeners.PressurePlateListener;
-import me.block2block.hubparkour.listeners.SetupListener;
+import me.block2block.hubparkour.listeners.*;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.managers.DatabaseManager;
 import me.block2block.hubparkour.utils.HubParkourExpansion;
@@ -83,6 +80,7 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PressurePlateListener(), this);
         Bukkit.getPluginManager().registerEvents(new BreakListener(), this);
         Bukkit.getPluginManager().registerEvents(new FlyListener(), this);
+        Bukkit.getPluginManager().registerEvents(new FallListener(), this);
 
         getCommand("parkour").setExecutor(new CommandParkour());
         getCommand("parkour").setTabCompleter(new ParkourTabComplete());
@@ -174,7 +172,7 @@ public class Main extends JavaPlugin {
     private boolean loadTypes() {
         Material start = ((getConfig().getString("Settings.Pressure-Plates.Start").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.Start")):null);
         Material checkpoint = ((getConfig().getString("Settings.Pressure-Plates.Checkpoint").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.Checkpoint")):null);
-        Material end = ((getConfig().getString("Settings.Pressure-Plates.End").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.End")):null);;
+        Material end = ((getConfig().getString("Settings.Pressure-Plates.End").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.End")):null);
 
         if (start == null || checkpoint == null || end == null || start == checkpoint || start == end || checkpoint == end) {
             getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. The plugin will now be disabled.");
@@ -207,15 +205,14 @@ public class Main extends JavaPlugin {
     private static String fetchSpigotVersion() {
         try {
             // We're connecting to spigot's API
-            URL url = new URL("https://www.spigotmc.org/api/general.php");
+            URL url = new URL("https://api.spigotmc.org/legacy/update.php");
             // Creating a connection
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             // We're writing a body that contains the API access key (Not required and obsolete, but!)
             con.setDoOutput(true);
 
             // Can't think of a clean way to represent this without looking bad
-            String body = "key" + "=" + "98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4" + "&" +
-                    "resource=47713";
+            String body = "resource=47713";
 
             // Get the output stream, what the site receives
             try (OutputStream stream = con.getOutputStream()) {

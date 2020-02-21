@@ -98,7 +98,7 @@ Messages:
         Player-Kicked-From-Parkour: "The parkour you were doing was deleted. You have left the parkour."
       Setup:
         Given-Setup-Stick: "You have been given the setup stick."
-        Please-Set-Start: "Welcome to the parkour setup wizard! In order to start, please start off by clicking where you would like your start pressure plate with the stick. Do not worry about placing any pressure plates, the plugin will do that for you! If you wish to cancel at any time, enter 'cancel'."
+        Please-Set-Start: "Welcome to the parkour setup wizard! Before we start, please note that the setup wizard will use your player location when clicking to register locations, not where you look when clicking the stick. In order to start, please start off by clicking where you would like your start pressure plate with the stick. Do not worry about placing any pressure plates, the plugin will do that for you! If you wish to cancel at any time, enter 'cancel'."
         Please-Set-End: "Start point set! Now, click where you would like your end pressure plate with your stick."
         Please-Set-Respawn: "End point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point. Please ensure you are looking in the direction you want them to spawn facing."
         Please-Set-Checkpoints: "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done'."

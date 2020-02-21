@@ -143,30 +143,36 @@ public class SetupListener implements Listener {
                             data.add(new StartPoint(e.getPlayer().getLocation().getBlock().getLocation()));
                             CacheManager.nextStage();
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-End")));
+                            e.setCancelled(true);
                             break;
                         case 1:
                             if (data.get(0).getLocation().equals(e.getPlayer().getLocation().getBlock().getLocation())) {
                                 e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Invalid-Placement")));
+                                e.setCancelled(true);
                                 return;
                             }
                             data.add(new EndPoint(e.getPlayer().getLocation().getBlock().getLocation()));
                             CacheManager.nextStage();
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-Respawn")));
+                            e.setCancelled(true);
                             break;
                         case 2:
                             data.add(new RestartPoint(e.getPlayer().getLocation().getBlock().getLocation()));
                             CacheManager.nextStage();
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-Checkpoints")));
+                            e.setCancelled(true);
                             break;
                         case 3:
                             for (PressurePlate p : data) {
                                 if (p.getLocation().equals(e.getPlayer().getLocation().getBlock().getLocation()) && p.getType() != 2) {
                                     e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Invalid-Placement")));
+                                    e.setCancelled(true);
                                     return;
                                 }
                             }
                             data.add(new Checkpoint(e.getPlayer().getLocation().getBlock().getLocation(), data.size() - 2));
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Checkpoint-Added")));
+                            e.setCancelled(true);
                     }
                 }
             }

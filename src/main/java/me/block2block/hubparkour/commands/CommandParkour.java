@@ -43,7 +43,7 @@ public class CommandParkour implements CommandExecutor {
                             HubParkourPlayer player = CacheManager.getPlayer(p);
                             Location l = player.getParkour().getRestartPoint().getLocation().clone();
                             if (player.getLastReached() != 0) {
-                                l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation();
+                                l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
                             }
                             l.setX(l.getX() + 0.5);
                             l.setY(l.getY() + 0.5);

@@ -81,11 +81,11 @@ public class HubParkourPlayer {
             } else {
                 if (previous == -1) {
                     if (parkour.getEndCommand() != null) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand());
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
                     }
                     if (parkour.getCheckpointCommand() != null) {
                         for (int i = 0;i < checkpoints.size();i++) {
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand());
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
                         }
                     }
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.First-Time").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));

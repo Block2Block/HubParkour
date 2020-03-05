@@ -3,6 +3,7 @@ package me.block2block.hubparkour.entities.plates;
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -32,7 +33,17 @@ public abstract class PressurePlate {
     };
 
     public void placeMaterial() {
-        location.getBlock().setType(material);
+        if (material != Material.AIR) {
+            if (location == null) {
+                Bukkit.getLogger().warning("A location that one of your parkour points is in does not exist. Please delete the " + parkour.getName() + " parkour and set it up again.");
+                return;
+            }
+            if (location.getWorld() == null) {
+                Bukkit.getLogger().warning("A location that one of your parkour points is in does not exist. Please delete the " + parkour.getName() + " parkour and set it up again.");
+                return;
+            }
+            location.getBlock().setType(material);
+        }
     };
 
     public void removeMaterial() {

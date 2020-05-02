@@ -1,0 +1,13 @@
+langauge: java
+script: mvn clean package
+deploy:
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file: "target/HubParkour-*.jar"
+    skip_cleanup: true
+  - provider: script
+    script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn deploy"
+    skip_cleanup: true
+branches:
+  only:
+    - master

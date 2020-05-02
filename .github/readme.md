@@ -1,7 +1,9 @@
 #HubParkour
+
 Welcome to HubParkour, the ultimate Hub Parkour solution!
 
 ##Installation
+
 For instalation instructions, please follow the instructions located on the [spigot page](https://www.spigotmc.org/resources/hubparkour.47713/).
 ##Developer API
 ###Using the API as a part of your plugin.
@@ -27,11 +29,13 @@ Maven:
 ```
 
 ###Usage
+
 The JavaDocs can be found [here](https://hubparkour.block2block.me/). The main class for the API is `HubParkourAPI` which can be used to get the player object and other misc things. A full list of methods is available on the JavaDoc page.
 
 There are also several Events that come as a part of the plugin that can be listened to and cancelled. Again, a full list of Events are available in the JavaDocs
 
 ###Example
+
 ```java
 import me.block2block.hubparkour.api.HubParkourAPI;import me.block2block.hubparkour.api.events.player.ParkourPlayerStartEvent;
 import org.bukkit.Bukkit;import org.bukkit.event.EventHandler;

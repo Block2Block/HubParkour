@@ -40,8 +40,10 @@ There are also several Events that come as a part of the plugin that can be list
 ### Example
 
 ```java
-import me.block2block.hubparkour.api.HubParkourAPI;import me.block2block.hubparkour.api.events.player.ParkourPlayerStartEvent;
-import org.bukkit.Bukkit;import org.bukkit.event.EventHandler;
+import me.block2block.hubparkour.api.HubParkourAPI;
+import me.block2block.hubparkour.api.events.player.ParkourPlayerStartEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class StartListener implements Listener {

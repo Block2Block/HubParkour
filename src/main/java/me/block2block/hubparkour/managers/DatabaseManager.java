@@ -62,7 +62,7 @@ public class DatabaseManager {
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_locations (`parkour_id` " + ((isMysql)?"INT":"INTEGER") +  ",`type` tinyint(3) NOT NULL,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `checkno` tinyint(64) NULL, `world` varchar(64) NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_holograms (`hologram_id` " + ((isMysql)?"INT NOT NULL AUTO_INCREMENT":"INTEGER PRIMARY KEY AUTOINCREMENT") +  ", `parkour_id` " + ((isMysql)?"INT":"INTEGER") +  ",`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_holograms (`hologram_id` " + ((isMysql)?"INT NOT NULL AUTO_INCREMENT":"INTEGER PRIMARY KEY AUTOINCREMENT") +  ", `parkour_id` " + ((isMysql)?"INT":"INTEGER") +  ",`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL" + ((isMysql)?", PRIMARY KEY (hologram_id)":"") + ")");
                 set = statement.execute();
             } catch (Exception e) {
                 Bukkit.getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");

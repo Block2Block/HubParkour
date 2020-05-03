@@ -3,6 +3,7 @@ package me.block2block.hubparkour.api.events.admin;
 import me.block2block.hubparkour.api.IParkour;
 import me.block2block.hubparkour.api.events.ParkourEvent;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
  * Called when an admin sets up a parkour.
@@ -13,7 +14,7 @@ public class ParkourSetupEvent extends ParkourEvent {
 
     @SuppressWarnings("unused")
     public ParkourSetupEvent(IParkour parkour, Player player) {
-        super(parkour);
+        super(parkour, true);
         this.player = player;
     }
 

@@ -12,7 +12,8 @@ public abstract class ParkourEvent extends Event {
     private final IParkour parkour;
 
     @SuppressWarnings("unused")
-    public ParkourEvent(IParkour parkour) {
+    public ParkourEvent(IParkour parkour, boolean isAsync) {
+        super(isAsync);
         this.parkour = parkour;
     }
 

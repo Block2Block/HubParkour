@@ -26,7 +26,7 @@ public abstract class ParkourPlayerEvent extends ParkourEvent implements Cancell
 
     @SuppressWarnings("unused")
     public ParkourPlayerEvent(IParkour parkour, IHubParkourPlayer player) {
-        super(parkour);
+        super(parkour, false);
         this.player = player;
         this.cancelled = false;
     }

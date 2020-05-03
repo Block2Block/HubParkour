@@ -13,7 +13,7 @@ public class ParkourDeleteEvent extends ParkourEvent {
 
     @SuppressWarnings("unused")
     public ParkourDeleteEvent(IParkour parkour, Player player) {
-        super(parkour);
+        super(parkour, false);
         this.player = player;
     }
 

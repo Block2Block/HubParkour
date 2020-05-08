@@ -54,7 +54,7 @@ public class LeaderboardHologram implements ILeaderboardHologram {
     }
 
     public void refresh() {
-        for (int i = 1; i < hologram.size(); i++) {
+        for (int i = (hologram.size() - 1); i > 0; i--) {
             hologram.removeLine(i);
         }
 

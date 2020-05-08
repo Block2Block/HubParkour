@@ -370,7 +370,7 @@ public class DatabaseManager {
     public void removeHologram(LeaderboardHologram hologram) {
         try {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_holograms WHERE hologram_id = ?");
-            statement.setInt(1, hologram.getParkour().getId());
+            statement.setInt(1, hologram.getId());
 
             boolean success = statement.execute();
         } catch (SQLException e) {

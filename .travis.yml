@@ -5,13 +5,9 @@ deploy:
     api_key: $GITHUB_TOKEN
     file: "/target/*.jar"
     skip_cleanup: true
-    on:
-      tags: true
   - provider: script
     script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn deploy"
     skip_cleanup: true
-    on:
-      tags: true
 branches:
   only:
     - master

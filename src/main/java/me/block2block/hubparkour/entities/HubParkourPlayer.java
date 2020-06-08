@@ -40,7 +40,9 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
     public void checkpoint(Checkpoint checkpoint) {
         lastReached = checkpoint.getCheckpointNo();
-        checkpoints.add(checkpoint);
+        if (!checkpoints.contains(checkpoint)) {
+            checkpoints.add(checkpoint);
+        }
     }
 
     public void end(boolean fly) {
@@ -149,6 +151,8 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
     public void restart() {
         startTime = System.currentTimeMillis();
+        checkpoints.clear();
+        lastReached = 0;
     }
 
     public long getPrevious() {

@@ -111,8 +111,9 @@ public class Main extends JavaPlugin {
             case "v1_13_R2":
             case "v1_14_R1":
             case "v1_15_R1":
+            case "v1_16_R1":
                 pre1_13 = false;
-                getLogger().info("1.13/1.14 server version detected.");
+                getLogger().info("1.13+ server version detected.");
                 break;
             default:
                 getLogger().info("Pre-1.13 server version detected.");

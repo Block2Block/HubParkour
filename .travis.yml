@@ -1,9 +1,11 @@
-langauge: java
+language: java
 script: mvn clean package
+before_deploy:
+  - export RELEASE_PKG_FILE=$(ls target/*.jar)
 deploy:
   - provider: releases
     api_key: $GITHUB_TOKEN
-    file: "/target/*.jar"
+    file: "${RELEASE_PKG_FILE}"
     skip_cleanup: true
   - provider: script
     script: "cp .travis.settings.xml $HOME/.m2/settings.xml && mvn deploy"

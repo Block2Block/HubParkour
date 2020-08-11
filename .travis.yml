@@ -1,7 +1,7 @@
 language: java
 script: mvn clean package
 before_deploy:
-  - export RELEASE_PKG_FILE=$(ls target/HotPotato-*)
+  - export RELEASE_PKG_FILE=$(ls target/HubParkour-*)
 deploy:
   - provider: releases
     api_key: $GITHUB_TOKEN

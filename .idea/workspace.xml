@@ -16,32 +16,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Minecraft 1.16 Support">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/items/CancelItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/items/CheckpointItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/items/ParkourItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/items/ResetItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ElytraListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Slight fix for">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerFailEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerFailEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/database/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/database/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/database/MySQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/database/MySQLConnectionPool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/database/SQLite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/database/SQLite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -324,7 +301,8 @@
       <workItem from="1597088688735" duration="131000" />
       <workItem from="1597088830109" duration="58000" />
       <workItem from="1597088900758" duration="13413000" />
-      <workItem from="1597102816266" duration="2577000" />
+      <workItem from="1597102816266" duration="3829000" />
+      <workItem from="1597106819663" duration="181000" />
     </task>
     <task id="LOCAL-00001" summary="Did some database stuff">
       <created>1578935241432</created>
@@ -550,7 +528,14 @@
       <option name="project" value="LOCAL" />
       <updated>1594165474462</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="v2.2&#10; - New Elytra and Teleportation exploit prevention (toggleable).&#10; - New Parkour Items in the hotbar.&#10; - Parkour checkpoints and restart points now take into account direction when setting up the parkour.&#10; - Added new /parkour removetime to allow you to remove people from the leaderboard.&#10; - Added new options in the config to allow users to start a new parkour when they are already in one.&#10; - Potion effects are removed when starting the parkour (toggleable).&#10; - Flying and gliding with Elytras is now toggled off when starting the parkour (toggleable).&#10; - Change MySQL connection handling to stop the server trying to keep 1 connection going continuously.&#10; - Fixed a bug where the plugin would insert the restart point twice into the Database.&#10; - Lots of misc improvements.">
+      <created>1597105601162</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1597105601162</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -601,7 +586,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="Added travis CI, optimised imports" />
     <MESSAGE value="After testing myself, fixed several bugs. Awaiting external testing." />
     <MESSAGE value="Fixing issues with setup, fixing some minor formatting issues" />
     <MESSAGE value="Added safeguard to prevent people from choosing the same location for 2 different points (besides the restart point)" />
@@ -626,7 +610,8 @@
     <MESSAGE value="v2.1.2&#10;Bug Fixes:&#10; - Fixed a bug where holograms would not properly delete themselves from the database resulting in regeneration after a server restart.&#10; - Fixed a bug where updating the hologram would only remove the first line, leaving all other lines active resulting in duplicate entries into the hologram." />
     <MESSAGE value="Bug fixes&#10; - Fixed a bug where if a checkpoint was achieved twice (by going onto the pressure plate twice), the plugin no longer things you haven't completed all of the checkpoints.&#10; - Patched an exploit which would allow a user to use /parkour checkpoint after restarting the parkour to achieve quicker parkour times." />
     <MESSAGE value="Minecraft 1.16 Support" />
-    <option name="LAST_COMMIT_MESSAGE" value="Minecraft 1.16 Support" />
+    <MESSAGE value="v2.2&#10; - New Elytra and Teleportation exploit prevention (toggleable).&#10; - New Parkour Items in the hotbar.&#10; - Parkour checkpoints and restart points now take into account direction when setting up the parkour.&#10; - Added new /parkour removetime to allow you to remove people from the leaderboard.&#10; - Added new options in the config to allow users to start a new parkour when they are already in one.&#10; - Potion effects are removed when starting the parkour (toggleable).&#10; - Flying and gliding with Elytras is now toggled off when starting the parkour (toggleable).&#10; - Change MySQL connection handling to stop the server trying to keep 1 connection going continuously.&#10; - Fixed a bug where the plugin would insert the restart point twice into the Database.&#10; - Lots of misc improvements." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.2&#10; - New Elytra and Teleportation exploit prevention (toggleable).&#10; - New Parkour Items in the hotbar.&#10; - Parkour checkpoints and restart points now take into account direction when setting up the parkour.&#10; - Added new /parkour removetime to allow you to remove people from the leaderboard.&#10; - Added new options in the config to allow users to start a new parkour when they are already in one.&#10; - Potion effects are removed when starting the parkour (toggleable).&#10; - Flying and gliding with Elytras is now toggled off when starting the parkour (toggleable).&#10; - Change MySQL connection handling to stop the server trying to keep 1 connection going continuously.&#10; - Fixed a bug where the plugin would insert the restart point twice into the Database.&#10; - Lots of misc improvements." />
   </component>
   <component name="WindowStateProjectService">
     <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1597096224451">
@@ -637,39 +622,43 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597088868997" />
+    <state x="2627" y="239" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1597105917626">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2627" y="239" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105917626" />
     <state x="370" y="434" key="GitRewordDialog" timestamp="1588942601587">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="370" y="434" key="GitRewordDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1588942601587" />
-    <state width="1877" height="121" key="GridCell.Tab.0.bottom" timestamp="1597105172221">
+    <state width="1877" height="121" key="GridCell.Tab.0.bottom" timestamp="1597106646779">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="121" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761709" />
-    <state width="1877" height="121" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105172221" />
-    <state width="1877" height="121" key="GridCell.Tab.0.center" timestamp="1597105172221">
+    <state width="1877" height="121" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597106646779" />
+    <state width="1877" height="121" key="GridCell.Tab.0.center" timestamp="1597106646779">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="121" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761709" />
-    <state width="1877" height="121" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105172221" />
-    <state width="1877" height="121" key="GridCell.Tab.0.left" timestamp="1597105172220">
+    <state width="1877" height="121" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597106646779" />
+    <state width="1877" height="121" key="GridCell.Tab.0.left" timestamp="1597106646779">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="121" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761709" />
-    <state width="1877" height="121" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105172220" />
-    <state width="1877" height="121" key="GridCell.Tab.0.right" timestamp="1597105172221">
+    <state width="1877" height="121" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597106646779" />
+    <state width="1877" height="121" key="GridCell.Tab.0.right" timestamp="1597106646779">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="121" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761709" />
-    <state width="1877" height="121" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105172221" />
+    <state width="1877" height="121" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597106646779" />
     <state x="201" y="144" key="VCS.ChangeListViewerDialog" timestamp="1588540604932">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="201" y="144" key="VCS.ChangeListViewerDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1588540604932" />
-    <state x="427" y="181" key="Vcs.Push.Dialog.v2" timestamp="1594165493097">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2347" y="181" key="Vcs.Push.Dialog.v2" timestamp="1597105612853">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="427" y="181" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1594165493097" />
-    <state x="2347" y="181" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1591627660960" />
+    <state x="2347" y="181" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105612853" />
     <state x="761" y="426" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1593523521992">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

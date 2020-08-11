@@ -30,7 +30,6 @@ public class FallListener implements Listener {
                         l.setX(l.getX() + 0.5);
                         l.setY(l.getY() + 0.5);
                         l.setZ(l.getZ() + 0.5);
-                        CacheManager.getPendingTeleports().add(p);
                         p.teleport(l);
                         p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Fall")));
                     }

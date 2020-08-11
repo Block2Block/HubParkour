@@ -7,18 +7,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="BranchesTreeState">
-    <expand>
+    <expand />
+    <select>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
-    </expand>
-    <select />
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Slight fix for">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Whoops">
+      <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,6 +122,7 @@
   </component>
   <component name="ProjectId" id="1TI7TQ5gQYXoPkbFk5MlUB2PiMY" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -153,8 +163,8 @@
     <option name="myCommands">
       <command value="mvn clean package -Xlint:deprecation" />
       <command value="mvn deploy" />
-      <command value="mvn clean package" />
       <command value="mvn clean package deploy" />
+      <command value="mvn clean package" />
     </option>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -303,6 +313,8 @@
       <workItem from="1597088900758" duration="13413000" />
       <workItem from="1597102816266" duration="3829000" />
       <workItem from="1597106819663" duration="181000" />
+      <workItem from="1597107040126" duration="774000" />
+      <workItem from="1597150786524" duration="5906000" />
     </task>
     <task id="LOCAL-00001" summary="Did some database stuff">
       <created>1578935241432</created>
@@ -535,7 +547,21 @@
       <option name="project" value="LOCAL" />
       <updated>1597105601162</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Slight fix for Travis CI Build management">
+      <created>1597107054199</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1597107054199</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Whoops">
+      <created>1597107181905</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1597107181905</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -575,19 +601,12 @@
         </entry>
       </map>
     </option>
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="1" value="TOOL_WINDOW" />
-      </map>
-    </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="After testing myself, fixed several bugs. Awaiting external testing." />
-    <MESSAGE value="Fixing issues with setup, fixing some minor formatting issues" />
     <MESSAGE value="Added safeguard to prevent people from choosing the same location for 2 different points (besides the restart point)" />
     <MESSAGE value="Version 2.0" />
     <MESSAGE value="Changed version from 2.0-ALPHA to 2.0" />
@@ -611,7 +630,9 @@
     <MESSAGE value="Bug fixes&#10; - Fixed a bug where if a checkpoint was achieved twice (by going onto the pressure plate twice), the plugin no longer things you haven't completed all of the checkpoints.&#10; - Patched an exploit which would allow a user to use /parkour checkpoint after restarting the parkour to achieve quicker parkour times." />
     <MESSAGE value="Minecraft 1.16 Support" />
     <MESSAGE value="v2.2&#10; - New Elytra and Teleportation exploit prevention (toggleable).&#10; - New Parkour Items in the hotbar.&#10; - Parkour checkpoints and restart points now take into account direction when setting up the parkour.&#10; - Added new /parkour removetime to allow you to remove people from the leaderboard.&#10; - Added new options in the config to allow users to start a new parkour when they are already in one.&#10; - Potion effects are removed when starting the parkour (toggleable).&#10; - Flying and gliding with Elytras is now toggled off when starting the parkour (toggleable).&#10; - Change MySQL connection handling to stop the server trying to keep 1 connection going continuously.&#10; - Fixed a bug where the plugin would insert the restart point twice into the Database.&#10; - Lots of misc improvements." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.2&#10; - New Elytra and Teleportation exploit prevention (toggleable).&#10; - New Parkour Items in the hotbar.&#10; - Parkour checkpoints and restart points now take into account direction when setting up the parkour.&#10; - Added new /parkour removetime to allow you to remove people from the leaderboard.&#10; - Added new options in the config to allow users to start a new parkour when they are already in one.&#10; - Potion effects are removed when starting the parkour (toggleable).&#10; - Flying and gliding with Elytras is now toggled off when starting the parkour (toggleable).&#10; - Change MySQL connection handling to stop the server trying to keep 1 connection going continuously.&#10; - Fixed a bug where the plugin would insert the restart point twice into the Database.&#10; - Lots of misc improvements." />
+    <MESSAGE value="Slight fix for Travis CI Build management" />
+    <MESSAGE value="Whoops" />
+    <option name="LAST_COMMIT_MESSAGE" value="Whoops" />
   </component>
   <component name="WindowStateProjectService">
     <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1597096224451">
@@ -630,47 +651,53 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="370" y="434" key="GitRewordDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1588942601587" />
-    <state width="1877" height="121" key="GridCell.Tab.0.bottom" timestamp="1597106646779">
+    <state width="1877" height="121" key="GridCell.Tab.0.bottom" timestamp="1597184357485">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="121" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761709" />
-    <state width="1877" height="121" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597106646779" />
-    <state width="1877" height="121" key="GridCell.Tab.0.center" timestamp="1597106646779">
+    <state width="1877" height="121" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597184357485" />
+    <state width="1877" height="121" key="GridCell.Tab.0.center" timestamp="1597184357485">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="121" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761709" />
-    <state width="1877" height="121" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597106646779" />
-    <state width="1877" height="121" key="GridCell.Tab.0.left" timestamp="1597106646779">
+    <state width="1877" height="121" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597184357485" />
+    <state width="1877" height="121" key="GridCell.Tab.0.left" timestamp="1597184357485">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="121" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761709" />
-    <state width="1877" height="121" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597106646779" />
-    <state width="1877" height="121" key="GridCell.Tab.0.right" timestamp="1597106646779">
+    <state width="1877" height="121" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597184357485" />
+    <state width="1877" height="121" key="GridCell.Tab.0.right" timestamp="1597184357485">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="121" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761709" />
-    <state width="1877" height="121" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597106646779" />
+    <state width="1877" height="121" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597184357485" />
     <state x="201" y="144" key="VCS.ChangeListViewerDialog" timestamp="1588540604932">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="201" y="144" key="VCS.ChangeListViewerDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1588540604932" />
-    <state x="2347" y="181" key="Vcs.Push.Dialog.v2" timestamp="1597105612853">
+    <state x="2347" y="181" key="Vcs.Push.Dialog.v2" timestamp="1597107191608">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="427" y="181" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1594165493097" />
-    <state x="2347" y="181" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105612853" />
-    <state x="761" y="426" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1593523521992">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2347" y="181" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597107191608" />
+    <state x="2697" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597107678507">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2697" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597107678507" />
+    <state x="2681" y="426" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1597107200536">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="761" y="426" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1593523521992" />
-    <state x="932" y="209" key="git4idea.ui.GitTagDialog" timestamp="1588540609809">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2681" y="426" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597107200536" />
+    <state x="2852" y="209" key="git4idea.ui.GitTagDialog" timestamp="1597107692126">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="932" y="209" key="git4idea.ui.GitTagDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1588540609809" />
-    <state x="2208" y="139" width="894" height="880" key="run.anything.popup" timestamp="1597105172204">
+    <state x="2852" y="209" key="git4idea.ui.GitTagDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597107692126" />
+    <state x="2208" y="139" width="894" height="880" key="run.anything.popup" timestamp="1597184357467">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="288" y="139" width="894" height="880" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597104761690" />
-    <state x="2208" y="139" width="894" height="880" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105172204" />
+    <state x="2208" y="139" width="894" height="880" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597184357467" />
   </component>
 </project>

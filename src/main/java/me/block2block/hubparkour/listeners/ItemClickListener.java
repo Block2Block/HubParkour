@@ -36,7 +36,6 @@ public class ItemClickListener implements Listener {
                                 l.setX(l.getX() + 0.5);
                                 l.setY(l.getY() + 0.5);
                                 l.setZ(l.getZ() + 0.5);
-                                CacheManager.getPendingTeleports().add(p);
                                 p.teleport(l);
                                 p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Successful")));
                                 break;
@@ -54,7 +53,6 @@ public class ItemClickListener implements Listener {
                                 l2.setX(l2.getX() + 0.5);
                                 l2.setY(l2.getY() + 0.5);
                                 l2.setZ(l2.getZ() + 0.5);
-                                CacheManager.getPendingTeleports().add(p);
                                 p.teleport(l2);
                                 p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Successful")));
                                 break;

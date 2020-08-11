@@ -18,11 +18,11 @@ public class CacheManager {
 
     private static final Map<UUID, HubParkourPlayer> players;
     private static final Map<Location, PressurePlate> points;
+    private static final Map<Location, PressurePlate> restartPoints;
     private static final Map<Integer, Material> types;
     private static final Map<Integer, ItemStack> items;
     private static final List<Parkour> parkours;
     private static final List<LeaderboardHologram> leaderboards;
-    private static final List<Player> pendingTeleports;
     private static int setupStage = -1;
     private static Player setupPlayer;
 
@@ -33,7 +33,7 @@ public class CacheManager {
         items = new HashMap<>();
         parkours = new ArrayList<>();
         leaderboards = new ArrayList<>();
-        pendingTeleports = new ArrayList<>();
+        restartPoints = new HashMap<>();
     }
 
     public static boolean isParkour(Player p) {
@@ -112,11 +112,25 @@ public class CacheManager {
         return points.containsKey(location);
     }
 
+    public static boolean isRestartPoint(Location location) {
+        location = location.clone();
+        location.setPitch(0);
+        location.setYaw(0);
+        return restartPoints.containsKey(location);
+    }
+
     public static PressurePlate getPoint(Location location) {
         location = location.clone();
         location.setPitch(0);
         location.setYaw(0);
         return points.get(location);
+    }
+
+    public static PressurePlate getRestartPoint(Location location) {
+        location = location.clone();
+        location.setPitch(0);
+        location.setYaw(0);
+        return restartPoints.get(location);
     }
 
     public static void removePlate(PressurePlate p) {
@@ -125,10 +139,17 @@ public class CacheManager {
     }
 
     public static void addPoint(PressurePlate p) {
-        Location location = p.getLocation();
+        Location location = p.getLocation().clone();
         location.setYaw(0);
         location.setPitch(0);
         points.put(location, p);
+    }
+
+    public static void addRestartPoint(PressurePlate p) {
+        Location location = p.getLocation().clone();
+        location.setYaw(0);
+        location.setPitch(0);
+        restartPoints.put(location, p);
     }
 
     public static void playerStart(HubParkourPlayer p) {
@@ -160,7 +181,4 @@ public class CacheManager {
         return leaderboards;
     }
 
-    public static List<Player> getPendingTeleports() {
-        return pendingTeleports;
-    }
 }

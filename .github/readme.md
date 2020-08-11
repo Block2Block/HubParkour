@@ -25,7 +25,7 @@ Maven:
     <dependency>
         <groupId>me.block2block</groupId>
         <artifactId>HubParkour</artifactId>
-        <version>2.1.3</version>
+        <version>2.2.1</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>

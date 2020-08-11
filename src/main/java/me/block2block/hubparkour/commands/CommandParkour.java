@@ -46,7 +46,6 @@ public class CommandParkour implements CommandExecutor {
                             l.setX(l.getX() + 0.5);
                             l.setY(l.getY() + 0.5);
                             l.setZ(l.getZ() + 0.5);
-                            CacheManager.getPendingTeleports().add(p);
                             p.teleport(l);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Successful")));
                         } else {
@@ -68,7 +67,6 @@ public class CommandParkour implements CommandExecutor {
                             l.setX(l.getX() + 0.5);
                             l.setY(l.getY() + 0.5);
                             l.setZ(l.getZ() + 0.5);
-                            CacheManager.getPendingTeleports().add(p);
                             p.teleport(l);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Successful")));
                         } else {

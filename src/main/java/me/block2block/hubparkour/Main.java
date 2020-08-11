@@ -89,6 +89,8 @@ public class Main extends JavaPlugin {
                 pp.placeMaterial();
                 if (pp.getType() != 2) {
                     CacheManager.addPoint(pp);
+                } else {
+                    CacheManager.addRestartPoint(pp);
                 }
             }
 

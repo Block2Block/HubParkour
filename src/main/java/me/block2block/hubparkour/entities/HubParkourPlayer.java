@@ -6,6 +6,10 @@ import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFinishEvent;
+import me.block2block.hubparkour.api.items.CancelItem;
+import me.block2block.hubparkour.api.items.CheckpointItem;
+import me.block2block.hubparkour.api.items.ParkourItem;
+import me.block2block.hubparkour.api.items.ResetItem;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.Bukkit;
@@ -21,6 +25,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     private final Player player;
     private final Parkour parkour;
     private final List<Checkpoint> checkpoints = new ArrayList<>();
+    private final List<ParkourItem> parkourItems = new ArrayList<>();
     private int lastReached = 0;
     private long startTime;
     private long previous = -2;
@@ -36,6 +41,9 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                 previous = Main.getInstance().getDbManager().getTime(p, parkour);
             }
         }.runTaskAsynchronously(Main.getInstance());
+        parkourItems.add(new ResetItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Reset.Slot")));
+        parkourItems.add(new CheckpointItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Checkpoint.Slot")));
+        parkourItems.add(new CancelItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Cancel.Slot")));
     }
 
     public void checkpoint(Checkpoint checkpoint) {
@@ -45,14 +53,27 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         }
     }
 
-    public void end(boolean fly) {
-        if (fly) {
-            ParkourPlayerFailEvent failEvent = new ParkourPlayerFailEvent(this.parkour, this, ParkourPlayerFailEvent.FailCause.FLY);
+    public void end(ParkourPlayerFailEvent.FailCause cause) {
+        if (cause != null) {
+            ParkourPlayerFailEvent failEvent = new ParkourPlayerFailEvent(this.parkour, this, cause);
             Bukkit.getPluginManager().callEvent(failEvent);
             if (failEvent.isCancelled()) {
                 return;
             }
-            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Not-Enough-Checkpoints")));
+            switch (cause) {
+                case FLY:
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Fly")));
+                    break;
+                case ELYTRA_USE:
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Elytra-Use")));
+                    break;
+                case TELEPORTATION:
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Teleportation")));
+                    break;
+                case NEW_PARKOUR:
+                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Parkour-Change")));
+                    break;
+            }
         } else {
             if (Main.getInstance().getConfig().getBoolean("Settings.Must-Complete-All-Checkpoints")) {
                 if (checkpoints.size() != parkour.getNoCheckpoints()) {
@@ -64,6 +85,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Not-Enough-Checkpoints")));
                     parkour.playerEnd(this);
                     CacheManager.playerEnd(this);
+                    removeItems();
                     return;
                 }
             }
@@ -100,6 +122,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     }.runTaskAsynchronously(Main.getInstance());
                     parkour.playerEnd(this);
                     CacheManager.playerEnd(this);
+                    removeItems();
                     return;
                 }
             } else {
@@ -128,6 +151,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Too-Quick")));
                     parkour.playerEnd(this);
                     CacheManager.playerEnd(this);
+                    removeItems();
                     return;
                 }
             }
@@ -135,6 +159,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         }
         parkour.playerEnd(this);
         CacheManager.playerEnd(this);
+        removeItems();
     }
 
     public int getLastReached() {
@@ -161,5 +186,21 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
     public long getStartTime() {
         return startTime;
+    }
+
+    public List<ParkourItem> getParkourItems() {
+        return parkourItems;
+    }
+
+    public void giveItems() {
+        for (ParkourItem item : parkourItems) {
+            item.giveItem();
+        }
+    }
+
+    public void removeItems(){
+        for (ParkourItem item : parkourItems) {
+            item.removeItem();
+        }
     }
 }

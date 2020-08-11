@@ -9,11 +9,13 @@ import me.block2block.hubparkour.listeners.*;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.managers.DatabaseManager;
 import me.block2block.hubparkour.utils.HubParkourExpansion;
+import me.block2block.hubparkour.utils.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -77,6 +79,7 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BreakListener(), this);
         Bukkit.getPluginManager().registerEvents(new FlyListener(), this);
         Bukkit.getPluginManager().registerEvents(new FallListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ItemClickListener(), this);
 
         getCommand("parkour").setExecutor(new CommandParkour());
         getCommand("parkour").setTabCompleter(new ParkourTabComplete());
@@ -114,10 +117,24 @@ public class Main extends JavaPlugin {
             case "v1_16_R1":
                 pre1_13 = false;
                 getLogger().info("1.13+ server version detected.");
+                //Elytras are present in this version, register Elytra listener.
+                Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
                 break;
+            case "v1_12_R1":
+            case "v1_11_R1":
+            case "v1_10_R1":
+            case "v1_9_R1":
+            case "v1_9_R2":
+                //Elytras are present in this version, register Elytra listener.
+                Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
             default:
                 getLogger().info("Pre-1.13 server version detected.");
                 pre1_13 = true;
+        }
+
+        if (!loadItems()) {
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
         }
 
         getLogger().info("Plugin successfully enabled!");
@@ -181,7 +198,7 @@ public class Main extends JavaPlugin {
         Material end = ((getConfig().getString("Settings.Pressure-Plates.End").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.End")):null);
 
         if (start == null || checkpoint == null || end == null || start == checkpoint || start == end || checkpoint == end) {
-            getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. The plugin will now be disabled.");
+            getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. If this is the first time you've started the plugin and are on any version from 1.8-1.12, you must change the values to work with the old Spigot API. The plugin will now be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
@@ -190,6 +207,35 @@ public class Main extends JavaPlugin {
         CacheManager.setType(1, end);
         CacheManager.setType(2, Material.AIR);
         CacheManager.setType(3, checkpoint);
+        return true;
+    }
+
+    private boolean loadItems() {
+        Material reset = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Reset.Item"));
+        Material checkpoint = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Checkpoint.Item"));
+        Material cancel = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Cancel.Item"));
+
+        if (reset == null || checkpoint == null || cancel == null || reset == checkpoint || reset == cancel || checkpoint == cancel) {
+            getLogger().info("There are invalid values in your config.yml for the parkour items. Please correct the error and restart your server. If this is the first time you've started the plugin and are on any version from 1.8-1.12, you must change the values to work with the old Spigot API. The plugin will now be disabled.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return false;
+        }
+
+        if (getConfig().getInt("Settings.Parkour-Items.Cancel.Slot") != -1) {
+            ItemStack item = ItemUtil.ci(cancel, getConfig().getString("Settings.Parkour-Items.Cancel.Name"), 1, "", (short) getConfig().getInt("Settings.Parkour-Items.Cancel.Item-Data"));
+            CacheManager.setItem(2, item);
+        }
+
+        if (getConfig().getInt("Settings.Parkour-Items.Reset.Slot") != -1) {
+            ItemStack item = ItemUtil.ci(reset, getConfig().getString("Settings.Parkour-Items.Reset.Name"), 1, "", (short) getConfig().getInt("Settings.Parkour-Items.Reset.Item-Data"));
+            CacheManager.setItem(0, item);
+        }
+
+        if (getConfig().getInt("Settings.Parkour-Items.Checkpoint.Slot") != -1) {
+            ItemStack item = ItemUtil.ci(checkpoint, getConfig().getString("Settings.Parkour-Items.Checkpoint.Name"), 1, "", (short) getConfig().getInt("Settings.Parkour-Items.Checkpoint.Item-Data"));
+            CacheManager.setItem(1, item);
+        }
+
         return true;
     }
 

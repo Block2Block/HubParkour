@@ -11,7 +11,7 @@ public class ParkourPlayerFailEvent extends ParkourPlayerEvent {
     /**
      * Util enum for the Fail Cause.
      */
-    public enum FailCause {FLY, NOT_ENOUGH_CHECKPOINTS, @SuppressWarnings("unused") CUSTOM}
+    public enum FailCause {FLY, ELYTRA_USE, TELEPORTATION, NOT_ENOUGH_CHECKPOINTS, NEW_PARKOUR, @SuppressWarnings("unused") CUSTOM}
 
     private final FailCause failCause;
 

@@ -1,16 +1,14 @@
-package me.block2block.hubparkour.managers.database;
+package me.block2block.hubparkour.utils.database;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Connects to and uses a MySQL database
- *
- * @author -_Husky_-
- * @author tips48
- */
-public class MySQL extends Database {
+public class MySQLConnectionPool {
+
+    private BasicDataSource dataSource;
+
     private final String user;
     private final String database;
     private final String password;
@@ -29,9 +27,8 @@ public class MySQL extends Database {
      * @param password
      *            Password
      */
-    @SuppressWarnings("unused")
-    public MySQL(String hostname, String port, String username,
-                 String password) {
+    public MySQLConnectionPool(String hostname, String port, String username,
+                               String password) throws ClassNotFoundException {
         this(hostname, port, null, username, password);
     }
 
@@ -43,28 +40,19 @@ public class MySQL extends Database {
      * @param port
      *            Port number
      * @param database
-     *            io.github.Block2Block.BSNServerCommand.MySQL.Database name
+     *            Database name
      * @param username
      *            Username
      * @param password
      *            Password
      */
-    @SuppressWarnings("unused")
-    public MySQL(String hostname, String port, String database,
-                 String username, String password) {
+    public MySQLConnectionPool(String hostname, String port, String database,
+                               String username, String password) throws ClassNotFoundException {
         this.hostname = hostname;
         this.port = port;
         this.database = database;
         this.user = username;
         this.password = password;
-    }
-
-    @Override
-    public Connection openConnection() throws SQLException,
-            ClassNotFoundException {
-        if (checkConnection()) {
-            return connection;
-        }
 
         String connectionURL = "jdbc:mysql://"
                 + this.hostname + ":" + this.port;
@@ -73,9 +61,14 @@ public class MySQL extends Database {
         }
 
         Class.forName("com.mysql.jdbc.Driver");
-        connection = DriverManager.getConnection(connectionURL,
-                this.user, this.password);
-        return connection;
+        dataSource = new BasicDataSource();
+        dataSource.setUrl(connectionURL);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
     }
-}
 
+    public Connection getConnection() throws SQLException {
+        return dataSource.getConnection();
+    }
+
+}

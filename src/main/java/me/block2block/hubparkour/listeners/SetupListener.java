@@ -7,6 +7,7 @@ import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -145,39 +146,42 @@ public class SetupListener implements Listener {
         if (CacheManager.isSetup(e.getPlayer())) {
             if (e.hasItem()) {
                 if (e.getItem().getType() == Material.STICK && ChatColor.stripColor(e.getItem().getItemMeta().getDisplayName()).equals("HubParkour Setup Stick")) {
+                    Location location = e.getPlayer().getLocation().getBlock().getLocation();
+                    location.setPitch(e.getPlayer().getLocation().getPitch());
+                    location.setYaw(e.getPlayer().getLocation().getYaw());
                     switch (CacheManager.getSetupStage()) {
                         case 0:
-                            data.add(new StartPoint(e.getPlayer().getLocation().getBlock().getLocation()));
+                            data.add(new StartPoint(location));
                             CacheManager.nextStage();
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-End")));
                             e.setCancelled(true);
                             break;
                         case 1:
-                            if (data.get(0).getLocation().equals(e.getPlayer().getLocation().getBlock().getLocation())) {
+                            if (data.get(0).getLocation().equals(location)) {
                                 e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Invalid-Placement")));
                                 e.setCancelled(true);
                                 return;
                             }
-                            data.add(new EndPoint(e.getPlayer().getLocation().getBlock().getLocation()));
+                            data.add(new EndPoint(location));
                             CacheManager.nextStage();
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-Respawn")));
                             e.setCancelled(true);
                             break;
                         case 2:
-                            data.add(new RestartPoint(e.getPlayer().getLocation().getBlock().getLocation()));
+                            data.add(new RestartPoint(location));
                             CacheManager.nextStage();
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-Checkpoints")));
                             e.setCancelled(true);
                             break;
                         case 3:
                             for (PressurePlate p : data) {
-                                if (p.getLocation().equals(e.getPlayer().getLocation().getBlock().getLocation()) && p.getType() != 2) {
+                                if (p.getLocation().equals(location) && p.getType() != 2) {
                                     e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Invalid-Placement")));
                                     e.setCancelled(true);
                                     return;
                                 }
                             }
-                            data.add(new Checkpoint(e.getPlayer().getLocation().getBlock().getLocation(), data.size() - 2));
+                            data.add(new Checkpoint(location, data.size() - 2));
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Checkpoint-Added")));
                             e.setCancelled(true);
                     }

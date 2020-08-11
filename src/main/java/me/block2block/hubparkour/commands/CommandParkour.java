@@ -46,6 +46,7 @@ public class CommandParkour implements CommandExecutor {
                             l.setX(l.getX() + 0.5);
                             l.setY(l.getY() + 0.5);
                             l.setZ(l.getZ() + 0.5);
+                            CacheManager.getPendingTeleports().add(p);
                             p.teleport(l);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Successful")));
                         } else {
@@ -67,6 +68,7 @@ public class CommandParkour implements CommandExecutor {
                             l.setX(l.getX() + 0.5);
                             l.setY(l.getY() + 0.5);
                             l.setZ(l.getZ() + 0.5);
+                            CacheManager.getPendingTeleports().add(p);
                             p.teleport(l);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Successful")));
                         } else {
@@ -108,6 +110,7 @@ public class CommandParkour implements CommandExecutor {
                             if (leaveEvent.isCancelled()) {
                                 return true;
                             }
+                            player.removeItems();
                             player.getParkour().playerEnd(player);
                             CacheManager.playerEnd(player);
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leave.Left")));
@@ -284,6 +287,51 @@ public class CommandParkour implements CommandExecutor {
                                 }
                             } else {
                                 p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Must-Have-Holographic-Displays")));
+                            }
+                        } else {
+                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                        }
+                        break;
+                    case "removetime":
+                        if (p.hasPermission("hubparkour.admin")) {
+                            if (args.length == 3) {
+                                new BukkitRunnable(){
+                                    @Override
+                                    public void run() {
+                                        int parkourID;
+                                        try {
+                                            parkourID = Integer.parseInt(args[1]);
+                                        } catch (NumberFormatException e) {
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Not-Valid-Parkour")));
+                                            return;
+                                        }
+
+                                        Parkour parkour = CacheManager.getParkour(parkourID);
+                                        if (parkour == null) {
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Not-Valid-Parkour")));
+                                            return;
+                                        }
+                                        long time = Main.getInstance().getDbManager().getTime(args[2], parkour);
+                                        if (time == -1) {
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Not-Valid-Player")));
+                                            return;
+                                        }
+
+                                        Main.getInstance().getDbManager().resetTime(args[2], parkour.getId());
+                                        p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Success")));
+
+                                        new BukkitRunnable(){
+                                            @Override
+                                            public void run() {
+                                                for (ILeaderboardHologram hologram : parkour.getLeaderboards()) {
+                                                    hologram.refresh();
+                                                }
+                                            }
+                                        }.runTask(Main.getInstance());
+                                    }
+                                }.runTaskAsynchronously(Main.getInstance());
+                            } else {
+                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Not-Valid-Parkour")));
                             }
                         } else {
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));

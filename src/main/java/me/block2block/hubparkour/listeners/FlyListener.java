@@ -1,8 +1,14 @@
 package me.block2block.hubparkour.listeners;
 
+import me.block2block.hubparkour.Main;
+import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.managers.CacheManager;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 public class FlyListener implements Listener {
@@ -12,7 +18,22 @@ public class FlyListener implements Listener {
     public void onFly(PlayerToggleFlightEvent e) {
         if (e.isFlying()) {
             if (CacheManager.isParkour(e.getPlayer())) {
-                CacheManager.getPlayer(e.getPlayer()).end(true);
+                if (Main.getInstance().getConfig().getBoolean("Settings.Fail.On-Toggle-Fly")) {
+                    CacheManager.getPlayer(e.getPlayer()).end(ParkourPlayerFailEvent.FailCause.FLY);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent e) {
+        if (CacheManager.isParkour(e.getPlayer())) {
+            if (!CacheManager.getPendingTeleports().contains(e.getPlayer())) {
+                if (Main.getInstance().getConfig().getBoolean("Settings.Fail.On-Teleport")) {
+                    CacheManager.getPlayer(e.getPlayer()).end(ParkourPlayerFailEvent.FailCause.TELEPORTATION);
+                }
+            } else {
+                CacheManager.getPendingTeleports().remove(e.getPlayer());
             }
         }
     }

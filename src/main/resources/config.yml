@@ -58,6 +58,7 @@ Messages:
       - "&a/parkour hologram list&r - List all active holograms and their ID's."
       - "&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID."
       - "&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID."
+      - "&a/parkour removetime [parkour id] [player name]&r - Reset a players leaderboard time."
 
     #When a player does not have permission to execute a certain sub-command (only applicable to the admin commands).
     No-Permission: "You do not have permission to execute this command."
@@ -99,9 +100,13 @@ Messages:
         Line: "&a#{id} &r- &a{parkour-name} &r- &a{parkour-players} &ractive players."
         Footer: ""
       Delete:
-        Not-Valid-Parkour: "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list"
+        Not-Valid-Parkour: "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list."
         Success: "Parkour deleted successfully."
         Player-Kicked-From-Parkour: "The parkour you were doing was deleted. You have left the parkour."
+      RemoveTime:
+        Not-Valid-Parkour: "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list."
+        Not-Valid-Player: "That player has never attempted this parkour."
+        Success: "The players time has been reset!"
       Hologram:
         Must-Have-Holographic-Displays: "You must have Holographic Displays installed and holograms enabled in the config.yml in order to use this command."
         Help:
@@ -123,14 +128,14 @@ Messages:
           Successful: "Hologram successfully deleted."
       Setup:
         Given-Setup-Stick: "You have been given the setup stick."
-        Please-Set-Start: "Welcome to the parkour setup wizard! Before we start, please note that the setup wizard will use your player location when clicking to register locations, not where you look when clicking the stick. In order to start, please start off by clicking where you would like your start pressure plate with the stick. Do not worry about placing any pressure plates, the plugin will do that for you! If you wish to cancel at any time, enter 'cancel'."
+        Please-Set-Start: "Welcome to the parkour setup wizard!\n\nBefore we start, please note that the setup wizard will use your player location when clicking to register locations, not where you look when clicking the stick. When players use commands, they will get teleported facing the direction you are facing when clicking the stick.\nIn order to start, please start off by clicking where you would like your start pressure plate with the stick. Do not worry about placing any pressure plates, the plugin will do that for you! If you wish to cancel at any time, enter 'cancel'."
         Please-Set-End: "Start point set! Now, click where you would like your end pressure plate with your stick."
-        Please-Set-Respawn: "End point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point. Please ensure you are looking in the direction you want them to spawn facing."
+        Please-Set-Respawn: "End point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point."
         Please-Set-Checkpoints: "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done'."
         Checkpoint-Added: "Checkpoint successfully added."
         Please-Set-Name: "Now, you need to set a name for your parkour! Please enter a name for your parkour. It must be one word and not a duplicate. Names are compatible with formatting codes."
-        Please-Set-End-Command: "The name has been set! Please now type out your reward command for the end of your parkour. If you don't want one, just type 'none'."
-        Please-Set-Checkpoint-Command: "The End Command has been set! Please now type out your reward command for checkpoints of your parkour. This command will only be executed for each reached checkpoint after they finish the parkour to prevent exploitation. If you don't want one, just type 'none'."
+        Please-Set-End-Command: "The name has been set! Please now type out your reward command for the end of your parkour. If you don't want one, just type 'none'. Available placeholders are {player-uuid} and {player-name}."
+        Please-Set-Checkpoint-Command: "The End Command has been set! Please now type out your reward command for checkpoints of your parkour. This command will only be executed for each reached checkpoint after they finish the parkour to prevent exploitation. If you don't want one, just type 'none'. Available placeholders are {player-uuid} and {player-name}."
         Name-Too-Long: "That name is too long. It must be 1 word."
         Name-Taken: "That name is already taken. Please try again."
 
@@ -159,8 +164,11 @@ Messages:
       Not-Started: "You must start a parkour in order to finish it."
       Failed:
         Fly: "You are not allowed to fly while doing the parkour. Parkour failed!"
+        Elytra-Use: "You are not allowed to use an Elytra while doing the parkour. Parkour failed!"
+        Teleportation: "You are not allowed to teleport while doing the parkour. Parkour failed!"
         Not-Enough-Checkpoints: "You did not reach enough checkpoints, parkour failed!"
         Too-Quick: "You completed the parkour too quickly, parkour failed!"
+        Parkour-Change: "You have started another parkour, parkour failed!"
 
     #Messages displayed when a user finishes the parkour. It tells them what position they are in the leaderboard for that parkour.
     Leaderboard:
@@ -173,6 +181,35 @@ Settings:
     Enabled: true
   #Do you want to teleport a player to their last checkpoint upon receiving fall or void damage?
   Teleport-On-Fall: true
+  #Whether or not to remove potion effects on parkour start.
+  Remove-Potion-Effects: true
+  #Whether or to toggle flying off for the user when the user starts the parkour.
+  Remove-Fly: true
+  #If a player is already in a parkour, should they start a new parkour if they step on the start pressure plate.
+  Start-When-In-Parkour: false
+  #Whether a player should be failed for doing these specific things.
+  Fail:
+    On-Teleport: true
+    On-Elytra-Use: true
+    On-Toggle-Fly: true
+
+  #Settings related to items given when the parkour is started. Specify the slot for them to be put in. Use -1 to disable a specific item.
+  Parkour-Items:
+    Checkpoint:
+      Slot: 4
+      Item: "HEAVY_WEIGHTED_PRESSURE_PLATE"
+      Item-Data: 0
+      Name: "&aTeleport to Last Checkpoint"
+    Reset:
+      Slot: 5
+      Item: "OAK_DOOR"
+      Item-Data: 0
+      Name: "&cReset"
+    Cancel:
+      Slot: 6
+      Item: "RED_BED"
+      Item-Data: 0
+      Name: "&cCancel"
 
   Leaderboard:
     #The limit on how many spaces on the leaderboard to load. This will also effect leaderboard holograms.

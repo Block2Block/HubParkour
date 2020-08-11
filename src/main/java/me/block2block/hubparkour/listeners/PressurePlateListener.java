@@ -2,6 +2,7 @@ package me.block2block.hubparkour.listeners;
 
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerCheckpointEvent;
+import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerStartEvent;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.api.plates.PressurePlate;
@@ -9,10 +10,12 @@ import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
 
 @SuppressWarnings("ALL")
 public class PressurePlateListener implements Listener {
@@ -39,8 +42,30 @@ public class PressurePlateListener implements Listener {
                                 return;
                             } else {
                                 //Do nothing, is doing a different parkour.
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Already-In-Parkour")));
-                                return;
+                                if (Main.getInstance().getConfig().getBoolean("Settings.Start-When-In-Parkour")) {
+                                    CacheManager.getPlayer(p).end(ParkourPlayerFailEvent.FailCause.NEW_PARKOUR);
+
+                                    //Start the new parkour
+                                    Parkour parkour = (Parkour) pp.getParkour();
+                                    HubParkourPlayer player = new HubParkourPlayer(p, parkour);
+                                    ParkourPlayerStartEvent event = new ParkourPlayerStartEvent(parkour, player, player.getStartTime());
+                                    Bukkit.getPluginManager().callEvent(event);
+                                    if (event.isCancelled()) {
+                                        return;
+                                    }
+                                    parkour.playerStart(player);
+                                    CacheManager.playerStart(player);
+                                    if (Main.getInstance().getConfig().getBoolean("Settings.Remove-Potion-Effects")) {
+                                        for (PotionEffect effect : p.getActivePotionEffects()) {
+                                            p.removePotionEffect(effect.getType());
+                                        }
+                                    }
+                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Started").replace("{parkour-name}",parkour.getName())));
+                                    return;
+                                } else {
+                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Already-In-Parkour")));
+                                    return;
+                                }
                             }
                         } else {
                             //Start the parkour
@@ -53,7 +78,21 @@ public class PressurePlateListener implements Listener {
                             }
                             parkour.playerStart(player);
                             CacheManager.playerStart(player);
+                            if (Main.getInstance().getConfig().getBoolean("Settings.Remove-Potion-Effects")) {
+                                for (PotionEffect effect : p.getActivePotionEffects()) {
+                                    p.removePotionEffect(effect.getType());
+                                }
+                            }
+                            if (Main.getInstance().getConfig().getBoolean("Settings.Remove-Fly")) {
+                                p.setFlying(false);
+                                if (Material.getMaterial("ELYTRA") != null) {
+                                    p.setGliding(false);
+                                }
+                            }
+                            player.giveItems();
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Started").replace("{parkour-name}",parkour.getName())));
+
+
                         }
                         break;
                     case 1:
@@ -61,7 +100,7 @@ public class PressurePlateListener implements Listener {
                         if (CacheManager.isParkour(p)) {
                             if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
                                 //End the parkour.
-                                CacheManager.getPlayer(p).end(false);
+                                CacheManager.getPlayer(p).end(null);
                                 return;
                             } else {
                                 //Do nothing, is doing a different parkour.

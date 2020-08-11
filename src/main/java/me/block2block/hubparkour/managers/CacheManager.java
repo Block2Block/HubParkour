@@ -9,19 +9,32 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
 @SuppressWarnings("unused")
 public class CacheManager {
 
-    private static final Map<UUID, HubParkourPlayer> players = new HashMap<>();
-    private static final Map<Location, PressurePlate> points = new HashMap<>();
-    private static final Map<Integer, Material> types = new HashMap<>();
-    private static final List<Parkour> parkours = new ArrayList<>();
-    private static final List<LeaderboardHologram> leaderboards = new ArrayList<>();
+    private static final Map<UUID, HubParkourPlayer> players;
+    private static final Map<Location, PressurePlate> points;
+    private static final Map<Integer, Material> types;
+    private static final Map<Integer, ItemStack> items;
+    private static final List<Parkour> parkours;
+    private static final List<LeaderboardHologram> leaderboards;
+    private static final List<Player> pendingTeleports;
     private static int setupStage = -1;
     private static Player setupPlayer;
+
+    static {
+        players = new HashMap<>();
+        points = new HashMap<>();
+        types = new HashMap<>();
+        items = new HashMap<>();
+        parkours = new ArrayList<>();
+        leaderboards = new ArrayList<>();
+        pendingTeleports = new ArrayList<>();
+    }
 
     public static boolean isParkour(Player p) {
         return players.containsKey(p.getUniqueId());
@@ -84,11 +97,25 @@ public class CacheManager {
         return types;
     }
 
+    public static void setItem(int type, ItemStack material) {
+        items.put(type, material);
+    }
+
+    public static Map<Integer, ItemStack> getItems() {
+        return items;
+    }
+
     public static boolean isPoint(Location location) {
+        location = location.clone();
+        location.setPitch(0);
+        location.setYaw(0);
         return points.containsKey(location);
     }
 
     public static PressurePlate getPoint(Location location) {
+        location = location.clone();
+        location.setPitch(0);
+        location.setYaw(0);
         return points.get(location);
     }
 
@@ -98,7 +125,10 @@ public class CacheManager {
     }
 
     public static void addPoint(PressurePlate p) {
-        points.put(p.getLocation(), p);
+        Location location = p.getLocation();
+        location.setYaw(0);
+        location.setPitch(0);
+        points.put(location, p);
     }
 
     public static void playerStart(HubParkourPlayer p) {
@@ -128,5 +158,9 @@ public class CacheManager {
 
     public static List<LeaderboardHologram> getLeaderboards() {
         return leaderboards;
+    }
+
+    public static List<Player> getPendingTeleports() {
+        return pendingTeleports;
     }
 }

@@ -1,7 +1,11 @@
 package me.block2block.hubparkour.api;
 
+import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
+import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * Represents a player in a parkour.
@@ -18,10 +22,10 @@ public interface IHubParkourPlayer {
 
     /**
      * What happens when the player has finished the parkour
-     * @param fly if the parkour was failed because of flying.
+     * @param cause The cause of the end. Null if this was a parkour completed.
      */
     @SuppressWarnings("unused")
-    void end(boolean fly);
+    void end(ParkourPlayerFailEvent.FailCause cause);
 
     /**
      * Gets the last reached checkpoint
@@ -63,4 +67,20 @@ public interface IHubParkourPlayer {
     @SuppressWarnings("unused")
     long getStartTime();
 
+    /**
+     * Get a list of all of the parkour items. Even if items are disabled, they will still be present in this list, but will not give the item if disabled.
+     * @return the list of parkour items.
+     */
+    @SuppressWarnings("unused")
+    List<ParkourItem> getParkourItems();
+
+    /**
+     * Give a player all of the parkour items.
+     */
+    void giveItems();
+
+    /**
+     * Remove all of the parkour items and give them their original inventory.
+     */
+    void removeItems();
 }

@@ -117,6 +117,7 @@ public class Main extends JavaPlugin {
             case "v1_14_R1":
             case "v1_15_R1":
             case "v1_16_R1":
+            case "v1_16_R2":
                 pre1_13 = false;
                 getLogger().info("1.13+ server version detected.");
                 //Elytras are present in this version, register Elytra listener.

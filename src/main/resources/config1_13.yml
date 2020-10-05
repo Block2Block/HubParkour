@@ -195,9 +195,10 @@ Settings:
 
   #Settings related to items given when the parkour is started. Specify the slot for them to be put in. Use -1 to disable a specific item.
   Parkour-Items:
+    Clear-Inventory-On-Parkour-Start: true
     Checkpoint:
       Slot: 4
-      Item: "HEAVY_WEIGHTED_PRESSURE_PLATE"
+      Item: "LIGHT_WEIGHTED_PRESSURE_PLATE"
       Item-Data: 0
       Name: "&aTeleport to Last Checkpoint"
     Reset:

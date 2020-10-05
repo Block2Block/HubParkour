@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class ItemClickListener implements Listener {
 
@@ -63,9 +64,15 @@ public class ItemClickListener implements Listener {
                                 if (leaveEvent.isCancelled()) {
                                     return;
                                 }
-                                player.removeItems();
-                                player.getParkour().playerEnd(player);
-                                CacheManager.playerEnd(player);
+                                //Delay to avoid clientside visual glitch
+                                new BukkitRunnable(){
+                                    @Override
+                                    public void run() {
+                                        player.removeItems();
+                                        player.getParkour().playerEnd(player);
+                                        CacheManager.playerEnd(player);
+                                    }
+                                }.runTaskLater(Main.getInstance(), 1);
                                 p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leave.Left")));
                                 break;
                         }

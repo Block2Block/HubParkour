@@ -25,6 +25,10 @@ public abstract class ParkourItem {
 
     public abstract int getType();
 
+    public ItemStack getItem() {
+        return item;
+    }
+
     public void giveItem() {
         if (slot >= 0 && slot < 9) {
             originalItem = player.getPlayer().getInventory().getItem(slot);
@@ -39,6 +43,8 @@ public abstract class ParkourItem {
         if (slot >= 0 && slot < 9 && originalItem != null) {
             player.getPlayer().getInventory().setItem(slot, originalItem);
             originalItem = null;
+        } else if (slot >= 0 && slot < 9) {
+            player.getPlayer().getInventory().setItem(slot, new ItemStack(Material.AIR));
         }
     }
 

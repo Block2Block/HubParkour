@@ -32,18 +32,54 @@ public class Main extends JavaPlugin {
     private static DatabaseManager dbManager;
 
     private static boolean pre1_13 = false;
+    private static boolean post1_8 = true;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void onEnable() {
         instance = this;
 
+        switch (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]) {
+            case "v1_13_R1":
+            case "v1_13_R2":
+            case "v1_14_R1":
+            case "v1_15_R1":
+            case "v1_16_R1":
+            case "v1_16_R2":
+                pre1_13 = false;
+                post1_8 = true;
+                getLogger().info("1.13+ server version detected.");
+                //Elytras are present in this version, register Elytra listener.
+                Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
+                break;
+            case "v1_12_R1":
+            case "v1_11_R1":
+            case "v1_10_R1":
+            case "v1_9_R1":
+            case "v1_9_R2":
+                //Elytras are present in this version, register Elytra listener.
+                Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
+                getLogger().info("Pre-1.13 server version detected.");
+                pre1_13 = true;
+                post1_8 = true;
+                break;
+            default:
+                getLogger().info("Pre-1.13 server version detected.");
+                pre1_13 = true;
+                post1_8 = false;
+        }
+
         //Generating/Loading Config File
         if (!getDataFolder().exists()) getDataFolder().mkdir();
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()) {
             configFile.getParentFile().mkdirs();
-            copy(getResource("config.yml"), configFile);
+            if (pre1_13) {
+                copy(getResource("config1_8.yml"), configFile);
+            } else {
+                copy(getResource("config1_13.yml"), configFile);
+            }
+
         }
 
         config = new YamlConfiguration();
@@ -80,6 +116,8 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new FlyListener(), this);
         Bukkit.getPluginManager().registerEvents(new FallListener(), this);
         Bukkit.getPluginManager().registerEvents(new ItemClickListener(), this);
+        Bukkit.getPluginManager().registerEvents(new DropListener(), this);
+        Bukkit.getPluginManager().registerEvents(new LeaveListener(), this);
 
         getCommand("parkour").setExecutor(new CommandParkour());
         getCommand("parkour").setTabCompleter(new ParkourTabComplete());
@@ -109,30 +147,6 @@ public class Main extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new HubParkourExpansion(this).register();
-        }
-
-        switch (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]) {
-            case "v1_13_R1":
-            case "v1_13_R2":
-            case "v1_14_R1":
-            case "v1_15_R1":
-            case "v1_16_R1":
-            case "v1_16_R2":
-                pre1_13 = false;
-                getLogger().info("1.13+ server version detected.");
-                //Elytras are present in this version, register Elytra listener.
-                Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
-                break;
-            case "v1_12_R1":
-            case "v1_11_R1":
-            case "v1_10_R1":
-            case "v1_9_R1":
-            case "v1_9_R2":
-                //Elytras are present in this version, register Elytra listener.
-                Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
-            default:
-                getLogger().info("Pre-1.13 server version detected.");
-                pre1_13 = true;
         }
 
         if (!loadItems()) {
@@ -200,8 +214,8 @@ public class Main extends JavaPlugin {
         Material checkpoint = ((getConfig().getString("Settings.Pressure-Plates.Checkpoint").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.Checkpoint")):null);
         Material end = ((getConfig().getString("Settings.Pressure-Plates.End").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.End")):null);
 
-        if (start == null || checkpoint == null || end == null || start == checkpoint || start == end || checkpoint == end) {
-            getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. If this is the first time you've started the plugin and are on any version from 1.8-1.12, you must change the values to work with the old Spigot API. The plugin will now be disabled.");
+        if (start == null || checkpoint == null || end == null) {
+            getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. The plugin will now be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
@@ -218,8 +232,8 @@ public class Main extends JavaPlugin {
         Material checkpoint = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Checkpoint.Item"));
         Material cancel = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Cancel.Item"));
 
-        if (reset == null || checkpoint == null || cancel == null || reset == checkpoint || reset == cancel || checkpoint == cancel) {
-            getLogger().info("There are invalid values in your config.yml for the parkour items. Please correct the error and restart your server. If this is the first time you've started the plugin and are on any version from 1.8-1.12, you must change the values to work with the old Spigot API. The plugin will now be disabled.");
+        if (reset == null || checkpoint == null || cancel == null) {
+            getLogger().info("There are invalid values in your config.yml for the parkour items. Please correct the error and restart your server. The plugin will now be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
@@ -278,4 +292,7 @@ public class Main extends JavaPlugin {
         return pre1_13;
     }
 
+    public static boolean isPost1_8() {
+        return post1_8;
+    }
 }

@@ -1,0 +1,246 @@
+#  _    _       _       _____           _
+# | |  | |     | |     |  __ \         | |
+# | |__| |_   _| |__   | |__) |_ _ _ __| | _____  _   _ _ __
+# |  __  | | | | '_ \  |  ___/ _` | '__| |/ / _ \| | | | '__|
+# | |  | | |_| | |_) | | |  | (_| | |  |   < (_) | |_| | |
+# |_|  |_|\__,_|_.__/  |_|   \__,_|_|  |_|\_\___/ \__,_|_|
+#
+# This is the default configuration file for the "HubParkour" by Block2Block.
+#
+# Do not remove any of the different values. They cannot be disabled, however
+# I may introduce a system for them to be disabled in the near future if there
+# is enough demand. If you do remove values, the plugin will just load them in
+# again with their default values. The same occurs when there is an invalid value
+# used.
+#
+# I have worked quite hard on the plugin to make it as configurable as possible. Please
+# rate it on the Spigot page! Every review helps!
+#
+# If you have any questions, bug reports or suggestions, feel free to add it as an
+# issue on the GitHub.
+#
+# Most of the settings/messages are self explanatory, but I have explained the less obvious ones.
+
+Messages:
+  Prefix: "&2Parkour>> &r"
+
+  #When a pressure plate is broken, this is the message that is displayed
+  Break-Disallowed: "You are not allowed to break HubParkour Pressure Plates. In order to remove HubParkour Pressure Plates, please delete the parkour with /parkour delete [id]."
+
+  #All Hologram messages. Requires HolographicDisplays to be installed.
+  Holograms:
+    Start:
+     - "&9&l&n{parkour-name}"
+     - "&9&lParkour Start"
+    End:
+      - "&9&l&n{parkour-name}"
+      - "&9&lParkour End"
+    Checkpoint:
+      - "&9&l&n{parkour-name}"
+      - "&9&lCheckpoint #{checkpoint}"
+    Leaderboard:
+      Header: "&9&lLeaderboard for {parkour-name}"
+      Line: "&3#{place}&r - &b{player-name}&r - &b{player-time}"
+
+  #Command related messages. Default values are recommended, but they can all be changed. Server must be restarted for changes to apply.
+  Commands:
+    #The message that is displayed when a player includes no arguments with the /parkour command.
+    Help:
+      - "Parkour Help:"
+      - "&a/parkour reset &r- Sends you back to the start."
+      - "&a/parkour checkpoint &r- Teleports you to the last checkpoint you reached."
+      - "&a/parkour leave &r- Makes you leave the parkour."
+      - "&a/parkour leaderboard [parkour] &r- View the leaderboard for specific Parkour."
+    Help-Admin:
+      - "&a/parkour setup&r - Enter setup mode and begin parkour setup."
+      - "&a/parkour delete [id] &r- Delete the parkour with the specific ID."
+      - "&a/parkour list&r - Lists all active parkours."
+      - "&a/parkour hologram list&r - List all active holograms and their ID's."
+      - "&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID."
+      - "&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID."
+      - "&a/parkour removetime [parkour id] [player name]&r - Reset a players leaderboard time."
+
+    #When a player does not have permission to execute a certain sub-command (only applicable to the admin commands).
+    No-Permission: "You do not have permission to execute this command."
+
+    #When a player uses a command that is parkour dependant and does not specify a parkour, it will output this.
+    Not-Valid-Parkour: "That is not a valid parkour."
+
+    #The /parkour reset related messages.
+    Reset:
+      Successful: "You have been teleported to the start."
+      Not-Started-Parkour: "You must start a parkour in order to reset!"
+
+    #The /parkour checkpoint related messages.
+    Checkpoint:
+      Successful: "You have been teleported to your last checkpoint."
+      Not-Started-Parkour: "You must start a parkour in order to teleport to a checkpoint!"
+
+    #The message format for when a player looks at the top leaderboard.
+    Leaderboard:
+      Message:
+        Header: "The top times are:"
+        Line: "&a#{place} &r- &a{player-name} &r- &a{player-time} &rseconds."
+        Footer: ""
+      Not-Valid-Parkour: "That is not a valid parkour."
+
+    #Messages sent when the user uses /parkour leave.
+    Leave:
+      Left: "You have left the parkour and your progress has been reset."
+      Not-In-Parkour: "You must have started a parkour in order to leave it."
+
+    #Admin command messages.
+    Admin:
+      No-Permission: "You do not have permission to perform this command."
+      Reload:
+        Successful: "Reload successful! If you have changed database or hologram settings, you will need to restart the server in order for those changes to apply."
+        Failed: "The reload failed. Please make sure that you have formatted the file correctly."
+      List:
+        Header: "All active parkours:"
+        Line: "&a#{id} &r- &a{parkour-name} &r- &a{parkour-players} &ractive players."
+        Footer: ""
+      Delete:
+        Not-Valid-Parkour: "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list."
+        Success: "Parkour deleted successfully."
+        Player-Kicked-From-Parkour: "The parkour you were doing was deleted. You have left the parkour."
+      RemoveTime:
+        Not-Valid-Parkour: "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list."
+        Not-Valid-Player: "That player has never attempted this parkour."
+        Success: "The players time has been reset!"
+      Hologram:
+        Must-Have-Holographic-Displays: "You must have Holographic Displays installed and holograms enabled in the config.yml in order to use this command."
+        Help:
+          - "Available sub-commands:"
+          - "&a/parkour hologram list&r - List all active holograms and their ID's."
+          - "&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID."
+          - "&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID."
+        List:
+          Header: "All Active Holograms:"
+          Line: "&a#{id} &r- &a{parkour-name}"
+          Footer: ""
+        Create:
+          Not-Valid-Parkour: "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list"
+          Not-Enough-Arguments: "Invalid Arguments. Correct Arguments: &a/parkour hologram create [parkour id]"
+          Successful: "Hologram successfully created."
+        Delete:
+          Not-Valid-Hologram: "That is not a valid hologram ID. If you wish to see a list of all parkours and their IDs, do /parkour hologram list"
+          Not-Enough-Arguments: "Invalid Arguments. Correct Arguments: &a/parkour hologram delete [hologram id]"
+          Successful: "Hologram successfully deleted."
+      Setup:
+        Given-Setup-Stick: "You have been given the setup stick."
+        Please-Set-Start: "Welcome to the parkour setup wizard!\n\nBefore we start, please note that the setup wizard will use your player location when clicking to register locations, not where you look when clicking the stick. When players use commands, they will get teleported facing the direction you are facing when clicking the stick.\nIn order to start, please start off by clicking where you would like your start pressure plate with the stick. Do not worry about placing any pressure plates, the plugin will do that for you! If you wish to cancel at any time, enter 'cancel'."
+        Please-Set-End: "Start point set! Now, click where you would like your end pressure plate with your stick."
+        Please-Set-Respawn: "End point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point."
+        Please-Set-Checkpoints: "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done'."
+        Checkpoint-Added: "Checkpoint successfully added."
+        Please-Set-Name: "Now, you need to set a name for your parkour! Please enter a name for your parkour. It must be one word and not a duplicate. Names are compatible with formatting codes."
+        Please-Set-End-Command: "The name has been set! Please now type out your reward command for the end of your parkour. If you don't want one, just type 'none'. Available placeholders are {player-uuid} and {player-name}."
+        Please-Set-Checkpoint-Command: "The End Command has been set! Please now type out your reward command for checkpoints of your parkour. This command will only be executed for each reached checkpoint after they finish the parkour to prevent exploitation. If you don't want one, just type 'none'. Available placeholders are {player-uuid} and {player-name}."
+        Name-Too-Long: "That name is too long. It must be 1 word."
+        Name-Taken: "That name is already taken. Please try again."
+
+        Invalid-Placement: "The place you are trying to setup that point is currently set for a different type of point. If this is a mistake, please type 'cancel' and re-setup your parkour."
+
+        Setup-Complete: "Parkour setup complete!"
+        Setup-Cancelled: "Parkour setup was cancelled. Any points that were setup have been deleted."
+
+        Already-Someone-In-Setup: "Someone is already setting up a parkour. Please wait for them to finish in order to setup another parkour."
+
+        Must-Not-Be-In-Parkour: "You must not be in a parkour in order to set up a parkour. "
+
+  #Messages displayed while the user is doing parkour.
+  Parkour:
+    Started: "You have started the &a{parkour-name} &rparkour!"
+    Restarted: "You have restarted the parkour! Your time has been reset to 0!"
+    Already-In-Parkour: "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave."
+    Fall: "You have been teleported to your last checkpoint."
+    Checkpoints:
+      Reached: "You have reached checkpoint &a#{checkpoint}&r!"
+      Not-Started: "You must start a parkour in order to reach checkpoints!"
+    End:
+      Beat-Previous-Personal-Best: "You beat your previous record and you managed to complete the &a{parkour-name} &rparkour in &a{time} &rseconds!"
+      Not-Beat-Previous-Personal-Best: "You didn't beat your previous record, but you managed to complete the &a{parkour-name} &rparkour in &a{time} &rseconds!"
+      First-Time: "Well done! You completed the &a{parkour-name}&r parkour in &a{time}&r seconds! Your reward will be applied shortly!"
+      Not-Started: "You must start a parkour in order to finish it."
+      Failed:
+        Fly: "You are not allowed to fly while doing the parkour. Parkour failed!"
+        Elytra-Use: "You are not allowed to use an Elytra while doing the parkour. Parkour failed!"
+        Teleportation: "You are not allowed to teleport while doing the parkour. Parkour failed!"
+        Not-Enough-Checkpoints: "You did not reach enough checkpoints, parkour failed!"
+        Too-Quick: "You completed the parkour too quickly, parkour failed!"
+        Parkour-Change: "You have started another parkour, parkour failed!"
+
+    #Messages displayed when a user finishes the parkour. It tells them what position they are in the leaderboard for that parkour.
+    Leaderboard:
+      Leaderboard-Place: "You are in &a{position}{suffix} place&r for the &a{parkour-name}&r parkour!"
+
+Settings:
+  Holograms: false
+  Must-Complete-All-Checkpoints: true
+  Version-Checker:
+    Enabled: true
+  #Do you want to teleport a player to their last checkpoint upon receiving fall or void damage?
+  Teleport-On-Fall: true
+  #Whether or not to remove potion effects on parkour start.
+  Remove-Potion-Effects: true
+  #Whether or to toggle flying off for the user when the user starts the parkour.
+  Remove-Fly: true
+  #If a player is already in a parkour, should they start a new parkour if they step on the start pressure plate.
+  Start-When-In-Parkour: false
+  #Whether a player should be failed for doing these specific things.
+  Fail:
+    On-Teleport: true
+    On-Elytra-Use: true
+    On-Toggle-Fly: true
+
+  #Settings related to items given when the parkour is started. Specify the slot for them to be put in. Use -1 to disable a specific item.
+  Parkour-Items:
+    Clear-Inventory-On-Parkour-Start: true
+    Checkpoint:
+      Slot: 4
+      Item: "GOLD_PLATE"
+      Item-Data: 0
+      Name: "&aTeleport to Last Checkpoint"
+    Reset:
+      Slot: 5
+      Item: "WOOD_DOOR"
+      Item-Data: 0
+      Name: "&cReset"
+    Cancel:
+      Slot: 6
+      Item: "BED"
+      Item-Data: 0
+      Name: "&cCancel"
+
+  Leaderboard:
+    #The limit on how many spaces on the leaderboard to load. This will also effect leaderboard holograms.
+    Limit: 10
+
+  #MySQL/SQLite settings. Adds support for cross server player times and leaderboards.
+  #Note: The pressure plates must be in exactly the same location (including the types) in all servers in order for this to work.
+  Database:
+    #There are only 2 valid databases you can use, MySQL and SQLite.
+    #If another value is typed, the plugin will assume you want to use SQLite
+    Type: "SQLite"
+    #Details of the MySQL Database.
+    Details:
+      MySQL:
+        Hostname: "localhost"
+        Port: "3306"
+        Database: "HubParkour"
+        Username: "root"
+        Password: ""
+      SQLite:
+        #The file name MUST end in .db.
+        File-Name: "hp-storage.db"
+
+  #Specifies the type of pressure plates that the plugin uses. The plugin will disable itself if an invalid value is detected. Modify with caution.
+  #Valid values: Any type of pressure plate listed in the Spigot API Materials Enum. Google "Spigot API Material" to see a full list.
+  #Obviously if this is being used on a legacy server (anything between 1.8-1.12 I consider to be legacy) not all of the pressure
+  #plates in the newer Spigot API are in the older versions, so you need to plan accordingly.
+  #If you change these values when a parkour is already set up, the plugin will automatically replace the pressure
+  #plates upon restarting the server.
+  Pressure-Plates:
+    Start: "WOOD_PLATE"
+    Checkpoint: "GOLD_PLATE"
+    End: "IRON_PLATE"

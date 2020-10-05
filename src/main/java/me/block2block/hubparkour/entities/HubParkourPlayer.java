@@ -14,10 +14,13 @@ import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("DuplicatedCode")
 public class HubParkourPlayer implements IHubParkourPlayer {
@@ -29,6 +32,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     private int lastReached = 0;
     private long startTime;
     private long previous = -2;
+    private ItemStack[] inventory;
+    private ItemStack[] extraContents;
+    private ItemStack[] armorContents;
+    private ItemStack[] storageContents;
 
     @SuppressWarnings("unused")
     public HubParkourPlayer(Player p, Parkour parkour) {
@@ -193,6 +200,15 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     }
 
     public void giveItems() {
+        inventory = player.getInventory().getContents();
+        armorContents = player.getInventory().getArmorContents();
+        if (Main.isPost1_8()) {
+            extraContents = player.getInventory().getExtraContents();
+            storageContents = player.getInventory().getStorageContents();
+        }
+        if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start")) {
+            player.getInventory().clear();
+        }
         for (ParkourItem item : parkourItems) {
             item.giveItem();
         }
@@ -201,6 +217,23 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     public void removeItems(){
         for (ParkourItem item : parkourItems) {
             item.removeItem();
+        }
+        if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start")) {
+            if (inventory != null) {
+                player.getInventory().setContents(inventory);
+            }
+            if (armorContents != null) {
+                player.getInventory().setArmorContents(armorContents);
+            }
+            if (Main.isPost1_8()) {
+                if (extraContents != null) {
+                    player.getInventory().setExtraContents(extraContents);
+                }
+                if (storageContents != null) {
+                    player.getInventory().setStorageContents(storageContents);
+                }
+            }
+
         }
     }
 }

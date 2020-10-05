@@ -60,6 +60,12 @@ public class PressurePlateListener implements Listener {
                                             p.removePotionEffect(effect.getType());
                                         }
                                     }
+                                    if (Main.getInstance().getConfig().getBoolean("Settings.Remove-Fly")) {
+                                        p.setFlying(false);
+                                        if (Material.getMaterial("ELYTRA") != null) {
+                                            p.setGliding(false);
+                                        }
+                                    }
                                     p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Started").replace("{parkour-name}",parkour.getName())));
                                     return;
                                 } else {

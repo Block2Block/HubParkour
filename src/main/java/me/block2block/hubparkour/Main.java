@@ -46,6 +46,7 @@ public class Main extends JavaPlugin {
             case "v1_15_R1":
             case "v1_16_R1":
             case "v1_16_R2":
+            case "v1_16_R3":
                 pre1_13 = false;
                 post1_8 = true;
                 getLogger().info("1.13+ server version detected.");

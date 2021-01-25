@@ -3,7 +3,6 @@ package me.block2block.hubparkour.api.events.admin;
 import me.block2block.hubparkour.api.IParkour;
 import me.block2block.hubparkour.api.events.ParkourEvent;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
  * Called when an admin sets up a parkour.

@@ -137,4 +137,54 @@ public interface IParkour {
      * @return a list of leaderboards attached to this parkour.
      */
     List<ILeaderboardHologram> getLeaderboards();
+
+    /**
+     * Set the name of the parkour.
+     * @param name The new name for the parkour.
+     */
+    void setName(String name);
+
+    /**
+     * Set the end command for the parkour.
+     * @param endCommand The new end command for the parkour.
+     */
+    void setEndCommand(String endCommand);
+
+    /**
+     * Set the checkpoint command for the parkour.
+     * @param checkpointCommand The new checkpoint command for the parkour.
+     */
+    void setCheckpointCommand(String checkpointCommand);
+
+    /**
+     * Set the start point of the parkour.
+     * @param point The new start point for the parkour.
+     */
+    void setStartPoint(StartPoint point);
+
+    /**
+     * Set the end point of the parkour.
+     * @param point The new end point for the parkour.
+     */
+    void setEndPoint(EndPoint point);
+
+    /**
+     * Set the restart point of the parkour.
+     * @param point The new restart point for the parkour.
+     */
+    void setRestartPoint(RestartPoint point);
+
+    /**
+     * Adds a new checkpoint to the parkour.
+     * @param point The new start point for the parkour.
+     * @param checkNo The checkpoint number this should become.
+     */
+    void addCheckpoint(Checkpoint point, int checkNo);
+
+    /**
+     * Deletes a checkpoint from the parkour.
+     * @param point The checkpoint to remove.
+     */
+    void deleteCheckpoint(Checkpoint point);
 }
+

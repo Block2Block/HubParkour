@@ -23,6 +23,7 @@ public class SetupListener implements Listener {
 
     private List<PressurePlate> data = new ArrayList<>();
     private List<String> commandData = new ArrayList<>();
+    private int after = -1;
 
     @SuppressWarnings("unused")
     @EventHandler
@@ -139,6 +140,205 @@ public class SetupListener implements Listener {
                     }
                     break;
             }
+        } else if (CacheManager.isEdit(e.getPlayer())) {
+            switch (CacheManager.getCurrentModification()) {
+                case -1: {
+                    int edit;
+                    try {
+                        edit = Integer.parseInt(e.getMessage());
+                    } catch (NumberFormatException exception) {
+                        e.setCancelled(true);
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Edit")));
+                        return;
+                    }
+
+                    switch (edit) {
+                        case 1:
+                            //Name
+                            CacheManager.setCurrentModification(1);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Enter-New-Name")));
+                            break;
+                        case 2:
+                            //End Command
+                            CacheManager.setCurrentModification(2);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Enter-New-End-Command")));
+                            break;
+                        case 3:
+                            //Checkpoint Command
+                            CacheManager.setCurrentModification(3);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Enter-New-Checkpoint-Command")));
+                            break;
+                        case 4:
+                            //Start Point
+                            CacheManager.setCurrentModification(4);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Select-New-Start-Point")));
+                            break;
+                        case 5:
+                            //End Point
+                            CacheManager.setCurrentModification(5);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Select-New-End-Point")));
+                            break;
+                        case 6:
+                            //Restart Point
+                            CacheManager.setCurrentModification(6);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Select-New-Restart-Point")));
+                            break;
+                        case 7:
+                            //Checkpoints
+                            CacheManager.setCurrentModification(7);
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Checkpoint-Edit")) {
+                                sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                            }
+                            e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                            break;
+                        case 8:
+                            //Exit
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Exited-Edit-Mode")));
+                            CacheManager.leaveEditMode();
+                            break;
+                        default:
+                            e.setCancelled(true);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Edit")));
+                            return;
+                    }
+                    e.setCancelled(true);
+                    break;
+                }
+                case 1: {
+                    e.setCancelled(true);
+                    if (e.getMessage().split(" ").length == 1) {
+                        if (CacheManager.getParkour(e.getMessage()) == null || CacheManager.getParkour(e.getMessage()) == CacheManager.getEditParkour()) {
+                            CacheManager.getEditParkour().setName(e.getMessage());
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Name-Set")));
+                            CacheManager.setCurrentModification(-1);
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
+                                sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                            }
+                            e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                        } else {
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Name-Taken")));
+                        }
+                    } else {
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Name-Too-Long")));
+                    }
+                    break;
+                }
+                case 2: {
+                    e.setCancelled(true);
+                    String command = e.getMessage();
+                    if (e.getMessage().equalsIgnoreCase("none")) {
+                        command = null;
+                    }
+                    CacheManager.getEditParkour().setEndCommand(command);
+                    e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.End-Command-Set")));
+                    CacheManager.setCurrentModification(-1);
+                    StringBuilder sb = new StringBuilder();
+                    for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
+                        sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                    }
+                    e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                    break;
+                }
+                case 3: {
+                    e.setCancelled(true);
+                    String command = e.getMessage();
+                    if (e.getMessage().equalsIgnoreCase("none")) {
+                        command = null;
+                    }
+                    CacheManager.getEditParkour().setCheckpointCommand(command);
+                    e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Command-Set")));
+                    CacheManager.setCurrentModification(-1);
+                    StringBuilder sb = new StringBuilder();
+                    for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
+                        sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                    }
+                    e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                    break;
+                }
+                case 7: {
+                    int edit;
+                    try {
+                        edit = Integer.parseInt(e.getMessage());
+                    } catch (NumberFormatException exception) {
+                        e.setCancelled(true);
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Edit")));
+                        return;
+                    }
+                    e.setCancelled(true);
+                    switch (edit) {
+                        case 1:
+                            if (CacheManager.getEditParkour().getCheckpoints().size() == 0) {
+                                e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Delete.No-Checkpoints")));
+                                break;
+                            }
+                            CacheManager.setCurrentModification(8);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Delete.Please-Enter-Checkpoint")));
+                            break;
+                        case 2:
+                            CacheManager.setCurrentModification(9);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Add.After-Which")));
+                            break;
+                        case 3:
+                            CacheManager.setCurrentModification(-1);
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
+                                sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                            }
+                            e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                            break;
+                        default:
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Edit")));
+                            break;
+                    }
+                    break;
+                }
+                case 8: {
+                    int checkpointNo;
+                    try {
+                        checkpointNo = Integer.parseInt(e.getMessage());
+                    } catch (NumberFormatException exception) {
+                        e.setCancelled(true);
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Delete.Not-Valid-Checkpoint")));
+                        return;
+                    }
+                    e.setCancelled(true);
+                    Checkpoint checkpoint = CacheManager.getEditParkour().getCheckpoint(checkpointNo);
+                    if (checkpoint != null) {
+                        CacheManager.getEditParkour().deleteCheckpoint(checkpoint);
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Delete.Success")));
+                        CacheManager.setCurrentModification(7);
+                        StringBuilder sb = new StringBuilder();
+                        for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Checkpoint-Edit")) {
+                            sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                        }
+                        e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                    } else {
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Delete.Not-Valid-Checkpoint")));
+                        return;
+                    }
+                    break;
+                }
+                case 9: {
+                    int checkpointNo;
+                    try {
+                        checkpointNo = Integer.parseInt(e.getMessage());
+                    } catch (NumberFormatException exception) {
+                        e.setCancelled(true);
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Add.Not-Valid")));
+                        return;
+                    }
+                    e.setCancelled(true);
+                    if (checkpointNo >= 0 && checkpointNo <= CacheManager.getEditParkour().getNoCheckpoints()) {
+                        this.after = checkpointNo;
+                        CacheManager.setCurrentModification(10);
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Add.Select-Checkpoint")));
+                    } else {
+                        e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Add.Not-Valid")));
+                    }
+                }
+            }
         }
     }
 
@@ -186,6 +386,64 @@ public class SetupListener implements Listener {
                             data.add(new Checkpoint(location, data.size() - 2));
                             e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Checkpoint-Added")));
                             e.setCancelled(true);
+                    }
+                }
+            }
+        } else if (CacheManager.isEdit(e.getPlayer())) {
+            if (e.hasItem()) {
+                if (e.getItem().getType() == Material.STICK && ChatColor.stripColor(e.getItem().getItemMeta().getDisplayName()).equals("HubParkour Setup Stick")) {
+                    Location location = e.getPlayer().getLocation().getBlock().getLocation();
+                    location.setPitch(e.getPlayer().getLocation().getPitch());
+                    location.setYaw(e.getPlayer().getLocation().getYaw());
+                    switch (CacheManager.getCurrentModification()) {
+                        case 4: {
+                            StartPoint startPoint = new StartPoint(location);
+                            CacheManager.getEditParkour().setStartPoint(startPoint);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Start-Point-Set")));
+                            CacheManager.setCurrentModification(-1);
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
+                                sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                            }
+                            e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                            break;
+                        }
+                        case 5: {
+                            EndPoint endPoint = new EndPoint(location);
+                            CacheManager.getEditParkour().setEndPoint(endPoint);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.End-Point-Set")));
+                            CacheManager.setCurrentModification(-1);
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
+                                sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                            }
+                            e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                            break;
+                        }
+                        case 6: {
+                            RestartPoint restartPoint = new RestartPoint(location);
+                            CacheManager.getEditParkour().setRestartPoint(restartPoint);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Restart-Point-Set")));
+                            CacheManager.setCurrentModification(-1);
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
+                                sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                            }
+                            e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                            break;
+                        }
+                        case 10: {
+                            Checkpoint checkpoint = new Checkpoint(location, after + 1);
+                            CacheManager.getEditParkour().addCheckpoint(checkpoint, after + 1);
+                            e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Checkpoint-Add.Success")));
+                            CacheManager.setCurrentModification(7);
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Checkpoint-Edit")) {
+                                sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                            }
+                            e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                            break;
+                        }
                     }
                 }
             }

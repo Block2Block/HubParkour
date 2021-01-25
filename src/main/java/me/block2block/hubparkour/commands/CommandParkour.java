@@ -335,6 +335,99 @@ public class CommandParkour implements CommandExecutor {
                             p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
                         }
                         break;
+                    case "cleartimes":
+                        if (p.hasPermission("hubparkour.admin")) {
+                            if (args.length == 2) {
+                                new BukkitRunnable(){
+                                    @Override
+                                    public void run() {
+                                        int parkourID;
+                                        try {
+                                            parkourID = Integer.parseInt(args[1]);
+                                        } catch (NumberFormatException e) {
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.ClearTimes.Not-Valid-Parkour")));
+                                            return;
+                                        }
+
+                                        Parkour parkour = CacheManager.getParkour(parkourID);
+                                        if (parkour == null) {
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.ClearTimes.Not-Valid-Parkour")));
+                                            return;
+                                        }
+
+                                        Main.getInstance().getDbManager().resetTimes(parkour.getId());
+                                        p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.ClearTimes.Success")));
+
+                                        new BukkitRunnable(){
+                                            @Override
+                                            public void run() {
+                                                for (ILeaderboardHologram hologram : parkour.getLeaderboards()) {
+                                                    hologram.refresh();
+                                                }
+                                            }
+                                        }.runTask(Main.getInstance());
+                                    }
+                                }.runTaskAsynchronously(Main.getInstance());
+                            } else {
+                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.ClearTimes.Not-Valid-Parkour")));
+                            }
+                        } else {
+                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                        }
+                        break;
+                    case "edit":
+                        if (p.hasPermission("hubparkour.admin")) {
+                            if (args.length == 2) {
+                                new BukkitRunnable(){
+                                    @Override
+                                    public void run() {
+                                        int parkourID;
+                                        try {
+                                            parkourID = Integer.parseInt(args[1]);
+                                        } catch (NumberFormatException e) {
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Parkour")));
+                                            return;
+                                        }
+
+                                        Parkour parkour = CacheManager.getParkour(parkourID);
+                                        if (parkour == null) {
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Parkour")));
+                                            return;
+                                        }
+
+                                        if (CacheManager.isSomeoneEdit()) {
+                                            if (CacheManager.isEdit(p)) {
+                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Already-Editing")));
+                                            } else{
+                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Someone-Already-Editing")));
+                                            }
+                                            return;
+                                        } else {
+                                            if (parkour.getPlayers().size() > 0) {
+                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Must-Be-Empty")));
+                                                return;
+                                            }
+                                            CacheManager.enterEditMode(p, parkour);
+                                            p.getInventory().addItem(ItemUtil.ci(Material.STICK, "&2&lHubParkour Setup Stick", 1, "&rUse this item to;&rsetup your HubParkour;&rParkour."));
+                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Entered-Edit-Mode")));
+                                            StringBuilder sb = new StringBuilder();
+                                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
+                                                sb.append(s.replace("{parkour-name}", parkour.getName())).append("\n");
+                                            }
+                                            p.sendMessage(Main.c(true, sb.toString()));
+                                        }
+
+                                        return;
+
+                                    }
+                                }.runTaskAsynchronously(Main.getInstance());
+                            } else {
+                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Parkour")));
+                            }
+                        } else {
+                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                        }
+                        break;
                     default:
                         StringBuilder sb = new StringBuilder();
                         for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help")) {

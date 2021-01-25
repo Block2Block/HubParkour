@@ -8,7 +8,6 @@ import me.block2block.hubparkour.utils.database.MySQLConnectionPool;
 import me.block2block.hubparkour.utils.database.SQLite;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -779,7 +778,7 @@ public class DatabaseManager {
     public void resetTime(String name, int parkourId) {
         if (isMysql) {
             try (Connection connection = dbMySql.getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_playertimes SET `time` = 9223372036854775807 WHERE `name` = ? AND `parkour_id` = ?");
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `name` = ? AND `parkour_id` = ?");
                 statement.setString(1, name);
                 statement.setInt(2, parkourId);
                 statement.execute();
@@ -791,11 +790,340 @@ public class DatabaseManager {
         } else {
             try {
                 //Set it high rather than remove it to prevent the player claiming the reward again.
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_playertimes SET `time` = 9223372036854775807 WHERE `name` = ? AND `parkour_id` = ?");
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `name` = ? AND `parkour_id` = ?");
                 statement.setString(1, name);
                 statement.setInt(2, parkourId);
                 statement.execute();
             } catch (Exception e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void resetTimes(int parkourId) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `parkour_id` = ?");
+                statement.setInt(1, parkourId);
+                statement.execute();
+            } catch (Exception e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                //Set it high rather than remove it to prevent the player claiming the reward again.
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `parkour_id` = ?");
+                statement.setInt(1, parkourId);
+                statement.execute();
+            } catch (Exception e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setName(int id, String name) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET name = ? WHERE id = ?");
+                statement.setString(1, name);
+                statement.setInt(2, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET name = ? WHERE id = ?");
+                statement.setString(1, name);
+                statement.setInt(2, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setEndCommand(int id, String command) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET finish_reward = ? WHERE id = ?");
+                if (command == null) {
+                    statement.setNull(1, Types.VARCHAR);
+                } else {
+                    statement.setString(1, command);
+                }
+                statement.setInt(2, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET finish_reward = ? WHERE id = ?");
+                if (command == null) {
+                    statement.setNull(1, Types.VARCHAR);
+                } else {
+                    statement.setString(1, command);
+                }
+                statement.setInt(2, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setCheckpointCommand(int id, String command) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET checkpoint_reward = ? WHERE id = ?");
+                if (command != null) {
+                    statement.setString(1, command);
+                } else {
+                    statement.setNull(1, Types.VARCHAR);
+                }
+                statement.setInt(2, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET checkpoint_reward = ? WHERE id = ?");
+                if (command != null) {
+                    statement.setString(1, command);
+                } else {
+                    statement.setNull(1, Types.VARCHAR);
+                }
+                statement.setInt(2, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setStartPoint(int id, StartPoint point) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 0");
+                statement.setInt(1, point.getLocation().getBlockX());
+                statement.setInt(2, point.getLocation().getBlockY());
+                statement.setInt(3, point.getLocation().getBlockZ());
+                statement.setFloat(4, point.getLocation().getPitch());
+                statement.setFloat(5, point.getLocation().getYaw());
+                statement.setString(6, point.getLocation().getWorld().getName());
+                statement.setInt(7, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 0");
+                statement.setInt(1, point.getLocation().getBlockX());
+                statement.setInt(2, point.getLocation().getBlockY());
+                statement.setInt(3, point.getLocation().getBlockZ());
+                statement.setFloat(4, point.getLocation().getPitch());
+                statement.setFloat(5, point.getLocation().getYaw());
+                statement.setString(6, point.getLocation().getWorld().getName());
+                statement.setInt(7, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setEndPoint(int id, EndPoint point) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 1");
+                statement.setInt(1, point.getLocation().getBlockX());
+                statement.setInt(2, point.getLocation().getBlockY());
+                statement.setInt(3, point.getLocation().getBlockZ());
+                statement.setFloat(4, point.getLocation().getPitch());
+                statement.setFloat(5, point.getLocation().getYaw());
+                statement.setString(6, point.getLocation().getWorld().getName());
+                statement.setInt(7, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 1");
+                statement.setInt(1, point.getLocation().getBlockX());
+                statement.setInt(2, point.getLocation().getBlockY());
+                statement.setInt(3, point.getLocation().getBlockZ());
+                statement.setFloat(4, point.getLocation().getPitch());
+                statement.setFloat(5, point.getLocation().getYaw());
+                statement.setString(6, point.getLocation().getWorld().getName());
+                statement.setInt(7, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void setRestartPoint(int id, RestartPoint point) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 2");
+                statement.setInt(1, point.getLocation().getBlockX());
+                statement.setInt(2, point.getLocation().getBlockY());
+                statement.setInt(3, point.getLocation().getBlockZ());
+                statement.setFloat(4, point.getLocation().getPitch());
+                statement.setFloat(5, point.getLocation().getYaw());
+                statement.setString(6, point.getLocation().getWorld().getName());
+                statement.setInt(7, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 2");
+                statement.setInt(1, point.getLocation().getBlockX());
+                statement.setInt(2, point.getLocation().getBlockY());
+                statement.setInt(3, point.getLocation().getBlockZ());
+                statement.setFloat(4, point.getLocation().getPitch());
+                statement.setFloat(5, point.getLocation().getYaw());
+                statement.setString(6, point.getLocation().getWorld().getName());
+                statement.setInt(7, id);
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateCheckpointNumber(int id, Checkpoint point) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET checkno = ? WHERE parkour_id = ? AND type = 3 AND x = ? AND y = ? AND z = ? AND pitch = ? AND yaw = ? AND world = ?");
+                statement.setInt(1, point.getCheckpointNo());
+                statement.setInt(2, id);
+                statement.setInt(3, point.getLocation().getBlockX());
+                statement.setInt(4, point.getLocation().getBlockY());
+                statement.setInt(5, point.getLocation().getBlockZ());
+                statement.setFloat(6, point.getLocation().getPitch());
+                statement.setFloat(7, point.getLocation().getYaw());
+                statement.setString(8, point.getLocation().getWorld().getName());
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET checkno = ? WHERE parkour_id = ? AND type = 3 AND x = ? AND y = ? AND z = ? AND pitch = ? AND yaw = ? AND world = ?");
+                statement.setInt(1, point.getCheckpointNo());
+                statement.setInt(2, id);
+                statement.setInt(3, point.getLocation().getBlockX());
+                statement.setInt(4, point.getLocation().getBlockY());
+                statement.setInt(5, point.getLocation().getBlockZ());
+                statement.setFloat(6, point.getLocation().getPitch());
+                statement.setFloat(7, point.getLocation().getYaw());
+                statement.setString(8, point.getLocation().getWorld().getName());
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void addCheckpoint(int id, Checkpoint checkpoint) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_locations VALUES (?, 3, ?, ?, ?, ?, ?, ?, ?)");
+                statement.setInt(1, id);
+                statement.setInt(2, checkpoint.getLocation().getBlockX());
+                statement.setInt(3, checkpoint.getLocation().getBlockY());
+                statement.setInt(4, checkpoint.getLocation().getBlockZ());
+                statement.setFloat(5, checkpoint.getLocation().getPitch());
+                statement.setFloat(6, checkpoint.getLocation().getYaw());
+                statement.setInt(7, checkpoint.getCheckpointNo());
+                statement.setString(8, checkpoint.getLocation().getWorld().getName());
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_locations VALUES (?, 3, ?, ?, ?, ?, ?, ?, ?)");
+                statement.setInt(1, id);
+                statement.setInt(2, checkpoint.getLocation().getBlockX());
+                statement.setInt(3, checkpoint.getLocation().getBlockY());
+                statement.setInt(4, checkpoint.getLocation().getBlockZ());
+                statement.setFloat(5, checkpoint.getLocation().getPitch());
+                statement.setFloat(6, checkpoint.getLocation().getYaw());
+                statement.setInt(7, checkpoint.getCheckpointNo());
+                statement.setString(8, checkpoint.getLocation().getWorld().getName());
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void deleteCheckpoint(int id, Checkpoint checkpoint) {
+        if (isMysql) {
+            try (Connection connection = dbMySql.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_locations WHERE parkour_id = ? AND type = 3 AND checkno = ?");
+                statement.setInt(1, id);
+                statement.setInt(2, checkpoint.getCheckpointNo());
+                statement.execute();
+            } catch (SQLException e) {
+                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                error = true;
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_locations WHERE parkour_id = ? AND type = 3 AND checkno = ?");
+                statement.setInt(1, id);
+                statement.setInt(2, checkpoint.getCheckpointNo());
+                statement.execute();
+            } catch (SQLException e) {
                 Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();

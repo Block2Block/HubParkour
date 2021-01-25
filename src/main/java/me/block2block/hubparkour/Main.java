@@ -3,6 +3,7 @@ package me.block2block.hubparkour;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
+import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.listeners.*;
@@ -15,6 +16,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -52,6 +54,7 @@ public class Main extends JavaPlugin {
                 getLogger().info("1.13+ server version detected.");
                 //Elytras are present in this version, register Elytra listener.
                 Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
+                Bukkit.getPluginManager().registerEvents(new PotionListener(), this);
                 break;
             case "v1_12_R1":
             case "v1_11_R1":
@@ -172,6 +175,13 @@ public class Main extends JavaPlugin {
         if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
             for (Parkour parkour : CacheManager.getParkours()) {
                 parkour.removeHolograms();
+            }
+        }
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (CacheManager.isParkour(player)) {
+                HubParkourPlayer pl = CacheManager.getPlayer(player);
+                pl.removeItems();
             }
         }
         if (dbManager != null) {

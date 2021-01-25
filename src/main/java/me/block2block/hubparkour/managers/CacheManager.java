@@ -25,6 +25,9 @@ public class CacheManager {
     private static final List<LeaderboardHologram> leaderboards;
     private static int setupStage = -1;
     private static Player setupPlayer;
+    private static Player editPlayer;
+    private static Parkour editParkour;
+    private static int currentModification = -1;
 
     static {
         players = new HashMap<>();
@@ -34,6 +37,8 @@ public class CacheManager {
         parkours = new ArrayList<>();
         leaderboards = new ArrayList<>();
         restartPoints = new HashMap<>();
+        editPlayer = null;
+        editParkour = null;
     }
 
     public static boolean isParkour(Player p) {
@@ -55,6 +60,42 @@ public class CacheManager {
     public static void exitSetup() {
         setupPlayer = null;
         setupStage = -1;
+    }
+
+    public static void enterEditMode(Player player, Parkour parkour) {
+        editPlayer = player;
+        editParkour = parkour;
+        currentModification = -1;
+    }
+
+    public static boolean isEdit(Player p) {
+        return p.equals(editPlayer);
+    }
+
+    public static boolean isSomeoneEdit() {
+        return editParkour != null;
+    }
+
+    public static int getCurrentModification() {
+        return currentModification;
+    }
+
+    public static void setCurrentModification(int currentModification) {
+        CacheManager.currentModification = currentModification;
+    }
+
+    public static Parkour getEditParkour() {
+        return editParkour;
+    }
+
+    public static Player getEditPlayer() {
+        return editPlayer;
+    }
+
+    public static void leaveEditMode() {
+        editParkour = null;
+        editPlayer = null;
+        currentModification = -1;
     }
 
     public static int getSetupStage() {
@@ -152,12 +193,26 @@ public class CacheManager {
         restartPoints.put(location, p);
     }
 
+    public static void removeRestartPoint(PressurePlate p) {
+        p.removeMaterial();
+        restartPoints.remove(p.getLocation());
+    }
+
     public static void playerStart(HubParkourPlayer p) {
         players.put(p.getPlayer().getUniqueId(), p);
     }
 
     public static void playerEnd(HubParkourPlayer p) {
         players.remove(p.getPlayer().getUniqueId());
+        if (p.getActionBarTask() != null) {
+            p.getActionBarTask().cancel();
+        }
+        if (isSetup(p.getPlayer())) {
+            exitSetup();
+        }
+        if (isEdit(p.getPlayer())) {
+            leaveEditMode();
+        }
     }
 
     public static void addHologram(LeaderboardHologram hologram) {

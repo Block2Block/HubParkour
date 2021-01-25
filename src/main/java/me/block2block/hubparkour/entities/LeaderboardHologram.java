@@ -42,6 +42,15 @@ public class LeaderboardHologram implements ILeaderboardHologram {
         if (hologram != null) {
             hologram.delete();
         }
+        if (location == null) {
+            Main.getInstance().getLogger().info("The location of one of your leaderboard holograms for parkour " + parkour.getName() + " no longer exists. Please delete leaderboard hologram " + this.id + ".");
+            return;
+        }
+
+        if (location.getWorld() == null) {
+            Main.getInstance().getLogger().info("The location of one of your leaderboard holograms for parkour " + parkour.getName() + " no longer exists. Please delete leaderboard hologram " + this.id + ".");
+            return;
+        }
         hologram = HologramsAPI.createHologram(Main.getInstance(), location);
         hologram.appendTextLine(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getConfig().getString("Messages.Holograms.Leaderboard.Header").replace("{parkour-name}", parkour.getName())));
         refresh();

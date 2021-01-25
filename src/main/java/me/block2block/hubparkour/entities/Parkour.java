@@ -8,8 +8,10 @@ import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
 import me.block2block.hubparkour.api.IParkour;
 import me.block2block.hubparkour.api.plates.*;
+import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,14 +21,14 @@ import java.util.Map;
 public class Parkour implements IParkour {
 
     private final int id;
-    private final String name;
-    private final StartPoint start;
-    private final EndPoint endPoint;
+    private String name;
+    private StartPoint start;
+    private EndPoint endPoint;
     private final List<Checkpoint> checkpoints;
     private final List<IHubParkourPlayer> players;
-    private final String checkpointCommand;
-    private final String endCommand;
-    private final RestartPoint restartPoint;
+    private String checkpointCommand;
+    private String endCommand;
+    private RestartPoint restartPoint;
     private final Map<PressurePlate, Hologram> holograms = new HashMap<>();
     private final List<ILeaderboardHologram> leaderboardHolograms = new ArrayList<>();
 
@@ -180,5 +182,159 @@ public class Parkour implements IParkour {
 
     public List<ILeaderboardHologram> getLeaderboards() {
         return leaderboardHolograms;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Main.getInstance().getDbManager().setName(id, name);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
+        if (Main.isHolograms()) {
+            removeHolograms();
+            generateHolograms();
+            for (ILeaderboardHologram hologram : leaderboardHolograms) {
+                hologram.remove();
+                hologram.generate();
+            }
+        }
+    }
+
+    public void setEndCommand(String endCommand) {
+        this.endCommand = endCommand;
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Main.getInstance().getDbManager().setEndCommand(id, endCommand);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
+    }
+
+    public void setCheckpointCommand(String checkpointCommand) {
+        this.checkpointCommand = checkpointCommand;
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Main.getInstance().getDbManager().setCheckpointCommand(id, checkpointCommand);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
+    }
+
+    public void setStartPoint(StartPoint point) {
+        CacheManager.removePlate(this.start);
+        this.start = point;
+        CacheManager.addPoint(point);
+        this.start.setParkour(this);
+        point.placeMaterial();
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Main.getInstance().getDbManager().setStartPoint(id, point);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
+        if (Main.isHolograms()) {
+            removeHolograms();
+            generateHolograms();
+        }
+    }
+
+    public void setEndPoint(EndPoint point) {
+        CacheManager.removePlate(this.endPoint);
+        this.endPoint = point;
+        CacheManager.addPoint(point);
+        this.endPoint.setParkour(this);
+        point.placeMaterial();
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Main.getInstance().getDbManager().setEndPoint(id, point);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
+        if (Main.isHolograms()) {
+            removeHolograms();
+            generateHolograms();
+        }
+    }
+
+    public void setRestartPoint(RestartPoint point) {
+        CacheManager.removeRestartPoint(this.restartPoint);
+        this.restartPoint = point;
+        this.restartPoint.setParkour(this);
+        CacheManager.addRestartPoint(point);
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Main.getInstance().getDbManager().setRestartPoint(id, point);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
+    }
+
+    public void addCheckpoint(Checkpoint point, int checkNo) {
+        point.setParkour(this);
+        CacheManager.addPoint(point);
+        List<Checkpoint> checkpoints = new ArrayList<>(this.checkpoints);
+        this.checkpoints.clear();
+        for (Checkpoint checkpoint : checkpoints) {
+            if (checkpoint.getCheckpointNo() >= checkNo) {
+                if (checkpoint.getCheckpointNo() == checkNo) {
+                    this.checkpoints.add(point);
+                }
+                checkpoint.setCheckpointNo(checkpoint.getCheckpointNo() + 1);
+                new BukkitRunnable(){
+                    @Override
+                    public void run() {
+                        Main.getInstance().getDbManager().updateCheckpointNumber(id, checkpoint);
+                    }
+                }.runTaskAsynchronously(Main.getInstance());
+            }
+            this.checkpoints.add(checkpoint);
+        }
+        if (!this.checkpoints.contains(point)) {
+            this.checkpoints.add(point);
+        }
+
+        point.placeMaterial();
+
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Main.getInstance().getDbManager().addCheckpoint(id, point);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
+
+        if (Main.isHolograms()) {
+            removeHolograms();
+            generateHolograms();
+        }
+    }
+
+    public void deleteCheckpoint(Checkpoint point) {
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                CacheManager.removePlate(point);
+            }
+        }.runTask(Main.getInstance());
+        this.checkpoints.remove(point);
+        for (Checkpoint checkpoint : checkpoints) {
+            if (checkpoint.getCheckpointNo() > point.getCheckpointNo()) {
+                checkpoint.setCheckpointNo(checkpoint.getCheckpointNo() - 1);
+                new BukkitRunnable(){
+                    @Override
+                    public void run() {
+                        Main.getInstance().getDbManager().updateCheckpointNumber(id, checkpoint);
+                    }
+                }.runTaskAsynchronously(Main.getInstance());
+            }
+        }
+
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                Main.getInstance().getDbManager().deleteCheckpoint(id, point);
+            }
+        }.runTaskAsynchronously(Main.getInstance());
     }
 }

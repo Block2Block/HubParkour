@@ -16,8 +16,32 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.2.3&#10; - You can no longer drop parkour items.&#10; - You can now enable an option to clear inventory on parkour start.&#10; - Fixed a few issues with parkour items not being given, taken away or glitching. &#10; - Players leaving is now handled appropriately and patched an associated memory leak.&#10; - When loaded for the first time, there is no longer an issue with pressure plate and parkour item names being wrong, it changes based on your current version.&#10; - You can now have duplicate pressure plates (have more than 1 type with the same type of plate)&#10; - You can now have duplicate items (have more than 1 parkour item with the same material)">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.2.4&#10; - Added support for 1.16.4">
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PotionListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/TitleUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourSetupEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourSetupEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/Checkpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/Checkpoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_13.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config1_13.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_8.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config1_8.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,12 +122,15 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="C:\Users\accou\AppData\Local\JetBrains\Toolbox\apps\IDEA-U\ch-0\202.7319.50\plugins\maven\lib\maven3" />
-      </MavenGeneralSettings>
-    </option>
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="vmOptionsForImporter" value="-Xmx768m" />
@@ -156,9 +183,22 @@
     <option name="myCommands">
       <command value="mvn clean package -Xlint:deprecation" />
       <command value="mvn deploy" />
-      <command value="mvn clean package deploy" />
       <command value="mvn clean package" />
+      <command value="mvn clean package deploy" />
     </option>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -319,6 +359,31 @@
       <workItem from="1601749474072" duration="1956000" />
       <workItem from="1601899854034" duration="7306000" />
       <workItem from="1602347918770" duration="2306000" />
+      <workItem from="1604880391222" duration="947000" />
+      <workItem from="1605480013970" duration="603000" />
+      <workItem from="1605747764216" duration="1748000" />
+      <workItem from="1606685147103" duration="6000" />
+      <workItem from="1609185021484" duration="815000" />
+      <workItem from="1609281873053" duration="1923000" />
+      <workItem from="1609356561222" duration="10000" />
+      <workItem from="1609773296659" duration="1000" />
+      <workItem from="1609778024757" duration="1000" />
+      <workItem from="1610546003008" duration="629000" />
+      <workItem from="1610589423217" duration="5000" />
+      <workItem from="1610673320789" duration="1000" />
+      <workItem from="1610748361621" duration="1000" />
+      <workItem from="1611093521325" duration="189000" />
+      <workItem from="1611321267277" duration="3467000" />
+      <workItem from="1611329503790" duration="12017000" />
+      <workItem from="1611411429005" duration="12000" />
+      <workItem from="1611420831779" duration="14548000" />
+      <workItem from="1611449175853" duration="3000" />
+      <workItem from="1611456685109" duration="5000" />
+      <workItem from="1611456713029" duration="3000" />
+      <workItem from="1611507196385" duration="5582000" />
+      <workItem from="1611586818821" duration="1929000" />
+      <workItem from="1611588793189" duration="1464000" />
+      <workItem from="1611590442827" duration="7913000" />
     </task>
     <task id="LOCAL-00001" summary="Did some database stuff">
       <created>1578935241432</created>
@@ -586,7 +651,14 @@
       <option name="project" value="LOCAL" />
       <updated>1601913055339</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="v2.2.4&#10; - Added support for 1.16.4">
+      <created>1604880651243</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1604880651243</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -632,7 +704,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.0.1" />
     <MESSAGE value="Updating version from 2.0 to 2.0.1" />
     <MESSAGE value="v2.0.2" />
     <MESSAGE value="v2.0.3" />
@@ -657,70 +728,7 @@
     <MESSAGE value="v2.2.1&#10; - Fixed a bug where Yaw and Pitch would not push to the database properly.&#10; - Improved reliability of teleport exploit detection." />
     <MESSAGE value="v2.2.2&#10; - Added support for 1.16.2" />
     <MESSAGE value="v2.2.3&#10; - You can no longer drop parkour items.&#10; - You can now enable an option to clear inventory on parkour start.&#10; - Fixed a few issues with parkour items not being given, taken away or glitching. &#10; - Players leaving is now handled appropriately and patched an associated memory leak.&#10; - When loaded for the first time, there is no longer an issue with pressure plate and parkour item names being wrong, it changes based on your current version.&#10; - You can now have duplicate pressure plates (have more than 1 type with the same type of plate)&#10; - You can now have duplicate items (have more than 1 parkour item with the same material)" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.2.3&#10; - You can no longer drop parkour items.&#10; - You can now enable an option to clear inventory on parkour start.&#10; - Fixed a few issues with parkour items not being given, taken away or glitching. &#10; - Players leaving is now handled appropriately and patched an associated memory leak.&#10; - When loaded for the first time, there is no longer an issue with pressure plate and parkour item names being wrong, it changes based on your current version.&#10; - You can now have duplicate pressure plates (have more than 1 type with the same type of plate)&#10; - You can now have duplicate items (have more than 1 parkour item with the same material)" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="2685" y="226" key="#com.intellij.ide.util.MemberChooser" timestamp="1601911889739">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="765" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597096224451" />
-    <state x="2685" y="226" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601911889739" />
-    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1597088868997">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1597088868997" />
-    <state x="2627" y="239" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1597105917626">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="2627" y="239" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597105917626" />
-    <state width="1877" height="121" key="GridCell.Tab.0.bottom" timestamp="1601914503820">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="121" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598391658270" />
-    <state width="1877" height="121" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601914503820" />
-    <state width="1877" height="121" key="GridCell.Tab.0.center" timestamp="1601914503820">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="121" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598391658270" />
-    <state width="1877" height="121" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601914503820" />
-    <state width="1877" height="121" key="GridCell.Tab.0.left" timestamp="1601914503820">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="121" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598391658270" />
-    <state width="1877" height="121" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601914503820" />
-    <state width="1877" height="121" key="GridCell.Tab.0.right" timestamp="1601914503820">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="121" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598391658270" />
-    <state width="1877" height="121" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601914503820" />
-    <state x="1920" y="144" key="VCS.ChangeListViewerDialog" timestamp="1601913095891">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="201" y="144" key="VCS.ChangeListViewerDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598391541771" />
-    <state x="1920" y="144" key="VCS.ChangeListViewerDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601913095891" />
-    <state x="2347" y="181" key="Vcs.Push.Dialog.v2" timestamp="1601913216257">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="427" y="181" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598391629873" />
-    <state x="2347" y="181" key="Vcs.Push.Dialog.v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601913216257" />
-    <state x="2697" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1597107678507">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="2697" y="434" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597107678507" />
-    <state x="2681" y="426" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1597107200536">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="761" y="426" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1593523521992" />
-    <state x="2681" y="426" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1597107200536" />
-    <state x="2852" y="209" key="git4idea.ui.GitTagDialog" timestamp="1601913132482">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="932" y="209" key="git4idea.ui.GitTagDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598391559533" />
-    <state x="2852" y="209" key="git4idea.ui.GitTagDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601913132482" />
-    <state x="2208" y="139" width="894" height="880" key="run.anything.popup" timestamp="1601912637527">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="288" y="139" width="894" height="880" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1598391427942" />
-    <state x="2208" y="139" width="894" height="880" key="run.anything.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1601912637527" />
+    <MESSAGE value="v2.2.4&#10; - Added support for 1.16.4" />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.2.4&#10; - Added support for 1.16.4" />
   </component>
 </project>

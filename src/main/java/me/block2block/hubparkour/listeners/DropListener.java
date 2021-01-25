@@ -1,11 +1,15 @@
 package me.block2block.hubparkour.listeners;
 
+import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.HubParkourAPI;
 import me.block2block.hubparkour.api.items.ParkourItem;
-import me.block2block.hubparkour.entities.Parkour;
+import me.block2block.hubparkour.managers.CacheManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 
 public class DropListener implements Listener {
 
@@ -18,6 +22,32 @@ public class DropListener implements Listener {
                     return;
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPickup(PlayerPickupItemEvent e) {
+            Player p = e.getPlayer();
+            if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Items.Prevent-Item-Pickup")) {
+                if (HubParkourAPI.isInParkour(p)) {
+                    e.setCancelled(true);
+                }
+            }
+    }
+
+    @EventHandler
+    public void onInventoryInteract(InventoryClickEvent e) {
+        if (e.getWhoClicked() instanceof Player) {
+            Player player = (Player) e.getWhoClicked();
+            if (CacheManager.isParkour(player)) {
+                for (ParkourItem item : HubParkourAPI.getPlayer(player).getParkourItems()) {
+                    if (e.getCurrentItem().equals(item.getItem())) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+
         }
     }
 

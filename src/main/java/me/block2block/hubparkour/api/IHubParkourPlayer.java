@@ -4,6 +4,7 @@ import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 
@@ -83,4 +84,10 @@ public interface IHubParkourPlayer {
      * Remove all of the parkour items and give them their original inventory.
      */
     void removeItems();
+
+    /**
+     * Get the active action bar task.
+     * @return the BukkitTask object if it is active, null if not.
+     */
+    BukkitTask getActionBarTask();
 }

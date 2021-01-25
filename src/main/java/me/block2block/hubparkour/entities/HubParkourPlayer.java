@@ -12,15 +12,16 @@ import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.api.items.ResetItem;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.utils.TitleUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @SuppressWarnings("DuplicatedCode")
 public class HubParkourPlayer implements IHubParkourPlayer {
@@ -36,6 +37,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     private ItemStack[] extraContents;
     private ItemStack[] armorContents;
     private ItemStack[] storageContents;
+    private BukkitTask actionBarTask;
 
     @SuppressWarnings("unused")
     public HubParkourPlayer(Player p, Parkour parkour) {
@@ -51,6 +53,14 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         parkourItems.add(new ResetItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Reset.Slot")));
         parkourItems.add(new CheckpointItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Checkpoint.Slot")));
         parkourItems.add(new CancelItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Cancel.Slot")));
+        if (Main.getInstance().getConfig().getBoolean("Settings.Action-Bar.Enabled")) {
+            actionBarTask = new BukkitRunnable(){
+                @Override
+                public void run() {
+                    TitleUtil.sendActionBar(player, Main.c(false, Main.getInstance().getConfig().getString("Messages.Parkour.Action-Bar").replace("{current-time}", "" + ((System.currentTimeMillis() - startTime) / 1000f)).replace("{parkour-name}", parkour.getName()).replace("{current-checkpoint}", lastReached + "")), ChatColor.WHITE, false);
+                }
+            }.runTaskTimerAsynchronously(Main.getInstance(), 0, Main.getInstance().getConfig().getInt("Settings.Action-Bar.Update-Interval"));
+        }
     }
 
     public void checkpoint(Checkpoint checkpoint) {
@@ -66,6 +76,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             Bukkit.getPluginManager().callEvent(failEvent);
             if (failEvent.isCancelled()) {
                 return;
+            }
+            if (actionBarTask != null) {
+                actionBarTask.cancel();
+                actionBarTask = null;
             }
             switch (cause) {
                 case FLY:
@@ -89,6 +103,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     if (failEvent.isCancelled()) {
                         return;
                     }
+                    if (actionBarTask != null) {
+                        actionBarTask.cancel();
+                        actionBarTask = null;
+                    }
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Not-Enough-Checkpoints")));
                     parkour.playerEnd(this);
                     CacheManager.playerEnd(this);
@@ -104,7 +122,21 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             if (finishEvent.isCancelled()) {
                 return;
             }
+            if (actionBarTask != null) {
+                actionBarTask.cancel();
+                actionBarTask = null;
+            }
             if (previous > 0) {
+                if (Main.getInstance().getConfig().getBoolean("Settings.Repeat-Rewards")) {
+                    if (parkour.getEndCommand() != null) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                    }
+                    if (parkour.getCheckpointCommand() != null) {
+                        for (int i = 0;i < checkpoints.size();i++) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                        }
+                    }
+                }
                 if (finishMili < previous) {
                     player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Beat-Previous-Personal-Best").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));
                     new BukkitRunnable() {
@@ -235,5 +267,9 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             }
 
         }
+    }
+
+    public BukkitTask getActionBarTask() {
+        return actionBarTask;
     }
 }

@@ -10,6 +10,7 @@ import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,10 +27,51 @@ public class PressurePlateListener implements Listener {
         if (e.getFrom().getBlock().getType().equals(e.getTo().getBlock().getType())) {
             return;
         }
+        if (CacheManager.isParkour(e.getPlayer())) {
+            if (e.getTo().getBlock().isLiquid()) {
+                if (e.getTo().getBlock().getType() == Material.WATER) {
+                    if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Water")) {
+                        return;
+                    }
+                } else if (e.getTo().getBlock().getType() == Material.LAVA) {
+                    if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Lava")) {
+                        return;
+                    }
+                } else if (Main.isPre1_13()) {
+                    if (e.getTo().getBlock().getType() == Material.getMaterial("STATIONARY_WATER")) {
+                        if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Water")) {
+                            return;
+                        }
+                    } else {
+                        if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Lava")) {
+                            return;
+                        }
+                    }
+                }
+                if (Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Water")) {
+                    HubParkourPlayer player = CacheManager.getPlayer(e.getPlayer());
+
+                    Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                    if (player.getLastReached() != 0) {
+                        l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                    }
+                    l.setX(l.getX() + 0.5);
+                    l.setY(l.getY() + 0.5);
+                    l.setZ(l.getZ() + 0.5);
+                    e.getPlayer().teleport(l);
+                    e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Teleport")));
+                    return;
+                }
+            }
+        }
         if (CacheManager.getTypes().containsValue(e.getTo().getBlock().getType())) {
             if (CacheManager.isPoint(e.getTo().getBlock().getLocation())) {
                 PressurePlate pp = CacheManager.getPoint(e.getTo().getBlock().getLocation());
                 Player p = e.getPlayer();
+                if (pp.getParkour().equals(CacheManager.getEditParkour())) {
+                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Currently-Being-Edited")));
+                    return;
+                }
                 switch (pp.getType()) {
                     case 0:
                         //StartPoint

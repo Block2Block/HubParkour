@@ -4,7 +4,7 @@ import org.bukkit.Location;
 
 public class Checkpoint extends PressurePlate {
 
-    private final int checkpointNo;
+    private int checkpointNo;
 
     @SuppressWarnings("unused")
     public Checkpoint(Location location, int checkpointNo) {
@@ -18,5 +18,9 @@ public class Checkpoint extends PressurePlate {
 
     public int getCheckpointNo() {
         return checkpointNo;
+    }
+
+    public void setCheckpointNo(int checkpointNo) {
+        this.checkpointNo = checkpointNo;
     }
 }

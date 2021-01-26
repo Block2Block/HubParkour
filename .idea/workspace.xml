@@ -16,31 +16,12 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.2.4&#10; - Added support for 1.16.4">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PotionListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/TitleUtil.java" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.3&#10; - New edit mode to edit parkours that already exist.&#10; - New action bar to view parkour stats as you're doing the parkour.&#10; - New option to enable repeat rewards&#10; - Teleport on void and fall have now been separated in the config.&#10; - New Teleport on Water and Lava options.&#10; - New command to reset player times on specific parkours.&#10; - Players can no longer pick up items while in a parkour (toggle-able).&#10; - Players can no longer move parkour items out of their inventory.&#10; - New option to disable the ability to receive potion effects while doing a parkour (toggle-able). Due to limitations with the Spigot API, this option is only available to those who use server versions 1.13+.&#10; - New option to disable fall damage (only works when teleport on fall is disabled)&#10; - Modified how times are removed from the leaderboard (the time is now deleted completely from the Database)&#10; - Fixed a bug where if a player was in a parkour when the server restarted, they would not receive their inventory back.&#10; - Several API changes to accommodate Edit Mode (JavaDocs have already been updated).&#10; - Removed several unused imports.">
       <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourSetupEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourSetupEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/Checkpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/Checkpoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_13.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config1_13.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_8.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config1_8.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/TitleUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/TitleUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -183,22 +164,9 @@
     <option name="myCommands">
       <command value="mvn clean package -Xlint:deprecation" />
       <command value="mvn deploy" />
-      <command value="mvn clean package" />
       <command value="mvn clean package deploy" />
+      <command value="mvn clean package" />
     </option>
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -383,7 +351,12 @@
       <workItem from="1611507196385" duration="5582000" />
       <workItem from="1611586818821" duration="1929000" />
       <workItem from="1611588793189" duration="1464000" />
-      <workItem from="1611590442827" duration="7913000" />
+      <workItem from="1611590442827" duration="8899000" />
+      <workItem from="1611603846508" duration="22000" />
+      <workItem from="1611620863743" duration="30000" />
+      <workItem from="1611622921340" duration="221000" />
+      <workItem from="1611682473699" duration="976000" />
+      <workItem from="1611686529808" duration="2460000" />
     </task>
     <task id="LOCAL-00001" summary="Did some database stuff">
       <created>1578935241432</created>
@@ -658,7 +631,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604880651243</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="v2.3&#10; - New edit mode to edit parkours that already exist.&#10; - New action bar to view parkour stats as you're doing the parkour.&#10; - New option to enable repeat rewards&#10; - Teleport on void and fall have now been separated in the config.&#10; - New Teleport on Water and Lava options.&#10; - New command to reset player times on specific parkours.&#10; - Players can no longer pick up items while in a parkour (toggle-able).&#10; - Players can no longer move parkour items out of their inventory.&#10; - New option to disable the ability to receive potion effects while doing a parkour (toggle-able). Due to limitations with the Spigot API, this option is only available to those who use server versions 1.13+.&#10; - New option to disable fall damage (only works when teleport on fall is disabled)&#10; - Modified how times are removed from the leaderboard (the time is now deleted completely from the Database)&#10; - Fixed a bug where if a player was in a parkour when the server restarted, they would not receive their inventory back.&#10; - Several API changes to accommodate Edit Mode (JavaDocs have already been updated).&#10; - Removed several unused imports.">
+      <created>1611598676930</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1611598676930</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -704,7 +684,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="Updating version from 2.0 to 2.0.1" />
     <MESSAGE value="v2.0.2" />
     <MESSAGE value="v2.0.3" />
     <MESSAGE value="Updating versions" />
@@ -729,6 +708,7 @@
     <MESSAGE value="v2.2.2&#10; - Added support for 1.16.2" />
     <MESSAGE value="v2.2.3&#10; - You can no longer drop parkour items.&#10; - You can now enable an option to clear inventory on parkour start.&#10; - Fixed a few issues with parkour items not being given, taken away or glitching. &#10; - Players leaving is now handled appropriately and patched an associated memory leak.&#10; - When loaded for the first time, there is no longer an issue with pressure plate and parkour item names being wrong, it changes based on your current version.&#10; - You can now have duplicate pressure plates (have more than 1 type with the same type of plate)&#10; - You can now have duplicate items (have more than 1 parkour item with the same material)" />
     <MESSAGE value="v2.2.4&#10; - Added support for 1.16.4" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.2.4&#10; - Added support for 1.16.4" />
+    <MESSAGE value="v2.3&#10; - New edit mode to edit parkours that already exist.&#10; - New action bar to view parkour stats as you're doing the parkour.&#10; - New option to enable repeat rewards&#10; - Teleport on void and fall have now been separated in the config.&#10; - New Teleport on Water and Lava options.&#10; - New command to reset player times on specific parkours.&#10; - Players can no longer pick up items while in a parkour (toggle-able).&#10; - Players can no longer move parkour items out of their inventory.&#10; - New option to disable the ability to receive potion effects while doing a parkour (toggle-able). Due to limitations with the Spigot API, this option is only available to those who use server versions 1.13+.&#10; - New option to disable fall damage (only works when teleport on fall is disabled)&#10; - Modified how times are removed from the leaderboard (the time is now deleted completely from the Database)&#10; - Fixed a bug where if a player was in a parkour when the server restarted, they would not receive their inventory back.&#10; - Several API changes to accommodate Edit Mode (JavaDocs have already been updated).&#10; - Removed several unused imports." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.3&#10; - New edit mode to edit parkours that already exist.&#10; - New action bar to view parkour stats as you're doing the parkour.&#10; - New option to enable repeat rewards&#10; - Teleport on void and fall have now been separated in the config.&#10; - New Teleport on Water and Lava options.&#10; - New command to reset player times on specific parkours.&#10; - Players can no longer pick up items while in a parkour (toggle-able).&#10; - Players can no longer move parkour items out of their inventory.&#10; - New option to disable the ability to receive potion effects while doing a parkour (toggle-able). Due to limitations with the Spigot API, this option is only available to those who use server versions 1.13+.&#10; - New option to disable fall damage (only works when teleport on fall is disabled)&#10; - Modified how times are removed from the leaderboard (the time is now deleted completely from the Database)&#10; - Fixed a bug where if a player was in a parkour when the server restarted, they would not receive their inventory back.&#10; - Several API changes to accommodate Edit Mode (JavaDocs have already been updated).&#10; - Removed several unused imports." />
   </component>
 </project>

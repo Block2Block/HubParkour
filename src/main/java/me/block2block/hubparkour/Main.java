@@ -35,6 +35,7 @@ public class Main extends JavaPlugin {
 
     private static boolean pre1_13 = false;
     private static boolean post1_8 = true;
+    private static boolean post1_9 = false;
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
@@ -51,6 +52,7 @@ public class Main extends JavaPlugin {
             case "v1_16_R3":
                 pre1_13 = false;
                 post1_8 = true;
+                post1_9 = true;
                 getLogger().info("1.13+ server version detected.");
                 //Elytras are present in this version, register Elytra listener.
                 Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
@@ -59,6 +61,7 @@ public class Main extends JavaPlugin {
             case "v1_12_R1":
             case "v1_11_R1":
             case "v1_10_R1":
+                post1_9 = true;
             case "v1_9_R1":
             case "v1_9_R2":
                 //Elytras are present in this version, register Elytra listener.
@@ -305,5 +308,9 @@ public class Main extends JavaPlugin {
 
     public static boolean isPost1_8() {
         return post1_8;
+    }
+
+    public static boolean isPost1_9() {
+        return post1_9;
     }
 }

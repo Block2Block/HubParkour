@@ -1,5 +1,8 @@
 package me.block2block.hubparkour.utils;
 
+import me.block2block.hubparkour.Main;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -10,13 +13,20 @@ public class TitleUtil {
 
     public static void sendActionBar(Player player, String message, ChatColor color, boolean bold) {
         try {
-            Object chatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\": \"" + message + "\",\"color\":\"" + color.name().toLowerCase() + "\",\"bold\":\"" + ((bold)?"true":"false") + "\"}");
+            if (!Main.isPost1_9()) {
+                Object chatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\": \"" + message + "\",\"color\":\"" + color.name().toLowerCase() + "\",\"bold\":\"" + ((bold)?"true":"false") + "\"}");
 
-            Constructor<?> titleConstructor = getNMSClass("PacketPlayOutChat").getConstructor(getNMSClass("IChatBaseComponent"), byte.class);
+                Constructor<?> titleConstructor = getNMSClass("PacketPlayOutChat").getConstructor(getNMSClass("IChatBaseComponent"), byte.class);
 
-            Object packet = titleConstructor.newInstance(chatTitle, (byte) 2);
-            sendPacket(player, packet);
+                Object packet = titleConstructor.newInstance(chatTitle, (byte) 2);
+                sendPacket(player, packet);
+            } else {
+                TextComponent textComponent = new TextComponent(message);
+                textComponent.setColor(color.asBungee());
+                textComponent.setBold(bold);
 
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, textComponent);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

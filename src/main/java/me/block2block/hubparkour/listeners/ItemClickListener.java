@@ -10,14 +10,28 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemClickListener implements Listener {
+
+    private final List<Player> cancelNextEvent = new ArrayList<>();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
         if (CacheManager.isParkour(e.getPlayer())) {
+            if (cancelNextEvent.contains(e.getPlayer())) {
+                cancelNextEvent.remove(e.getPlayer());
+                return;
+            }
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                cancelNextEvent.add(e.getPlayer());
+            }
             if (e.getItem() != null) {
                 for (int type : CacheManager.getItems().keySet()) {
                     if (CacheManager.getItems().get(type).equals(e.getItem())) {
@@ -75,6 +89,19 @@ public class ItemClickListener implements Listener {
                                 p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leave.Left")));
                                 break;
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBuild(BlockPlaceEvent e) {
+        if (CacheManager.isParkour(e.getPlayer())) {
+            if (e.getBlockPlaced() != null) {
+                for (int type : CacheManager.getItems().keySet()) {
+                    if (CacheManager.getItems().get(type).getType().equals(e.getBlockPlaced().getType())) {
+                        e.setCancelled(true);
                     }
                 }
             }

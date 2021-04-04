@@ -6,7 +6,7 @@
   </component>
   <component name="JavadocGenerationManager">
     <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/javadoc" />
-    <option name="OTHER_OPTIONS" value="-link https://docs.oracle.com/javase/8/docs/api/ -link https://hub.spigotmc.org/javadocs/spigot/" />
+    <option name="OTHER_OPTIONS" value="-link https://docs.oracle.com/javase/8/docs/api/ -link https://hub.spigotmc.org/javadocs/spigot" />
     <option name="OPEN_IN_BROWSER" value="false" />
   </component>
   <component name="MavenProjectsManager">

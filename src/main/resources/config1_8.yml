@@ -30,8 +30,8 @@ Messages:
   #All Hologram messages. Requires HolographicDisplays to be installed.
   Holograms:
     Start:
-     - "&9&l&n{parkour-name}"
-     - "&9&lParkour Start"
+      - "&9&l&n{parkour-name}"
+      - "&9&lParkour Start"
     End:
       - "&9&l&n{parkour-name}"
       - "&9&lParkour End"
@@ -94,9 +94,6 @@ Messages:
     #Admin command messages.
     Admin:
       No-Permission: "You do not have permission to perform this command."
-      Reload:
-        Successful: "Reload successful! If you have changed database or hologram settings, you will need to restart the server in order for those changes to apply."
-        Failed: "The reload failed. Please make sure that you have formatted the file correctly."
       List:
         Header: "All active parkours:"
         Line: "&a#{id} &r- &a{parkour-name} &r- &a{parkour-players} &ractive players."
@@ -161,6 +158,7 @@ Messages:
         Exited-Edit-Mode: "You have left edit mode."
         Choose-Edit:
           - "Please select what you would like to edit about parkour &a{parkour-name}&r. Type the digit in chat."
+          - "Please note that split times will be reset for this parkour upon modifications to any parkour points."
           - "&a1&r - Name"
           - "&a2&r - End Command"
           - "&a3&r - Checkpoint Command"
@@ -209,9 +207,16 @@ Messages:
     Teleport: "You have been teleported to your last checkpoint."
     Currently-Being-Edited: "This parkour is currently in being modified by an admin. Please wait to attempt this parkour!"
     Checkpoints:
-      Reached: "You have reached checkpoint &a#{checkpoint}&r!"
+      Reached:
+        New-Split-Time: "You have reached checkpoint &a#{checkpoint}&r in &a{new-time}s&r!"
+        Beat-Split-Time: "You have reached checkpoint &a#{checkpoint}&r in &a{new-time}s&r and beat your personal best of &a{old-time}s&r!"
+        Not-Beat-Split-Time: "You have reached checkpoint &a#{checkpoint}&r in &a{new-time}s&r (personal best: {old-time}s)!"
       Not-Started: "You must start a parkour in order to reach checkpoints!"
     End:
+      Split-Time:
+        New-Split-Time: "You have reached the finish point in &a{new-time}s&r!"
+        Beat-Split-Time: "You have reached reached the finish point in &a{new-time}s&r and beat your personal best of &a{old-time}s&r!"
+        Not-Beat-Split-Time: "You have reached reached the finish point in &a{new-time}s&r (personal best: {old-time}s)!"
       Beat-Previous-Personal-Best: "You beat your previous record and you managed to complete the &a{parkour-name} &rparkour in &a{time} &rseconds!"
       Not-Beat-Previous-Personal-Best: "You didn't beat your previous record, but you managed to complete the &a{parkour-name} &rparkour in &a{time} &rseconds!"
       First-Time: "Well done! You completed the &a{parkour-name}&r parkour in &a{time}&r seconds! Your reward will be applied shortly!"
@@ -245,10 +250,14 @@ Settings:
     Enabled: true
   #Do you want to teleport a player to their last checkpoint upon receiving fall or void damage?
   Teleport:
-      On-Fall: true
-      On-Void: true
-      On-Lava: true
-      On-Water: true
+    #Teleport when the player falls. Only triggers once the player hits the ground.
+    On-Fall:
+      Enabled: true
+      #The minimum distance the player must fall in order to trigger teleportation. This is the distance from where they fell to the ground.
+      Minimum-Distance: 3.0
+    On-Void: true
+    On-Lava: true
+    On-Water: true
   #Disables any damage recieved when the players falls. Only works when Teleport On Fall is disabled.
   Cancel-Fall-Damage: false
   #Whether or not to remove potion effects on parkour start.
@@ -264,6 +273,26 @@ Settings:
     On-Teleport: true
     On-Elytra-Use: true
     On-Toggle-Fly: true
+
+  #Health settings. If both settings are disabled, any damage taken while in the parkour will not get reset when they leave/finish the parkour.
+  Health:
+    #This change only applies while in the parkour. When they leave/finish the parkour, their health is set back to what it was. If this is disabled, health will not be set back to the starting health upon parkour completion/exit.
+    Heal-To-Full: true
+    #Disables the ability to take damage at all while in a parkour.
+    Disable-Damage: true
+
+  #Hunger settings. If both settings are disabled, any hunger lost while in the parkour will not get reset when they leave/finish the parkour.
+  Hunger:
+    #This change only applies while in the parkour. When they leave/finish the parkour, their hunger is set back to what it was. If this is disabled, hunger will not be set back to the starting health upon parkour completion/exit.
+    Saturate-To-Full: true
+    #Disables the ability to loose hunger at all while in a parkour.
+    Disable-Hunger: true
+
+  #Whether to set a specific gamemode when the player does a parkour.
+  Parkour-Gamemode:
+    Enabled: true
+    #This MUST be in all caps. Adventure mode is recommended to prevent visual glitches when trying to place blocks.
+    Gamemode: ADVENTURE
 
   #Settings related to items given when the parkour is started. Specify the slot for them to be put in. Use -1 to disable a specific item.
   Parkour-Items:

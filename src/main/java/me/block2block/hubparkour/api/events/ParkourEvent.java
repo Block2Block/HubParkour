@@ -22,8 +22,11 @@ public abstract class ParkourEvent extends Event {
         return parkour;
     }
 
-    @Override
     public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

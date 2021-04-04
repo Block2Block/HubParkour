@@ -20,7 +20,7 @@ public class FallListener implements Listener {
             Player p = (Player) e.getEntity();
             if (CacheManager.isParkour(p)) {
                 if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                    if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Fall")) {
+                    if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Fall.Enabled") || p.getFallDistance() < Main.getInstance().getConfig().getDouble("Settings.Teleport.On-Fall.Minimum-Distance")) {
                         if (Main.getInstance().getConfig().getBoolean("Settings.Cancel-Fall-Damage")) {
                             e.setCancelled(true);
                         }
@@ -31,10 +31,14 @@ public class FallListener implements Listener {
                         return;
                     }
                 } else {
+                    if (Main.getInstance().getConfig().getBoolean("Settings.Health.Disable-Damage")) {
+                        e.setCancelled(true);
+                    }
                     return;
                 }
 
                 e.setCancelled(true);
+                p.setFallDistance(0);
                 HubParkourPlayer player = CacheManager.getPlayer(p);
 
                 Location l = player.getParkour().getRestartPoint().getLocation().clone();
@@ -45,6 +49,7 @@ public class FallListener implements Listener {
                 l.setY(l.getY() + 0.5);
                 l.setZ(l.getZ() + 0.5);
                 double health = p.getHealth();
+                Main.getInstance().getLogger().info("[DEBUG] USER HAS BEEN TELEPORTED, REASON: " + e.getCause().name() + ", LOCATION: " + p.getLocation().toString());
                 p.teleport(l);
                 p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Teleport")));
             }

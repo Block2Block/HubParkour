@@ -58,8 +58,10 @@ public class PressurePlateListener implements Listener {
                     l.setX(l.getX() + 0.5);
                     l.setY(l.getY() + 0.5);
                     l.setZ(l.getZ() + 0.5);
+                    e.getPlayer().setFallDistance(0);
                     e.getPlayer().teleport(l);
                     e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Teleport")));
+                    Main.getInstance().getLogger().info("[DEBUG] USER HAS BEEN TELEPORTED, REASON: WATER/LAVA");
                     return;
                 }
             }
@@ -172,8 +174,8 @@ public class PressurePlateListener implements Listener {
                                 if (event.isCancelled()) {
                                     return;
                                 }
+
                                 CacheManager.getPlayer(p).checkpoint(checkpoint);
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoints.Reached").replace("{checkpoint}","" + checkpoint.getCheckpointNo())));
                                 return;
                             } else {
                                 //Do nothing, is doing a different parkour.

@@ -41,9 +41,15 @@ public class DropListener implements Listener {
             Player player = (Player) e.getWhoClicked();
             if (CacheManager.isParkour(player)) {
                 for (ParkourItem item : HubParkourAPI.getPlayer(player).getParkourItems()) {
-                    if (e.getCurrentItem().equals(item.getItem())) {
-                        e.setCancelled(true);
-                        return;
+                    if (item != null) {
+                        if (item.getItem() != null) {
+                            if (e.getCurrentItem() != null) {
+                                if (item.getItem().equals(e.getCurrentItem())) {
+                                    e.setCancelled(true);
+                                    return;
+                                }
+                            }
+                        }
                     }
                 }
             }

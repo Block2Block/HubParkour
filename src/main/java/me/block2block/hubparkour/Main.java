@@ -110,7 +110,7 @@ public class Main extends JavaPlugin {
         dbManager = new DatabaseManager();
 
         try {
-            dbManager.setup(getConfig().getString("Settings.Database.Type").toLowerCase().equals("mysql"));
+            dbManager.setup(getConfig().getString("Settings.Database.Type").equalsIgnoreCase("mysql"));
         } catch (Exception e) {
             getLogger().severe("There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:\n");
             e.printStackTrace();
@@ -185,10 +185,8 @@ public class Main extends JavaPlugin {
             if (CacheManager.isParkour(player)) {
                 HubParkourPlayer pl = CacheManager.getPlayer(player);
                 pl.removeItems();
+                pl.setToPrevState();
             }
-        }
-        if (dbManager != null) {
-            dbManager.closeConnection();
         }
     }
 

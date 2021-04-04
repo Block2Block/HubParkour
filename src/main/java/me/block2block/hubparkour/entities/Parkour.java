@@ -138,6 +138,9 @@ public class Parkour implements IParkour {
             l.setX(l.getX() + 0.5);
             l.setZ(l.getZ() + 0.5);
             l.setY(l.getY() + 2);
+            if (l.getWorld() == null) {
+                continue;
+            }
             Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), l);
             int counter = 0;
             for (String s : Main.getInstance().getConfig().getStringList("Messages.Holograms." + configKey)) {
@@ -232,6 +235,7 @@ public class Parkour implements IParkour {
             @Override
             public void run() {
                 Main.getInstance().getDbManager().setStartPoint(id, point);
+                Main.getInstance().getDbManager().resetSplitTimes(id);
             }
         }.runTaskAsynchronously(Main.getInstance());
         if (Main.isHolograms()) {
@@ -250,6 +254,7 @@ public class Parkour implements IParkour {
             @Override
             public void run() {
                 Main.getInstance().getDbManager().setEndPoint(id, point);
+                Main.getInstance().getDbManager().resetSplitTimes(id);
             }
         }.runTaskAsynchronously(Main.getInstance());
         if (Main.isHolograms()) {
@@ -301,6 +306,7 @@ public class Parkour implements IParkour {
             @Override
             public void run() {
                 Main.getInstance().getDbManager().addCheckpoint(id, point);
+                Main.getInstance().getDbManager().resetSplitTimes(id);
             }
         }.runTaskAsynchronously(Main.getInstance());
 
@@ -334,6 +340,7 @@ public class Parkour implements IParkour {
             @Override
             public void run() {
                 Main.getInstance().getDbManager().deleteCheckpoint(id, point);
+                Main.getInstance().getDbManager().resetSplitTimes(id);
             }
         }.runTaskAsynchronously(Main.getInstance());
     }

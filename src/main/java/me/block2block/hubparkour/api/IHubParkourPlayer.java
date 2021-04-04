@@ -3,10 +3,12 @@ package me.block2block.hubparkour.api;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.api.plates.Checkpoint;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a player in a parkour.
@@ -90,4 +92,35 @@ public interface IHubParkourPlayer {
      * @return the BukkitTask object if it is active, null if not.
      */
     BukkitTask getActionBarTask();
+
+    /**
+     * Get a map of all split times, mapped by checkpoint number.
+     * @return Map of all split times.
+     */
+    Map<Integer, Long> getSplitTimes();
+
+    /**
+     * Get the time of the users current split.
+     * @return The time of the split.
+     */
+    long getCurrentSplit();
+
+    /**
+     * Get the gamemode the player was in before the parkour was started.
+     * @return The gamemode the player was in.
+     */
+    GameMode getPrevGamemode();
+
+    /**
+     * Get the health the player was at before the parkour was started.
+     * @return The health the player was at.
+     */
+    public double getPrevHealth();
+
+    /**
+     * Get the hunger the player was at before the parkour was started.
+     * @return The hunger the player was at.
+     */
+    public int getPrevHunger();
+
 }

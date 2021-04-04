@@ -295,6 +295,15 @@ public class SetupListener implements Listener {
                     break;
                 }
                 case 8: {
+                    if (e.getMessage().equalsIgnoreCase("cancel")) {
+                        CacheManager.setCurrentModification(7);
+                        StringBuilder sb = new StringBuilder();
+                        for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Checkpoint-Edit")) {
+                            sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                        }
+                        e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                        return;
+                    }
                     int checkpointNo;
                     try {
                         checkpointNo = Integer.parseInt(e.getMessage());
@@ -321,6 +330,15 @@ public class SetupListener implements Listener {
                     break;
                 }
                 case 9: {
+                    if (e.getMessage().equalsIgnoreCase("cancel")) {
+                        CacheManager.setCurrentModification(7);
+                        StringBuilder sb = new StringBuilder();
+                        for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Checkpoint-Edit")) {
+                            sb.append(s.replace("{parkour-name}", CacheManager.getEditParkour().getName())).append("\n");
+                        }
+                        e.getPlayer().sendMessage(Main.c(true, sb.toString()));
+                        return;
+                    }
                     int checkpointNo;
                     try {
                         checkpointNo = Integer.parseInt(e.getMessage());

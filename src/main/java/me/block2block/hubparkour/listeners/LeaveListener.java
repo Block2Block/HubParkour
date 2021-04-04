@@ -14,7 +14,14 @@ public class LeaveListener implements Listener {
             HubParkourPlayer player = CacheManager.getPlayer(e.getPlayer());
             player.removeItems();
             player.getParkour().playerEnd(player);
+            player.setToPrevState();
             CacheManager.playerEnd(player);
+        }
+        if (CacheManager.isEdit(e.getPlayer())) {
+            CacheManager.leaveEditMode();
+        }
+        if (CacheManager.isSetup(e.getPlayer())) {
+            CacheManager.exitSetup();
         }
     }
 

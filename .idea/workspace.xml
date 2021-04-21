@@ -16,29 +16,12 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.3.1&#10; - Fixed a bug where the action bar messages would spam error messages in console and not work in newer version of Minecraft.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/HungerListener.java" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.4: Parkour Splitting&#10; - New Parkour Split times for each checkpoint hit.&#10; - New parkour split variable for the action bar (use {current-splittime} to put it in the action bar, the default message has not changed).&#10; - New options to set gamemode while doing the parkour.&#10; - New health and hunger options.&#10; - Fixed a bug with the API where Event listeners would not work as intended.&#10; - Fixed a bug where leaving would not result in edit or setup mode being exited.&#10; - Fixed a bug where cancel would not work when in the delete/add checkpoints edit mode.&#10; - Fixed a bug where when clicking on a block with parkour items, messages would get sent twice.&#10; - Fixed a bug where an error would occur generating holograms if the parkour points were in a world that could not be found.&#10; - Fixed an occasional NPE when a player clicked an item.&#10; - Some internal changes to how SQLite databases are handled.&#10; - Stopped players from being able to backtrack checkpoints by going over previous checkpoints.">
       <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/ParkourEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/ParkourEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/LeaveListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/LeaveListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/database/Database.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/database/MySQLConnectionPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/database/MySQLConnectionPool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/database/SQLite.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_13.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config1_13.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_8.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config1_8.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -186,17 +169,6 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/HubParkour/javadoc/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
@@ -434,7 +406,10 @@
       <workItem from="1617383825712" duration="7449000" />
       <workItem from="1617391647458" duration="7775000" />
       <workItem from="1617469022665" duration="1494000" />
-      <workItem from="1617544998303" duration="3165000" />
+      <workItem from="1617544998303" duration="6235000" />
+      <workItem from="1618782988274" duration="928000" />
+      <workItem from="1618916291545" duration="4191000" />
+      <workItem from="1619027548411" duration="1027000" />
     </task>
     <task id="LOCAL-00001" summary="Did some database stuff">
       <created>1578935241432</created>
@@ -723,7 +698,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611695144286</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="v2.4: Parkour Splitting&#10; - New Parkour Split times for each checkpoint hit.&#10; - New parkour split variable for the action bar (use {current-splittime} to put it in the action bar, the default message has not changed).&#10; - New options to set gamemode while doing the parkour.&#10; - New health and hunger options.&#10; - Fixed a bug with the API where Event listeners would not work as intended.&#10; - Fixed a bug where leaving would not result in edit or setup mode being exited.&#10; - Fixed a bug where cancel would not work when in the delete/add checkpoints edit mode.&#10; - Fixed a bug where when clicking on a block with parkour items, messages would get sent twice.&#10; - Fixed a bug where an error would occur generating holograms if the parkour points were in a world that could not be found.&#10; - Fixed an occasional NPE when a player clicked an item.&#10; - Some internal changes to how SQLite databases are handled.&#10; - Stopped players from being able to backtrack checkpoints by going over previous checkpoints.">
+      <created>1617550445386</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1617550445386</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -769,7 +751,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="Updating versions" />
     <MESSAGE value="v2.0.5" />
     <MESSAGE value="Update v2.0.5" />
     <MESSAGE value="Update v2.0.6" />
@@ -794,6 +775,7 @@
     <MESSAGE value="v2.3&#10; - New edit mode to edit parkours that already exist.&#10; - New action bar to view parkour stats as you're doing the parkour.&#10; - New option to enable repeat rewards&#10; - Teleport on void and fall have now been separated in the config.&#10; - New Teleport on Water and Lava options.&#10; - New command to reset player times on specific parkours.&#10; - Players can no longer pick up items while in a parkour (toggle-able).&#10; - Players can no longer move parkour items out of their inventory.&#10; - New option to disable the ability to receive potion effects while doing a parkour (toggle-able). Due to limitations with the Spigot API, this option is only available to those who use server versions 1.13+.&#10; - New option to disable fall damage (only works when teleport on fall is disabled)&#10; - Modified how times are removed from the leaderboard (the time is now deleted completely from the Database)&#10; - Fixed a bug where if a player was in a parkour when the server restarted, they would not receive their inventory back.&#10; - Several API changes to accommodate Edit Mode (JavaDocs have already been updated).&#10; - Removed several unused imports." />
     <MESSAGE value="v2.3.1&#10; - Fixed a bug where the action bar messages would spam error messages in console and not work in newer version of Minecraft." />
     <MESSAGE value="v2.3.1&#10; - Fixed a bug where the action bar messages would spam error messages in console and not work in newer versions of Minecraft.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.3.1&#10; - Fixed a bug where the action bar messages would spam error messages in console and not work in newer version of Minecraft." />
+    <MESSAGE value="v2.4: Parkour Splitting&#10; - New Parkour Split times for each checkpoint hit.&#10; - New parkour split variable for the action bar (use {current-splittime} to put it in the action bar, the default message has not changed).&#10; - New options to set gamemode while doing the parkour.&#10; - New health and hunger options.&#10; - Fixed a bug with the API where Event listeners would not work as intended.&#10; - Fixed a bug where leaving would not result in edit or setup mode being exited.&#10; - Fixed a bug where cancel would not work when in the delete/add checkpoints edit mode.&#10; - Fixed a bug where when clicking on a block with parkour items, messages would get sent twice.&#10; - Fixed a bug where an error would occur generating holograms if the parkour points were in a world that could not be found.&#10; - Fixed an occasional NPE when a player clicked an item.&#10; - Some internal changes to how SQLite databases are handled.&#10; - Stopped players from being able to backtrack checkpoints by going over previous checkpoints." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.4: Parkour Splitting&#10; - New Parkour Split times for each checkpoint hit.&#10; - New parkour split variable for the action bar (use {current-splittime} to put it in the action bar, the default message has not changed).&#10; - New options to set gamemode while doing the parkour.&#10; - New health and hunger options.&#10; - Fixed a bug with the API where Event listeners would not work as intended.&#10; - Fixed a bug where leaving would not result in edit or setup mode being exited.&#10; - Fixed a bug where cancel would not work when in the delete/add checkpoints edit mode.&#10; - Fixed a bug where when clicking on a block with parkour items, messages would get sent twice.&#10; - Fixed a bug where an error would occur generating holograms if the parkour points were in a world that could not be found.&#10; - Fixed an occasional NPE when a player clicked an item.&#10; - Some internal changes to how SQLite databases are handled.&#10; - Stopped players from being able to backtrack checkpoints by going over previous checkpoints." />
   </component>
 </project>

@@ -8,9 +8,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("ALL")
 public class FallListener implements Listener {
+
+    private static List<Player> hasTeleported = new ArrayList<>();
 
     @SuppressWarnings("unused")
     @EventHandler
@@ -29,6 +35,10 @@ public class FallListener implements Listener {
                 } else if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Void")) {
                         return;
+                    } else {
+                        if (hasTeleported.contains(p)) {
+                            return;
+                        }
                     }
                 } else {
                     if (Main.getInstance().getConfig().getBoolean("Settings.Health.Disable-Damage")) {
@@ -49,9 +59,17 @@ public class FallListener implements Listener {
                 l.setY(l.getY() + 0.5);
                 l.setZ(l.getZ() + 0.5);
                 double health = p.getHealth();
-                Main.getInstance().getLogger().info("[DEBUG] USER HAS BEEN TELEPORTED, REASON: " + e.getCause().name() + ", LOCATION: " + p.getLocation().toString());
                 p.teleport(l);
                 p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Teleport")));
+                if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                    hasTeleported.add(p);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            hasTeleported.remove(p);
+                        }
+                    }.runTaskLater(Main.getInstance(), 5);
+                }
             }
         }
     }

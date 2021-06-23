@@ -25,11 +25,7 @@ public class ItemUtil {
             im = sm;
         }
 
-        if (Main.isPre1_13()) {
-            im.spigot().setUnbreakable(true);
-        } else {
-            im.setUnbreakable(true);
-        }
+        im.setUnbreakable(true);
 
         im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES);
         is.setItemMeta(im);

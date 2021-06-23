@@ -50,6 +50,8 @@ public class Main extends JavaPlugin {
             case "v1_16_R1":
             case "v1_16_R2":
             case "v1_16_R3":
+            case "v1_16_R4":
+            case "v1_17_R1":
                 pre1_13 = false;
                 post1_8 = true;
                 post1_9 = true;

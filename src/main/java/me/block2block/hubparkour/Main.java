@@ -11,6 +11,7 @@ import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.managers.DatabaseManager;
 import me.block2block.hubparkour.utils.HubParkourExpansion;
 import me.block2block.hubparkour.utils.ItemUtil;
+import me.block2block.hubparkour.utils.LoggerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -42,6 +43,16 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        LoggerUtil.log(LoggerUtil.LogLevel.OUTLINE, "*************************************************************");
+        LoggerUtil.log(LoggerUtil.LogLevel.PLUGIN_NAME, " _    _       _       _____           _                      ");
+        LoggerUtil.log(LoggerUtil.LogLevel.PLUGIN_NAME, "| |  | |     | |     |  __ \\         | |                    ");
+        LoggerUtil.log(LoggerUtil.LogLevel.PLUGIN_NAME, "| |__| |_   _| |__   | |__) |_ _ _ __| | _____  _   _ _ __   ");
+        LoggerUtil.log(LoggerUtil.LogLevel.PLUGIN_NAME, "|  __  | | | | '_ \\  |  ___/ _` | '__| |/ / _ \\| | | | '__|");
+        LoggerUtil.log(LoggerUtil.LogLevel.PLUGIN_NAME2, "| |  | | |_| | |_) | | |  | (_| | |  |   < (_) | |_| | |     ");
+        LoggerUtil.log(LoggerUtil.LogLevel.PLUGIN_NAME2, "|_|  |_|\\__,_|_.__/  |_|   \\__,_|_|  |_|\\_\\___/ \\__,_|_|");
+        LoggerUtil.log(LoggerUtil.LogLevel.PLUGIN_NAME, "                                                             ");
+        LoggerUtil.log(LoggerUtil.LogLevel.OUTLINE, "*************************************************************");
+
         switch (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]) {
             case "v1_13_R1":
             case "v1_13_R2":
@@ -55,7 +66,7 @@ public class Main extends JavaPlugin {
                 pre1_13 = false;
                 post1_8 = true;
                 post1_9 = true;
-                getLogger().info("1.13+ server version detected.");
+                LoggerUtil.log(LoggerUtil.LogLevel.INFO, "1.13+ server version was detected.");
                 //Elytras are present in this version, register Elytra listener.
                 Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
                 Bukkit.getPluginManager().registerEvents(new PotionListener(), this);
@@ -68,12 +79,12 @@ public class Main extends JavaPlugin {
             case "v1_9_R2":
                 //Elytras are present in this version, register Elytra listener.
                 Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
-                getLogger().info("Pre-1.13 server version detected.");
+                LoggerUtil.log(LoggerUtil.LogLevel.INFO, "Pre-1.13 (Legacy) server version was detected.");
                 pre1_13 = true;
                 post1_8 = true;
                 break;
             default:
-                getLogger().info("Pre-1.13 server version detected.");
+                LoggerUtil.log(LoggerUtil.LogLevel.INFO, "Pre-1.13 (Legacy) server version was detected.");
                 pre1_13 = true;
                 post1_8 = false;
         }
@@ -106,7 +117,7 @@ public class Main extends JavaPlugin {
         holograms = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
 
         if (holograms) {
-            getLogger().info("HolographicDisplays detected.");
+            LoggerUtil.log(LoggerUtil.LogLevel.INFO, "HolographicDisplays was detected.");
         }
 
         dbManager = new DatabaseManager();
@@ -114,7 +125,7 @@ public class Main extends JavaPlugin {
         try {
             dbManager.setup(getConfig().getString("Settings.Database.Type").equalsIgnoreCase("mysql"));
         } catch (Exception e) {
-            getLogger().severe("There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:\n");
+            LoggerUtil.log(LoggerUtil.LogLevel.ERROR, "There has been an error connecting to the database. HubParkour will be disabled. Stack Trace:\n");
             e.printStackTrace();
         }
 
@@ -142,14 +153,16 @@ public class Main extends JavaPlugin {
             }
 
             if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
-                getLogger().info("Generating holograms for parkour " + parkour.getName() + "...");
+
+                LoggerUtil.log(LoggerUtil.LogLevel.INFO, "Generating holograms for parkour " + parkour.getName() + "...");
+
                 parkour.generateHolograms();
             }
         }
 
         for (LeaderboardHologram hologram : CacheManager.getLeaderboards()) {
             if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
-                getLogger().info("Generating leaderboard hologram for parkour " + hologram.getParkour().getName() + "...");
+                LoggerUtil.log(LoggerUtil.LogLevel.INFO, "Generating leaderboard hologram for parkour " + hologram.getParkour().getName() + "...");
                 hologram.generate();
             }
         }
@@ -163,14 +176,14 @@ public class Main extends JavaPlugin {
             return;
         }
 
-        getLogger().info("Plugin successfully enabled!");
+        LoggerUtil.log(LoggerUtil.LogLevel.SUCCESS, "HubParkour has successfully enabled!");
 
         if (getConfig().getBoolean("Settings.Version-Checker.Enabled")) {
             String version = newVersionCheck();
             if (version != null) {
-                getLogger().info("HubParkour v" + version + " is out now! I highly recommend you download the new version!");
+                LoggerUtil.log(LoggerUtil.LogLevel.WARN, "HubParkour v" + version + " has been released! It is highly recommend that you download the new version!");
             } else {
-                getLogger().info("Your HubParkour version is up to date!");
+                LoggerUtil.log(LoggerUtil.LogLevel.SUCCESS, "HubParkour is up-to-date!");
             }
         }
     }
@@ -229,7 +242,7 @@ public class Main extends JavaPlugin {
         Material end = ((getConfig().getString("Settings.Pressure-Plates.End").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.End")):null);
 
         if (start == null || checkpoint == null || end == null) {
-            getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. The plugin will now be disabled.");
+            LoggerUtil.log(LoggerUtil.LogLevel.ERROR, "There are invalid values in your config.yml for pressure plate types. Please fix the error and restart your server. HubParkour will now be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
@@ -247,7 +260,7 @@ public class Main extends JavaPlugin {
         Material cancel = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Cancel.Item"));
 
         if (reset == null || checkpoint == null || cancel == null) {
-            getLogger().info("There are invalid values in your config.yml for the parkour items. Please correct the error and restart your server. The plugin will now be disabled.");
+            LoggerUtil.log(LoggerUtil.LogLevel.ERROR, "There are invalid values in your config.yml for the parkour items. Please fix the error and restart your server. HubParkour will now be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
@@ -282,7 +295,7 @@ public class Main extends JavaPlugin {
             return null;
         }
         catch(Exception e) {
-            getInstance().getLogger().info("Unable to check for new versions.");
+            LoggerUtil.log(LoggerUtil.LogLevel.INFO, "Unable to check for new versions of HubParkour/");
         }
         return null;
     }
@@ -295,7 +308,7 @@ public class Main extends JavaPlugin {
                 return scanner.next();
             }
         } catch (IOException e) {
-            getInstance().getLogger().info("Unable to connect to the Spigot resource API.");
+            LoggerUtil.log(LoggerUtil.LogLevel.INFO, "Unable to connect to the Spigot resource API.");
             return null;
         }
 

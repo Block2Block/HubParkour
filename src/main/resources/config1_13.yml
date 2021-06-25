@@ -21,6 +21,9 @@
 #
 # Most of the settings/messages are self explanatory, but I have explained the less obvious ones.
 
+# DO NOT REMOVE THIS LINE.
+config-version: 2.0
+
 Messages:
   Prefix: "&2Parkour>> &r"
 

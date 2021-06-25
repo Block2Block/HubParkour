@@ -4,6 +4,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
+import me.block2block.hubparkour.utils.LoggerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;

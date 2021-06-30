@@ -3,6 +3,7 @@ package me.block2block.hubparkour.listeners;
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +17,7 @@ public class FlyListener implements Listener {
     public void onFly(PlayerToggleFlightEvent e) {
         if (e.isFlying()) {
             if (CacheManager.isParkour(e.getPlayer())) {
-                if (Main.getInstance().getConfig().getBoolean("Settings.Fail.On-Toggle-Fly")) {
+                if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Fail.On-Toggle-Fly", true)) {
                     CacheManager.getPlayer(e.getPlayer()).end(ParkourPlayerFailEvent.FailCause.FLY);
                 }
             }
@@ -32,7 +33,7 @@ public class FlyListener implements Listener {
             l.setZ(l.getZ() - 0.5);
             if (!CacheManager.isPoint(l)) {
                 if (!CacheManager.isRestartPoint(l)) {
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Fail.On-Teleport")) {
+                    if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Fail.On-Teleport", true)) {
                         CacheManager.getPlayer(e.getPlayer()).end(ParkourPlayerFailEvent.FailCause.TELEPORTATION);
                     }
                 }

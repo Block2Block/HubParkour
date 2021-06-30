@@ -11,7 +11,9 @@ import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import me.block2block.hubparkour.utils.ItemUtil;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,8 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class CommandParkour implements CommandExecutor {
@@ -36,134 +37,169 @@ public class CommandParkour implements CommandExecutor {
             if (args.length > 0) {
                 switch (args[0]) {
                     case "reset":
-                        if (CacheManager.isParkour(p)) {
-                            ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint());
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (event.isCancelled()) {
-                                return true;
+                        if (p.hasPermission("hubparkour.command.reset")) {
+                            if (CacheManager.isParkour(p)) {
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint());
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (event.isCancelled()) {
+                                    return true;
+                                }
+                                Location l = CacheManager.getPlayer(p).getParkour().getRestartPoint().getLocation().clone();
+                                l.setX(l.getX() + 0.5);
+                                l.setY(l.getY() + 0.5);
+                                l.setZ(l.getZ() + 0.5);
+                                p.teleport(l);
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Reset.Successful", "You have been teleported to the start.", true, Collections.emptyMap());
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Reset.Not-Started-Parkour", "You must start a parkour in order to reset!", true, Collections.emptyMap());
                             }
-                            Location l = CacheManager.getPlayer(p).getParkour().getRestartPoint().getLocation().clone();
-                            l.setX(l.getX() + 0.5);
-                            l.setY(l.getY() + 0.5);
-                            l.setZ(l.getZ() + 0.5);
-                            p.teleport(l);
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Successful")));
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Not-Started-Parkour")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
                         break;
                     case "checkpoint":
-                        if (CacheManager.isParkour(p)) {
-                            HubParkourPlayer player = CacheManager.getPlayer(p);
-                            ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint());
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (event.isCancelled()) {
-                                return true;
+                        if (p.hasPermission("hubparkour.command.checkpoint")) {
+                            if (CacheManager.isParkour(p)) {
+                                HubParkourPlayer player = CacheManager.getPlayer(p);
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint());
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (event.isCancelled()) {
+                                    return true;
+                                }
+                                Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                                if (player.getLastReached() != 0) {
+                                    l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                                }
+                                l.setX(l.getX() + 0.5);
+                                l.setY(l.getY() + 0.5);
+                                l.setZ(l.getZ() + 0.5);
+                                p.teleport(l);
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Checkpoint.Successful", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Checkpoint.Not-Started-Parkour", "You must start a parkour in order to teleport to a checkpoint!", true, Collections.emptyMap());
                             }
-                            Location l = player.getParkour().getRestartPoint().getLocation().clone();
-                            if (player.getLastReached() != 0) {
-                                l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
-                            }
-                            l.setX(l.getX() + 0.5);
-                            l.setY(l.getY() + 0.5);
-                            l.setZ(l.getZ() + 0.5);
-                            p.teleport(l);
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Successful")));
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Not-Started-Parkour")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
+
                         break;
                     case "top10":
                     case "leaderboard":
-                        if (args.length == 2) {
-                            Parkour parkour = CacheManager.getParkour(args[1]);
-                            if (parkour != null) {
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        StringBuilder sb = new StringBuilder(Main.getInstance().getConfig().getString("Messages.Commands.Leaderboard.Message.Header") + "\n");
-                                        Map<Integer, List<String>> leaderboard = Main.getInstance().getDbManager().getLeaderboard(parkour, Main.getInstance().getConfig().getInt("Settings.Leaderboard.Limit"));
+                        if (p.hasPermission("hubparkour.command.leaderboard")) {
+                            if (args.length >= 2) {
+                                List<String> argsList = new ArrayList<>(Arrays.asList(args));
+                                argsList.remove(0);
+                                Parkour parkour = CacheManager.getParkour(String.join(" ", argsList));
+                                if (parkour != null) {
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            StringBuilder sb = new StringBuilder(ConfigUtil.getString("Messages.Commands.Leaderboard.Message.Header", "The top times are:") + "\n");
+                                            Map<Integer, List<String>> leaderboard = Main.getInstance().getDbManager().getLeaderboard(parkour, ConfigUtil.getInt("Settings.Leaderboard.Limit", 10));
 
-                                        for (int place : leaderboard.keySet()) {
-                                            List<String> record = leaderboard.get(place);
-                                            sb.append(Main.getInstance().getConfig().getString("Messages.Commands.Leaderboard.Message.Line").replace("{player-name}", record.get(0)).replace("{player-time}", "" + Float.parseFloat(record.get(1)) / 1000f).replace("{place}", "" + place)).append("\n");
+                                            for (int place : leaderboard.keySet()) {
+                                                List<String> record = leaderboard.get(place);
+                                                sb.append(ConfigUtil.getString("Messages.Commands.Leaderboard.Message.Line", "&a#{place} &r- &a{player-name} &r- &a{player-time} &rseconds.").replace("{player-name}", record.get(0)).replace("{player-time}", ConfigUtil.formatTime(Long.parseLong(record.get(1)))).replace("{place}", "" + place)).append("\n");
+                                            }
+
+                                            sb.append(ConfigUtil.getString("Messages.Commands.Leaderboard.Message.Footer", ""));
+                                            String s = sb.toString();
+
+                                            if (Main.isPlaceholders()) {
+                                                s = PlaceholderAPI.setPlaceholders(p, s);
+                                            }
+
+                                            p.sendMessage(Main.c(true, s.trim()));
                                         }
-
-                                        sb.append(Main.getInstance().getConfig().getString("Messages.Commands.Leaderboard.Message.Footer"));
-                                        p.sendMessage(Main.c(true, sb.toString().trim()));
-                                    }
-                                }.runTaskAsynchronously(Main.getInstance());
-                            } else {
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leaderboard.Not-Valid-Parkour")));
-                            }
-                        } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leaderboard.Not-Valid-Parkour")));
-                        }
-                        break;
-                    case "leave":
-                        if (CacheManager.isParkour(p)) {
-                            HubParkourPlayer player = CacheManager.getPlayer(p);
-                            ParkourPlayerLeaveEvent leaveEvent = new ParkourPlayerLeaveEvent(player.getParkour(), player);
-                            Bukkit.getPluginManager().callEvent(leaveEvent);
-                            if (leaveEvent.isCancelled()) {
-                                return true;
-                            }
-                            player.removeItems();
-                            player.getParkour().playerEnd(player);
-                            CacheManager.playerEnd(player);
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leave.Left")));
-                        } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leave.Not-In-Parkour")));
-                        }
-                        break;
-                    case "setup":
-                        if (p.hasPermission("hubparkour.admin")) {
-                            if (!CacheManager.isParkour(p)) {
-                                if (CacheManager.getSetupStage() == -1) {
-                                    CacheManager.nextStage();
-                                    CacheManager.setSetupPlayer(p);
-                                    p.getInventory().addItem(ItemUtil.ci(Material.STICK, "&2&lHubParkour Setup Stick", 1, "&rUse this item to;&rsetup your HubParkour;&rParkour."));
-                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Given-Setup-Stick")));
-                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Please-Set-Start")));
+                                    }.runTaskAsynchronously(Main.getInstance());
                                 } else {
-                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Someone-Already-In-Setup")));
+                                    ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Leaderboard.Not-Valid-Parkour", "That is not a valid parkour.", true, Collections.emptyMap());
                                 }
                             } else {
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Setup.Must-Not-Be-In-Parkour")));
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Leaderboard.Not-Valid-Parkour", "That is not a valid parkour.", true, Collections.emptyMap());
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+
+                        break;
+                    case "leave":
+                        if (p.hasPermission("hubparkour.command.leave")) {
+                            if (CacheManager.isParkour(p)) {
+                                HubParkourPlayer player = CacheManager.getPlayer(p);
+                                ParkourPlayerLeaveEvent leaveEvent = new ParkourPlayerLeaveEvent(player.getParkour(), player);
+                                Bukkit.getPluginManager().callEvent(leaveEvent);
+                                if (leaveEvent.isCancelled()) {
+                                    return true;
+                                }
+                                player.removeItems();
+                                player.getParkour().playerEnd(player);
+                                CacheManager.playerEnd(player);
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Leave.Left", "You have left the parkour and your progress has been reset.", true, Collections.emptyMap());
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Leave.Not-In-Parkour", "You must have started a parkour in order to leave it.", true, Collections.emptyMap());
+                            }
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+
+                        break;
+                    case "setup":
+                        if (p.hasPermission("hubparkour.admin.setup")) {
+                            if (!CacheManager.isParkour(p)) {
+                                if (!CacheManager.alreadySetup()) {
+                                    CacheManager.startSetup(p);
+                                } else {
+                                    ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Setup.Someone-Already-In-Setup", "Someone is already setting up a parkour. Please wait for them to finish in order to setup another parkour.", true, Collections.emptyMap());
+                                }
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Setup.Must-Not-Be-In-Parkour", "You must not be in a parkour in order to set up a parkour.", true, Collections.emptyMap());
+                            }
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
                         break;
                     case "list":
-                        if (p.hasPermission("hubparkour.admin")) {
-                            StringBuilder sb = new StringBuilder(Main.getInstance().getConfig().getString("Messages.Commands.Admin.List.Header") + "\n");
+                        if (p.hasPermission("hubparkour.admin.list")) {
+                            StringBuilder sb = new StringBuilder(ConfigUtil.getString("Messages.Commands.Admin.List.Header", "All active parkours:") + "\n");
                             for (Parkour parkour : CacheManager.getParkours()) {
-                                sb.append(Main.getInstance().getConfig().getString("Messages.Commands.Admin.List.Line").replace("{parkour-name}", parkour.getName()).replace("{parkour-players}", "" + parkour.getPlayers().size()).replace("{id}", "" + parkour.getId())).append("\n");
+                                sb.append(ConfigUtil.getString("Messages.Commands.Admin.List.Line", "&aID: {id} &r- &a{parkour-name} &r- &a{parkour-players} &ractive players.").replace("{parkour-name}", parkour.getName()).replace("{parkour-players}", "" + parkour.getPlayers().size()).replace("{id}", "" + parkour.getId())).append("\n");
                             }
 
-                            sb.append(Main.getInstance().getConfig().getString("Messages.Commands.Admin.List.Footer"));
-                            p.sendMessage(Main.c(true, sb.toString().trim()));
+                            sb.append(ConfigUtil.getString("Messages.Commands.Admin.List.Footer", ""));
+                            String s = sb.toString();
+
+                            if (Main.isPlaceholders()) {
+                                s = PlaceholderAPI.setPlaceholders(p, s);
+                            }
+
+                            p.sendMessage(Main.c(true, s.trim()));
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
                         break;
                     case "delete":
-                        if (p.hasPermission("hubparkour.admin")) {
-                            if (args.length == 2) {
-                                int id;
+                        if (p.hasPermission("hubparkour.admin.delete")) {
+                            if (args.length >= 2) {
+                                int id = -1;
                                 try {
                                     id = Integer.parseInt(args[1]);
-                                } catch (NumberFormatException e) {
-                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Delete.Not-Valid-Parkour")));
-                                    return true;
+                                } catch (NumberFormatException ignored) {
                                 }
-                                Parkour parkour = CacheManager.getParkour(id);
+                                Parkour parkour;
+                                if (id != -1) {
+                                    parkour = CacheManager.getParkour(id);
+                                } else {
+                                    List<String> argsList = new ArrayList<>(Arrays.asList(args));
+                                    argsList.remove(0);
+                                    parkour = CacheManager.getParkour(String.join(" ", argsList));
+                                }
+
                                 if (parkour != null) {
                                     ParkourDeleteEvent deleteEvent = new ParkourDeleteEvent(parkour, p);
                                     Bukkit.getPluginManager().callEvent(deleteEvent);
                                     for (IHubParkourPlayer player : parkour.getPlayers()) {
-                                        player.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Delete.Player-Kicked-From-Parkour")));
+                                        ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Delete.Player-Kicked-From-Parkour", "The parkour you were doing was deleted. You have left the parkour.", true, Collections.emptyMap());
                                         CacheManager.playerEnd((HubParkourPlayer) player);
                                     }
 
@@ -185,32 +221,38 @@ public class CommandParkour implements CommandExecutor {
                                             }
                                             Main.getInstance().getDbManager().deleteParkour(parkour);
                                             CacheManager.getParkours().remove(parkour);
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Delete.Success")));
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Delete.Success", "Parkour deleted successfully.", true, Collections.emptyMap());
                                         }
                                     }.runTaskAsynchronously(Main.getInstance());
                                 } else {
-                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Delete.Not-Valid-Parkour")));
+                                    ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Delete.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
                                 }
                             } else {
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Delete.Not-Valid-Parkour")));
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Delete.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
                         break;
                     case "hologram":
-                        if (p.hasPermission("hubparkour.admin")) {
-                            if (Main.isHolograms() && Main.getInstance().getConfig().getBoolean("Settings.Holograms")) {
+                        if (p.hasPermission("hubparkour.admin.hologram")) {
+                            if (Main.isHolograms()) {
                                 if (args.length > 1) {
                                     switch (args[1]) {
                                         case "list":
-                                            StringBuilder list = new StringBuilder(Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.List.Header") + "\n");
+                                            StringBuilder list = new StringBuilder(ConfigUtil.getString("Messages.Commands.Admin.Hologram.List.Header", "All Active Holograms:") + "\n");
                                             for (LeaderboardHologram hologram : CacheManager.getLeaderboards()) {
-                                                list.append(Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.List.Line").replace("{parkour-name}", hologram.getParkour().getName()).replace("{id}", "" + hologram.getId())).append("\n");
+                                                list.append(ConfigUtil.getString("Messages.Commands.Admin.Hologram.List.Line", "&aID: {id} &r- &a{parkour-name}").replace("{parkour-name}", hologram.getParkour().getName()).replace("{id}", "" + hologram.getId())).append("\n");
                                             }
 
-                                            list.append(Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.List.Footer"));
-                                            p.sendMessage(Main.c(true, list.toString().trim()));
+                                            list.append(ConfigUtil.getString("Messages.Commands.Admin.Hologram.List.Footer", ""));
+                                            String s = list.toString();
+
+                                            if (Main.isPlaceholders()) {
+                                                s = PlaceholderAPI.setPlaceholders(p, s);
+                                            }
+
+                                            p.sendMessage(Main.c(true, s.trim()));
                                             break;
                                         case "delete":
                                             if (args.length == 3) {
@@ -218,13 +260,13 @@ public class CommandParkour implements CommandExecutor {
                                                 try {
                                                     id = Integer.parseInt(args[2]);
                                                 } catch (NumberFormatException e) {
-                                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Delete.Not-Valid-Hologram")));
+                                                    ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Delete.Not-Valid-Hologram", "That is not a valid hologram ID. If you wish to see a list of all parkours and their IDs, do /parkour hologram list.", true, Collections.emptyMap());
                                                     return true;
                                                 }
 
                                                 LeaderboardHologram hologram = CacheManager.getHologram(id);
                                                 if (hologram == null) {
-                                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Delete.Not-Valid-Hologram")));
+                                                    ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Delete.Not-Valid-Hologram", "That is not a valid hologram ID. If you wish to see a list of all parkours and their IDs, do /parkour hologram list.", true, Collections.emptyMap());
                                                     return true;
                                                 }
 
@@ -235,26 +277,31 @@ public class CommandParkour implements CommandExecutor {
                                                     @Override
                                                     public void run() {
                                                         Main.getInstance().getDbManager().removeHologram(hologram);
-                                                        p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Delete.Successful")));
+                                                        ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Delete.Successful", "Hologram successfully deleted.", true, Collections.emptyMap());
                                                     }
                                                 }.runTaskAsynchronously(Main.getInstance());
                                             } else {
-                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Delete.Not-Enough-Arguments")));
+                                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Delete.Not-Enough-Arguments", "Invalid Arguments. Correct Arguments: &a/parkour hologram delete [hologram id]", true, Collections.emptyMap());
                                             }
                                             break;
                                         case "create":
-                                            if (args.length == 3) {
-                                                int id;
+                                            if (args.length >= 3) {
+                                                int id = -1;
                                                 try {
-                                                    id = Integer.parseInt(args[2]);
-                                                } catch (NumberFormatException e) {
-                                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Create.Not-Valid-Parkour")));
-                                                    return true;
+                                                    id = Integer.parseInt(args[1]);
+                                                } catch (NumberFormatException ignored) {
                                                 }
-
-                                                Parkour parkour = CacheManager.getParkour(id);
+                                                Parkour parkour;
+                                                if (id != -1) {
+                                                    parkour = CacheManager.getParkour(id);
+                                                } else {
+                                                    List<String> argsList = new ArrayList<>(Arrays.asList(args));
+                                                    argsList.remove(0);
+                                                    argsList.remove(0);
+                                                    parkour = CacheManager.getParkour(String.join(" ", argsList));
+                                                }
                                                 if (parkour == null) {
-                                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Create.Not-Valid-Parkour")));
+                                                    ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Create.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
                                                     return true;
                                                 }
                                                 Location location = new Location(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ());
@@ -263,60 +310,95 @@ public class CommandParkour implements CommandExecutor {
                                                 CacheManager.addHologram(hologram);
 
                                                 hologram.generate();
-                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Create.Successful")));
+                                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Create.Successful", "Hologram successfully created.", true, Collections.emptyMap());
                                             } else {
-                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Create.Not-Enough-Arguments")));
+                                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Create.Not-Enough-Arguments", "Invalid Arguments. Correct Arguments: &a/parkour hologram create [parkour id]", true, Collections.emptyMap());
                                             }
                                             break;
                                         default:
                                             StringBuilder sb = new StringBuilder();
-                                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Hologram.Help")) {
-                                                sb.append(s).append("\n");
+
+                                            //Default value list
+                                            List<String> defaultList = new ArrayList<>();
+                                            defaultList.add("Available sub-commands:");
+                                            defaultList.add("&a/parkour hologram list&r - List all active holograms and their ID's.");
+                                            defaultList.add("&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID.");
+                                            defaultList.add("&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID.");
+
+                                            for (String s2 : ConfigUtil.getStringList("Messages.Commands.Admin.Hologram.Help", defaultList)) {
+                                                sb.append(s2).append("\n");
                                             }
-                                            p.sendMessage(Main.c(true, sb.toString().trim()));
+                                            String s2 = sb.toString();
+
+                                            if (Main.isPlaceholders()) {
+                                                s2 = PlaceholderAPI.setPlaceholders(p, s2);
+                                            }
+
+                                            p.sendMessage(Main.c(true, s2.trim()));
                                             break;
                                     }
                                 } else {
                                     StringBuilder sb = new StringBuilder();
-                                    for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Hologram.Help")) {
+
+                                    //Default value list
+                                    List<String> defaultList = new ArrayList<>();
+                                    defaultList.add("Available sub-commands:");
+                                    defaultList.add("&a/parkour hologram list&r - List all active holograms and their ID's.");
+                                    defaultList.add("&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID.");
+                                    defaultList.add("&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID.");
+
+                                    for (String s : ConfigUtil.getStringList("Messages.Commands.Admin.Hologram.Help", defaultList)) {
                                         sb.append(s).append("\n");
                                     }
-                                    p.sendMessage(Main.c(true, sb.toString().trim()));
+                                    String s = sb.toString();
+
+                                    if (Main.isPlaceholders()) {
+                                        s = PlaceholderAPI.setPlaceholders(p, s);
+                                    }
+
+                                    p.sendMessage(Main.c(true, s.trim()));
                                 }
                             } else {
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Hologram.Must-Have-Holographic-Displays")));
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Must-Have-Holographic-Displays", "You must have Holographic Displays installed in order to use this command.", true, Collections.emptyMap());
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
                         break;
                     case "removetime":
-                        if (p.hasPermission("hubparkour.admin")) {
-                            if (args.length == 3) {
+                        if (p.hasPermission("hubparkour.admin.removetime")) {
+                            if (args.length >= 3) {
                                 new BukkitRunnable(){
                                     @Override
                                     public void run() {
-                                        int parkourID;
+                                        int id = -1;
                                         try {
-                                            parkourID = Integer.parseInt(args[1]);
-                                        } catch (NumberFormatException e) {
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Not-Valid-Parkour")));
-                                            return;
+                                            id = Integer.parseInt(args[1]);
+                                        } catch (NumberFormatException ignored) {
                                         }
-
-                                        Parkour parkour = CacheManager.getParkour(parkourID);
+                                        Parkour parkour;
+                                        String name;
+                                        if (id != -1) {
+                                            parkour = CacheManager.getParkour(id);
+                                            name = args[2];
+                                        } else {
+                                            List<String> argsList = new ArrayList<>(Arrays.asList(args));
+                                            argsList.remove(0);
+                                            name = argsList.remove(argsList.size() - 1);
+                                            parkour = CacheManager.getParkour(String.join(" ", argsList));
+                                        }
                                         if (parkour == null) {
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Not-Valid-Parkour")));
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.RemoveTime.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
                                             return;
                                         }
-                                        long time = Main.getInstance().getDbManager().getTime(args[2], parkour);
+                                        long time = Main.getInstance().getDbManager().getTime(name, parkour);
                                         if (time == -1) {
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Not-Valid-Player")));
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.RemoveTime.Not-Valid-Player", "That player has never attempted this parkour.", true, Collections.emptyMap());
                                             return;
                                         }
 
-                                        Main.getInstance().getDbManager().resetTime(args[2], parkour.getId());
-                                        p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Success")));
+                                        Main.getInstance().getDbManager().resetTime(name, parkour.getId());
+                                        ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.RemoveTime.Success", "The players time has been reset!", true, Collections.emptyMap());
 
                                         new BukkitRunnable(){
                                             @Override
@@ -329,34 +411,38 @@ public class CommandParkour implements CommandExecutor {
                                     }
                                 }.runTaskAsynchronously(Main.getInstance());
                             } else {
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.RemoveTime.Not-Valid-Parkour")));
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.RemoveTime.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
                         break;
                     case "cleartimes":
-                        if (p.hasPermission("hubparkour.admin")) {
-                            if (args.length == 2) {
+                        if (p.hasPermission("hubparkour.admin.cleartimes")) {
+                            if (args.length >= 2) {
                                 new BukkitRunnable(){
                                     @Override
                                     public void run() {
-                                        int parkourID;
+                                        int id = -1;
                                         try {
-                                            parkourID = Integer.parseInt(args[1]);
-                                        } catch (NumberFormatException e) {
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.ClearTimes.Not-Valid-Parkour")));
-                                            return;
+                                            id = Integer.parseInt(args[1]);
+                                        } catch (NumberFormatException ignored) {
                                         }
-
-                                        Parkour parkour = CacheManager.getParkour(parkourID);
+                                        Parkour parkour;
+                                        if (id != -1) {
+                                            parkour = CacheManager.getParkour(id);
+                                        } else {
+                                            List<String> argsList = new ArrayList<>(Arrays.asList(args));
+                                            argsList.remove(0);
+                                            parkour = CacheManager.getParkour(String.join(" ", argsList));
+                                        }
                                         if (parkour == null) {
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.ClearTimes.Not-Valid-Parkour")));
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.ClearTimes.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
                                             return;
                                         }
 
                                         Main.getInstance().getDbManager().resetTimes(parkour.getId());
-                                        p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.ClearTimes.Success")));
+                                        ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.ClearTimes.Success", "All player times have been reset!", true, Collections.emptyMap());
 
                                         new BukkitRunnable(){
                                             @Override
@@ -369,52 +455,49 @@ public class CommandParkour implements CommandExecutor {
                                     }
                                 }.runTaskAsynchronously(Main.getInstance());
                             } else {
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.ClearTimes.Not-Valid-Parkour")));
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.ClearTimes.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
                         break;
                     case "edit":
-                        if (p.hasPermission("hubparkour.admin")) {
-                            if (args.length == 2) {
+                        if (p.hasPermission("hubparkour.admin.edit")) {
+                            if (args.length >= 2) {
                                 new BukkitRunnable(){
                                     @Override
                                     public void run() {
-                                        int parkourID;
+                                        int id = -1;
                                         try {
-                                            parkourID = Integer.parseInt(args[1]);
-                                        } catch (NumberFormatException e) {
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Parkour")));
-                                            return;
+                                            id = Integer.parseInt(args[1]);
+                                        } catch (NumberFormatException ignored) {
                                         }
-
-                                        Parkour parkour = CacheManager.getParkour(parkourID);
+                                        Parkour parkour;
+                                        if (id != -1) {
+                                            parkour = CacheManager.getParkour(id);
+                                        } else {
+                                            List<String> argsList = new ArrayList<>(Arrays.asList(args));
+                                            argsList.remove(0);
+                                            parkour = CacheManager.getParkour(String.join(" ", argsList));
+                                        }
                                         if (parkour == null) {
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Parkour")));
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Edit.Not-Valid-Parkour", "That is not a valid parkour. To see a list of valid parkours, do &a/parkour list&r.", true, Collections.emptyMap());
                                             return;
                                         }
 
                                         if (CacheManager.isSomeoneEdit()) {
                                             if (CacheManager.isEdit(p)) {
-                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Already-Editing")));
+                                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Edit.Already-Editing", "You are already editing a parkour. In order to edit another parkour, use 8 in the main edit menu to finish setting up.", true, Collections.emptyMap());
                                             } else{
-                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Someone-Already-Editing")));
+                                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Edit.Someone-Already-Editing", "Someone is already editing a parkour. Wait for them to finish before editing another.", true, Collections.emptyMap());
                                             }
                                             return;
                                         } else {
                                             if (parkour.getPlayers().size() > 0) {
-                                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Must-Be-Empty")));
+                                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Edit.Must-Be-Empty", "The parkour must be empty before you can edit it.", true, Collections.emptyMap());
                                                 return;
                                             }
                                             CacheManager.enterEditMode(p, parkour);
-                                            p.getInventory().addItem(ItemUtil.ci(Material.STICK, "&2&lHubParkour Setup Stick", 1, "&rUse this item to;&rsetup your HubParkour;&rParkour."));
-                                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Entered-Edit-Mode")));
-                                            StringBuilder sb = new StringBuilder();
-                                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Admin.Edit.Choose-Edit")) {
-                                                sb.append(s.replace("{parkour-name}", parkour.getName())).append("\n");
-                                            }
-                                            p.sendMessage(Main.c(true, sb.toString()));
                                         }
 
                                         return;
@@ -422,38 +505,204 @@ public class CommandParkour implements CommandExecutor {
                                     }
                                 }.runTaskAsynchronously(Main.getInstance());
                             } else {
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.Edit.Not-Valid-Parkour")));
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Edit.Not-Valid-Parkour", "That is not a valid parkour. To see a list of valid parkours, do &a/parkour list&r.", true, Collections.emptyMap());
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Admin.No-Permission")));
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
+                        break;
+                    case "reload":
+                        if (p.hasPermission("hubparkour.admin.reload")) {
+                            ConfigUtil.reload();
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Reload-Success", "The plugin configuration has been reloaded. This reload does not affect any holograms, please restart your server for those changes to take effect.", true, Collections.emptyMap());
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+                        break;
+                    case "teleport":
+                        if (p.hasPermission("hubparkour.command.teleport")) {
+                            if (args.length >= 2) {
+                                List<String> argsList = new ArrayList<>(Arrays.asList(args));
+                                argsList.remove(0);
+                                Parkour parkour = CacheManager.getParkour(String.join(" ", argsList));
+                                if (parkour != null) {
+                                    if (CacheManager.isParkour(p)) {
+                                        HubParkourPlayer player = CacheManager.getPlayer(p);
+                                        if (player.getParkour().getId() == parkour.getId()) {
+                                            Location l = parkour.getRestartPoint().getLocation().clone();
+                                            l.setX(l.getX() + 0.5);
+                                            l.setY(l.getY() + 0.5);
+                                            l.setZ(l.getZ() + 0.5);
+                                            p.teleport(l);
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Teleport.Teleported", "You have been teleported to the parkour restart point.", true, Collections.emptyMap());
+                                        } else {
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Teleport.Currently-In-Another-Parkour", "You cannot teleport to a parkour start point while in a different parkour. Please leave your parkour and try again.", true, Collections.emptyMap());
+                                        }
+                                    } else {
+                                        Location l = parkour.getRestartPoint().getLocation().clone();
+                                        l.setX(l.getX() + 0.5);
+                                        l.setY(l.getY() + 0.5);
+                                        l.setZ(l.getZ() + 0.5);
+                                        p.teleport(l);
+                                        ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Teleport.Teleported", "You have been teleported to the parkour restart point.", true, Collections.emptyMap());
+                                    }
+                                } else {
+                                    ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Teleport.Not-Valid-Parkour", "That is not a valid parkour.", true, Collections.emptyMap());
+                                }
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Teleport.Not-Valid-Parkour", "That is not a valid parkour.", true, Collections.emptyMap());
+                            }
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+
+                        break;
+                    case "done":
+                        if (p.hasPermission("hubparkour.command.setup")) {
+                            if (CacheManager.isSetup(p)) {
+                                CacheManager.getSetupWizard().onChat("done");
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Setup.Not-In-Setup", "You are not currently in setup. If you want to setup a parkour, use /parkour setup.", true, Collections.emptyMap());
+                            }
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+
+                        break;
+                    case "cancel":
+                        if (p.hasPermission("hubparkour.command.setup")) {
+                            if (CacheManager.isSetup(p)) {
+                                CacheManager.getSetupWizard().onChat("cancel");
+                            } else if (CacheManager.isEdit(p)) {
+                                CacheManager.getEditWizard().onChat("cancel");
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Setup.Not-In-Setup", "You are not currently in setup. If you want to setup a parkour, use /parkour setup.", true, Collections.emptyMap());
+                            }
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+
+                        break;
+                    case "input":
+                        if (p.hasPermission("hubparkour.command.setup")) {
+                            if (CacheManager.isSetup(p)) {
+                                List<String> message = new ArrayList<>(Arrays.asList(args));
+                                message.remove(0);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        CacheManager.getSetupWizard().onChat(String.join(" ", message));
+                                    }
+                                }.runTaskAsynchronously(Main.getInstance());
+                            } else if (CacheManager.isEdit(p)) {
+                                List<String> message = new ArrayList<>(Arrays.asList(args));
+                                message.remove(0);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        CacheManager.getEditWizard().onChat(String.join(" ", message));
+                                    }
+                                }.runTaskAsynchronously(Main.getInstance());
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Setup.Not-In-Setup", "You are not currently in setup. If you want to setup a parkour, use /parkour setup.", true, Collections.emptyMap());
+                            }
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+
                         break;
                     default:
                         StringBuilder sb = new StringBuilder();
-                        for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help")) {
+
+                        //default help list
+                        List<String> defaultList = new ArrayList<>();
+                        defaultList.add("Parkour Help:");
+                        defaultList.add("&a/parkour reset &r- Sends you back to the start.");
+                        defaultList.add("&a/parkour checkpoint &r- Teleports you to the last checkpoint you reached.");
+                        defaultList.add("&a/parkour leave &r- Makes you leave the parkour.");
+                        defaultList.add("&a/parkour leaderboard [parkour] &r- View the leaderboard for specific Parkour.");
+                        defaultList.add("&a/parkour teleport [parkour] &r- Teleport to the beginning of a parkour.");
+
+                        for (String s : ConfigUtil.getStringList("Messages.Commands.Help", defaultList)) {
                             sb.append(s).append("\n");
                         }
                         if (p.hasPermission("hubparkour.admin")) {
-                            for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help-Admin")) {
+
+                            //default admin help list
+                            defaultList.clear();
+                            defaultList.add("&a/parkour setup&r - Enter setup mode and begin parkour setup.");
+                            defaultList.add("&a/parkour done&r - Continues with the setup wizard when setting checkpoints.");
+                            defaultList.add("&a/parkour input [text]&r - Gives the setup wizard or edit mode text input when you are asked for input.");
+                            defaultList.add("&a/parkour cancel&r - Cancels the current operation in the setup/edit wizard.");
+                            defaultList.add("&a/parkour delete [parkour id or name] &r- Delete the parkour with the specific ID.");
+                            defaultList.add("&a/parkour list&r - Lists all active parkours.");
+                            defaultList.add("&a/parkour hologram list&r - List all active holograms and their ID's.");
+                            defaultList.add("&a/parkour hologram create [parkour id or name]&r - Place a Leaderboard hologram for the specified parkour ID.");
+                            defaultList.add("&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID.");
+                            defaultList.add("&a/parkour removetime [parkour id or name] [player name]&r - Reset a players leaderboard time.");
+                            defaultList.add("&a/parkour cleartimes [parkour id or name]&r - Completely reset all times for a specific parkour.");
+                            defaultList.add("&a/parkour edit [parkour id or name]&r - Enables edit mode to modify information about a parkour.");
+                            defaultList.add("&a/parkour reload &r- Reload HubParkour's configuration.");
+
+                            for (String s : ConfigUtil.getStringList("Messages.Commands.Help-Admin", defaultList)) {
                                 sb.append(s).append("\n");
                             }
                         }
 
-                        p.sendMessage(Main.c(true, sb.toString().trim()));
+                        String s = sb.toString();
+
+                        if (Main.isPlaceholders()) {
+                            s = PlaceholderAPI.setPlaceholders(p, s);
+                        }
+
+                        p.sendMessage(Main.c(true, s.trim()));
                         break;
                 }
             } else {
                 StringBuilder sb = new StringBuilder();
-                for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help")) {
+
+                //default help list
+                List<String> defaultList = new ArrayList<>();
+                defaultList.add("Parkour Help:");
+                defaultList.add("&a/parkour reset &r- Sends you back to the start.");
+                defaultList.add("&a/parkour checkpoint &r- Teleports you to the last checkpoint you reached.");
+                defaultList.add("&a/parkour leave &r- Makes you leave the parkour.");
+                defaultList.add("&a/parkour leaderboard [parkour] &r- View the leaderboard for specific Parkour.");
+                defaultList.add("&a/parkour teleport [parkour] &r- Teleport to the beginning of a parkour.");
+
+                for (String s : ConfigUtil.getStringList("Messages.Commands.Help", defaultList)) {
                     sb.append(s).append("\n");
                 }
                 if (p.hasPermission("hubparkour.admin")) {
-                    for (String s : Main.getInstance().getConfig().getStringList("Messages.Commands.Help-Admin")) {
+
+                    //default admin help list
+                    defaultList.clear();
+                    defaultList.add("&a/parkour setup&r - Enter setup mode and begin parkour setup.");
+                    defaultList.add("&a/parkour done&r - Continues with the setup wizard when setting checkpoints.");
+                    defaultList.add("&a/parkour input [text]&r - Gives the setup wizard or edit mode text input when you are asked for input.");
+                    defaultList.add("&a/parkour cancel&r - Cancels the current operation in the setup/edit wizard.");
+                    defaultList.add("&a/parkour delete [parkour id or name] &r- Delete the parkour with the specific ID.");
+                    defaultList.add("&a/parkour list&r - Lists all active parkours.");
+                    defaultList.add("&a/parkour hologram list&r - List all active holograms and their ID's.");
+                    defaultList.add("&a/parkour hologram create [parkour id or name]&r - Place a Leaderboard hologram for the specified parkour ID.");
+                    defaultList.add("&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID.");
+                    defaultList.add("&a/parkour removetime [parkour id or name] [player name]&r - Reset a players leaderboard time.");
+                    defaultList.add("&a/parkour cleartimes [parkour id or name]&r - Completely reset all times for a specific parkour.");
+                    defaultList.add("&a/parkour edit [parkour id or name]&r - Enables edit mode to modify information about a parkour.");
+                    defaultList.add("&a/parkour reload &r- Reload HubParkour's configuration.");
+
+                    for (String s : ConfigUtil.getStringList("Messages.Commands.Help-Admin", defaultList)) {
                         sb.append(s).append("\n");
                     }
                 }
 
-                p.sendMessage(Main.c(true, sb.toString().trim()));
+                String s = sb.toString();
+
+                if (Main.isPlaceholders()) {
+                    s = PlaceholderAPI.setPlaceholders(p, s);
+                }
+
+                p.sendMessage(Main.c(true, s.trim()));
             }
         } else {
             sender.sendMessage("You cannot execute HubParkour commands from console.");

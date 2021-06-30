@@ -2,9 +2,7 @@ package me.block2block.hubparkour.managers;
 
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.plates.PressurePlate;
-import me.block2block.hubparkour.entities.HubParkourPlayer;
-import me.block2block.hubparkour.entities.LeaderboardHologram;
-import me.block2block.hubparkour.entities.Parkour;
+import me.block2block.hubparkour.entities.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,11 +21,8 @@ public class CacheManager {
     private static final Map<Integer, ItemStack> items;
     private static final List<Parkour> parkours;
     private static final List<LeaderboardHologram> leaderboards;
-    private static int setupStage = -1;
-    private static Player setupPlayer;
-    private static Player editPlayer;
-    private static Parkour editParkour;
-    private static int currentModification = -1;
+    private static SetupWizard setupWizard;
+    private static EditWizard editWizard;
 
     static {
         players = new HashMap<>();
@@ -37,8 +32,8 @@ public class CacheManager {
         parkours = new ArrayList<>();
         leaderboards = new ArrayList<>();
         restartPoints = new HashMap<>();
-        editPlayer = null;
-        editParkour = null;
+        setupWizard = null;
+        editWizard = null;
     }
 
     public static boolean isParkour(Player p) {
@@ -50,59 +45,50 @@ public class CacheManager {
     }
 
     public static boolean isSetup(Player p) {
-        return p.equals(setupPlayer);
+        if (setupWizard != null) {
+            return setupWizard.getPlayer().equals(p);
+        }
+        return false;
     }
 
-    public static void setSetupPlayer(Player p) {
-        setupPlayer = p;
+    public static void startSetup(Player p) {
+        setupWizard = new SetupWizard(p);
+    }
+
+    public static boolean alreadySetup() {
+        return setupWizard != null;
     }
 
     public static void exitSetup() {
-        setupPlayer = null;
-        setupStage = -1;
+        setupWizard = null;
+    }
+
+    public static SetupWizard getSetupWizard() {
+        return setupWizard;
     }
 
     public static void enterEditMode(Player player, Parkour parkour) {
-        editPlayer = player;
-        editParkour = parkour;
-        currentModification = -1;
+        editWizard = new EditWizard(player, parkour);
     }
 
     public static boolean isEdit(Player p) {
-        return p.equals(editPlayer);
+        if (editWizard != null) {
+            return p.equals(editWizard.getPlayer());
+        }
+        return false;
+    }
+
+    public static EditWizard getEditWizard() {
+        return editWizard;
     }
 
     public static boolean isSomeoneEdit() {
-        return editParkour != null;
-    }
-
-    public static int getCurrentModification() {
-        return currentModification;
-    }
-
-    public static void setCurrentModification(int currentModification) {
-        CacheManager.currentModification = currentModification;
-    }
-
-    public static Parkour getEditParkour() {
-        return editParkour;
-    }
-
-    public static Player getEditPlayer() {
-        return editPlayer;
+        return editWizard != null;
     }
 
     public static void leaveEditMode() {
-        editParkour = null;
-        editPlayer = null;
-        currentModification = -1;
+        editWizard = null;
     }
-
-    public static int getSetupStage() {
-        return setupStage;
-    }
-
-    public static void nextStage() {setupStage++;}
 
     public static void addParkour(Parkour parkour) {
         parkours.add(parkour);

@@ -4,6 +4,7 @@ import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.plates.*;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import me.block2block.hubparkour.utils.database.MySQLConnectionPool;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,9 +39,9 @@ public class DatabaseManager {
     public void setup(boolean isMySql) throws SQLException, ClassNotFoundException {
         isMysql = isMySql;
         if (isMysql) {
-            dbMySql = new MySQLConnectionPool(Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Hostname"), Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Port"),Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Database"), Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Username"), Main.getInstance().getConfig().getString("Settings.Database.Details.MySQL.Password"));
+            dbMySql = new MySQLConnectionPool(ConfigUtil.getString("Settings.Database.Details.MySQL.Hostname", "localhost"), ConfigUtil.getString("Settings.Database.Details.MySQL.Port", "3306"),ConfigUtil.getString("Settings.Database.Details.MySQL.Database", "HubParkour"), ConfigUtil.getString("Settings.Database.Details.MySQL.Username", "root"), ConfigUtil.getString("Settings.Database.Details.MySQL.Password", ""));
         } else {
-            setupSQLite(Main.getInstance().getConfig().getString("Settings.Database.Details.SQLite.File-Name"));
+            setupSQLite(ConfigUtil.getString("Settings.Database.Details.SQLite.File-Name", "hp-storage.db"));
         }
         createTables();
         loadParkours();
@@ -65,6 +66,12 @@ public class DatabaseManager {
 
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_splittimes (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL, `time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
                 set = statement.execute();
+
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_reachedcheckpoints (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL)");
+                set = statement.execute();
+
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_lastruncompleted (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL)");
+                set = statement.execute();
             } catch (Exception e) {
                 Bukkit.getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
                 error = true;
@@ -86,6 +93,12 @@ public class DatabaseManager {
                 set = statement.execute();
 
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_splittimes (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `checkpoint` INTEGER NOT NULL, `time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
+                set = statement.execute();
+
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_reachedcheckpoints (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL)");
+                set = statement.execute();
+
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_lastruncompleted (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL)");
                 set = statement.execute();
             } catch (Exception e) {
                 Bukkit.getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
@@ -241,6 +254,96 @@ public class DatabaseManager {
                 e.printStackTrace();
             }
         return -1;
+    }
+
+    public List<Checkpoint> getReachedCheckpoints(Player player, Parkour parkour) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_reachedcheckpoints WHERE parkour_id = ? AND uuid = ?");
+            statement.setString(2, player.getUniqueId().toString());
+            statement.setInt(1, parkour.getId());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            List<Checkpoint> checkpoints = new ArrayList<>();
+            while (resultSet.next()) {
+                checkpoints.add(parkour.getCheckpoint(resultSet.getInt(3)));
+            }
+            return checkpoints;
+        } catch (Exception e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public void resetReachedCheckpoints(Player player, Parkour parkour) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_reachedcheckpoints WHERE parkour_id = ? AND uuid = ?");
+            statement.setString(2, player.getUniqueId().toString());
+            statement.setInt(1, parkour.getId());
+
+            statement.execute();
+        } catch (Exception e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            e.printStackTrace();
+        }
+    }
+
+
+    public void reachedCheckpoint(Player player, Parkour parkour, Checkpoint checkpoint) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_reachedcheckpoints VALUES (?, ?, ?)");
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setInt(2, parkour.getId());
+            statement.setInt(3, checkpoint.getCheckpointNo());
+
+            statement.execute();
+        } catch (Exception e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            e.printStackTrace();
+        }
+    }
+
+    public boolean wasCompletedLastRun(Player player, Parkour parkour) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_lastruncompleted WHERE parkour_id = ? AND uuid = ?");
+            statement.setString(2, player.getUniqueId().toString());
+            statement.setInt(1, parkour.getId());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            return resultSet.next();
+        } catch (Exception e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void resetLastRun(Player player, Parkour parkour) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_lastruncompleted WHERE parkour_id = ? AND uuid = ?");
+            statement.setString(2, player.getUniqueId().toString());
+            statement.setInt(1, parkour.getId());
+
+            statement.execute();
+        } catch (Exception e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            e.printStackTrace();
+        }
+    }
+
+    public void completedLastRun(Player player, Parkour parkour) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_lastruncompleted VALUES (?,?)");
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setInt(2, parkour.getId());
+
+            statement.execute();
+        } catch (Exception e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            e.printStackTrace();
+        }
     }
 
     public long getTime(String player, Parkour parkour) {
@@ -676,6 +779,42 @@ public class DatabaseManager {
         }
     }
 
+    public long getRecordTime(Parkour parkour) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` DESC");
+            statement.setInt(1, parkour.getId());
+            ResultSet set = statement.executeQuery();
+            if (set.next()) {
+                return set.getLong(1);
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            error = true;
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public String getRecordHolder(Parkour parkour) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` DESC");
+            statement.setInt(1, parkour.getId());
+            ResultSet set = statement.executeQuery();
+            if (set.next()) {
+                return set.getString(1);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            error = true;
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     private Connection getConnection() throws SQLException {
         if (isMysql) {
@@ -687,7 +826,7 @@ public class DatabaseManager {
                 e.printStackTrace();
             }
             File dataFolder = Bukkit.getPluginManager().getPlugin("HubParkour").getDataFolder();
-            String dbLocation = Main.getInstance().getConfig().getString("Settings.Database.Details.SQLite.File-Name");
+            String dbLocation = ConfigUtil.getString("Settings.Database.Details.SQLite.File-Name", "hp-storage.db");
             Connection dbSqlite = DriverManager
                     .getConnection("jdbc:sqlite:"
                             + dataFolder + "/"

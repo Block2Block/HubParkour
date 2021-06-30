@@ -9,6 +9,7 @@ import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,6 +18,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("ALL")
 public class PressurePlateListener implements Listener {
@@ -30,25 +35,25 @@ public class PressurePlateListener implements Listener {
         if (CacheManager.isParkour(e.getPlayer())) {
             if (e.getTo().getBlock().isLiquid()) {
                 if (e.getTo().getBlock().getType() == Material.WATER) {
-                    if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Water")) {
+                    if (!ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
                         return;
                     }
                 } else if (e.getTo().getBlock().getType() == Material.LAVA) {
-                    if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Lava")) {
+                    if (!ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true)) {
                         return;
                     }
                 } else if (Main.isPre1_13()) {
                     if (e.getTo().getBlock().getType() == Material.getMaterial("STATIONARY_WATER")) {
-                        if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Water")) {
+                        if (!ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
                             return;
                         }
                     } else {
-                        if (!Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Lava")) {
+                        if (!ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true)) {
                             return;
                         }
                     }
                 }
-                if (Main.getInstance().getConfig().getBoolean("Settings.Teleport.On-Water")) {
+                if (ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
                     HubParkourPlayer player = CacheManager.getPlayer(e.getPlayer());
 
                     Location l = player.getParkour().getRestartPoint().getLocation().clone();
@@ -60,8 +65,7 @@ public class PressurePlateListener implements Listener {
                     l.setZ(l.getZ() + 0.5);
                     e.getPlayer().setFallDistance(0);
                     e.getPlayer().teleport(l);
-                    e.getPlayer().sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Teleport")));
-                    Main.getInstance().getLogger().info("[DEBUG] USER HAS BEEN TELEPORTED, REASON: WATER/LAVA");
+                    ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                     return;
                 }
             }
@@ -70,8 +74,8 @@ public class PressurePlateListener implements Listener {
             if (CacheManager.isPoint(e.getTo().getBlock().getLocation())) {
                 PressurePlate pp = CacheManager.getPoint(e.getTo().getBlock().getLocation());
                 Player p = e.getPlayer();
-                if (pp.getParkour().equals(CacheManager.getEditParkour())) {
-                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Currently-Being-Edited")));
+                if (pp.getParkour().equals(CacheManager.alreadySetup())) {
+                    ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Currently-Being-Edited", "This parkour is currently in being modified by an admin. Please wait to attempt this parkour!", true, Collections.emptyMap());
                     return;
                 }
                 switch (pp.getType()) {
@@ -82,11 +86,11 @@ public class PressurePlateListener implements Listener {
                                 //Restart the parkour.
 
                                 CacheManager.getPlayer(p).restart();
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Restarted")));
+                                ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Restarted", "You have restarted the parkour! Your time has been reset to 0!", true, Collections.emptyMap());
                                 return;
                             } else {
                                 //Do nothing, is doing a different parkour.
-                                if (Main.getInstance().getConfig().getBoolean("Settings.Start-When-In-Parkour")) {
+                                if (ConfigUtil.getBoolean("Settings.Start-When-In-Parkour", false)) {
                                     CacheManager.getPlayer(p).end(ParkourPlayerFailEvent.FailCause.NEW_PARKOUR);
 
                                     //Start the new parkour
@@ -99,21 +103,25 @@ public class PressurePlateListener implements Listener {
                                     }
                                     parkour.playerStart(player);
                                     CacheManager.playerStart(player);
-                                    if (Main.getInstance().getConfig().getBoolean("Settings.Remove-Potion-Effects")) {
+                                    if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Potion-Effects", true)) {
                                         for (PotionEffect effect : p.getActivePotionEffects()) {
                                             p.removePotionEffect(effect.getType());
                                         }
                                     }
-                                    if (Main.getInstance().getConfig().getBoolean("Settings.Remove-Fly")) {
+                                    if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Fly", true)) {
                                         p.setFlying(false);
                                         if (Material.getMaterial("ELYTRA") != null) {
                                             p.setGliding(false);
                                         }
                                     }
-                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Started").replace("{parkour-name}",parkour.getName())));
+
+                                    Map<String, String> bindings = new HashMap<>();
+                                    bindings.put("parkour-name", parkour.getName());
+
+                                    ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Started", "You have started the &a{parkour-name} &rparkour!", true, bindings);
                                     return;
                                 } else {
-                                    p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Already-In-Parkour")));
+                                    ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Already-In-Parkour", "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave.", true, Collections.emptyMap());
                                     return;
                                 }
                             }
@@ -128,19 +136,23 @@ public class PressurePlateListener implements Listener {
                             }
                             parkour.playerStart(player);
                             CacheManager.playerStart(player);
-                            if (Main.getInstance().getConfig().getBoolean("Settings.Remove-Potion-Effects")) {
+                            if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Potion-Effects", true)) {
                                 for (PotionEffect effect : p.getActivePotionEffects()) {
                                     p.removePotionEffect(effect.getType());
                                 }
                             }
-                            if (Main.getInstance().getConfig().getBoolean("Settings.Remove-Fly")) {
+                            if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Fly", true)) {
                                 p.setFlying(false);
                                 if (Material.getMaterial("ELYTRA") != null) {
                                     p.setGliding(false);
                                 }
                             }
                             player.giveItems();
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Started").replace("{parkour-name}",parkour.getName())));
+
+                            Map<String, String> bindings = new HashMap<>();
+                            bindings.put("parkour-name", parkour.getName());
+
+                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Started", "You have started the &a{parkour-name} &rparkour!", true, bindings);
 
 
                         }
@@ -154,11 +166,11 @@ public class PressurePlateListener implements Listener {
                                 return;
                             } else {
                                 //Do nothing, is doing a different parkour.
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Already-In-Parkour")));
+                                ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Already-In-Parkour", "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave.", true, Collections.emptyMap());
                                 return;
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Not-Started")));
+                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.End.Not-Started", "You must start a parkour in order to finish it.", true, Collections.emptyMap());
                         }
                         break;
                     case 2:
@@ -179,11 +191,11 @@ public class PressurePlateListener implements Listener {
                                 return;
                             } else {
                                 //Do nothing, is doing a different parkour.
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Already-In-Parkour")));
+                                ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Already-In-Parkour", "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave.", true, Collections.emptyMap());
                                 return;
                             }
                         } else {
-                            p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoints.Not-Started")));
+                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Checkpoints.Not-Started", "You must start a parkour in order to reach checkpoints!", true, Collections.emptyMap());
                         }
                         break;
                 }

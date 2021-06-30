@@ -5,6 +5,7 @@ import me.block2block.hubparkour.api.events.player.ParkourPlayerLeaveEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerTeleportEvent;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ItemClickListener implements Listener {
@@ -51,7 +53,7 @@ public class ItemClickListener implements Listener {
                                 l.setY(l.getY() + 0.5);
                                 l.setZ(l.getZ() + 0.5);
                                 p.teleport(l);
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Reset.Successful")));
+                                ConfigUtil.sendMessage(p, "Messages.Commands.Reset.Successful", "You have been teleported to the start.", true, Collections.emptyMap());
                                 break;
                             case 1:
                                 //Checkpoint.
@@ -68,7 +70,7 @@ public class ItemClickListener implements Listener {
                                 l2.setY(l2.getY() + 0.5);
                                 l2.setZ(l2.getZ() + 0.5);
                                 p.teleport(l2);
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Checkpoint.Successful")));
+                                ConfigUtil.sendMessage(p, "Messages.Commands.Checkpoint.Successful", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                                 break;
                             case 2:
                                 //Cancel.
@@ -86,7 +88,7 @@ public class ItemClickListener implements Listener {
                                         CacheManager.playerEnd(player);
                                     }
                                 }.runTaskLater(Main.getInstance(), 1);
-                                p.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Commands.Leave.Left")));
+                                ConfigUtil.sendMessage(p, "Messages.Commands.Leave.Left", "You have left the parkour and your progress has been reset.", true, Collections.emptyMap());
                                 break;
                         }
                     }

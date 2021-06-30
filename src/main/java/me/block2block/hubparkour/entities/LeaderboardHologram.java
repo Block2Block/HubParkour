@@ -4,6 +4,7 @@ import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -52,7 +53,7 @@ public class LeaderboardHologram implements ILeaderboardHologram {
             return;
         }
         hologram = HologramsAPI.createHologram(Main.getInstance(), location);
-        hologram.appendTextLine(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getConfig().getString("Messages.Holograms.Leaderboard.Header").replace("{parkour-name}", parkour.getName())));
+        hologram.appendTextLine(ChatColor.translateAlternateColorCodes('&', ConfigUtil.getString("Messages.Holograms.Leaderboard.Header", "&9&lLeaderboard for {parkour-name}").replace("{parkour-name}", parkour.getName())));
         refresh();
     }
 
@@ -67,14 +68,14 @@ public class LeaderboardHologram implements ILeaderboardHologram {
             hologram.removeLine(i);
         }
 
-        Map<Integer, List<String>> leaderboard = Main.getInstance().getDbManager().getLeaderboard(parkour, Main.getInstance().getConfig().getInt("Settings.Leaderboard.Limit"));
+        Map<Integer, List<String>> leaderboard = Main.getInstance().getDbManager().getLeaderboard(parkour, ConfigUtil.getInt("Settings.Leaderboard.Limit", 10));
 
         new BukkitRunnable() {
             @Override
             public void run() {
                 for (int place : leaderboard.keySet()) {
                     List<String> record = leaderboard.get(place);
-                    hologram.appendTextLine(ChatColor.translateAlternateColorCodes('&', Main.getInstance().getConfig().getString("Messages.Holograms.Leaderboard.Line").replace("{player-name}", record.get(0)).replace("{player-time}", "" + Float.parseFloat(record.get(1)) / 1000f).replace("{place}", "" + place)));
+                    hologram.appendTextLine(ChatColor.translateAlternateColorCodes('&', ConfigUtil.getString("Messages.Holograms.Leaderboard.Line", "&3#{place}&r - &b{player-name}&r - &b{player-time}").replace("{player-name}", record.get(0)).replace("{player-time}", ConfigUtil.formatTime(Long.parseLong(record.get(1)))).replace("{place}", "" + place)));
                 }
             }
         }.runTask(Main.getInstance());

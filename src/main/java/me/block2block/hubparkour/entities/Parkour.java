@@ -9,6 +9,8 @@ import me.block2block.hubparkour.api.ILeaderboardHologram;
 import me.block2block.hubparkour.api.IParkour;
 import me.block2block.hubparkour.api.plates.*;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.utils.ConfigUtil;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -119,18 +121,34 @@ public class Parkour implements IParkour {
     @SuppressWarnings("unused")
     public void generateHolograms() {
         for (PressurePlate p : getAllPoints()) {
+            List<String> defaultValues = new ArrayList<>();
             String configKey = "";
             switch (p.getType()) {
                 case 0:
+                    if (!ConfigUtil.getBoolean("Settings.Holograms.Start", true)) {
+                        continue;
+                    }
                     configKey = "Start";
+                    defaultValues.add("&9&l&n{parkour-name}");
+                    defaultValues.add("&9&lParkour Start");
                     break;
                 case 1:
+                    if (!ConfigUtil.getBoolean("Settings.Holograms.End", true)) {
+                        continue;
+                    }
                     configKey = "End";
+                    defaultValues.add("&9&l&n{parkour-name}");
+                    defaultValues.add("&9&lParkour End");
                     break;
                 case 2:
                     continue;
                 case 3:
+                    if (!ConfigUtil.getBoolean("Settings.Holograms.Checkpoint", true)) {
+                        continue;
+                    }
                     configKey = "Checkpoint";
+                    defaultValues.add("&9&l&n{parkour-name}");
+                    defaultValues.add("&9&lCheckpoint #{checkpoint}");
                     break;
                 default:
             }
@@ -143,8 +161,14 @@ public class Parkour implements IParkour {
             }
             Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), l);
             int counter = 0;
-            for (String s : Main.getInstance().getConfig().getStringList("Messages.Holograms." + configKey)) {
-                TextLine textLine = hologram.appendTextLine(ChatColor.translateAlternateColorCodes('&', s.replace("{parkour-name}",name).replace("{checkpoint}",((p instanceof Checkpoint)?((Checkpoint)p).getCheckpointNo() + "":""))));
+
+
+            for (String s : ConfigUtil.getStringList("Messages.Holograms." + configKey, defaultValues)) {
+                s = ChatColor.translateAlternateColorCodes('&', s.replace("{parkour-name}",name).replace("{checkpoint}",((p instanceof Checkpoint)?((Checkpoint)p).getCheckpointNo() + "":"")));
+                if (Main.isPlaceholders()) {
+                    s = PlaceholderAPI.setPlaceholders(null, s);
+                }
+                TextLine textLine = hologram.appendTextLine(s);
                 counter++;
             }
             holograms.put(p, hologram);

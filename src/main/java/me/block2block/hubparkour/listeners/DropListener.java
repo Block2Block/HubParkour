@@ -4,6 +4,7 @@ import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.HubParkourAPI;
 import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,7 +29,7 @@ public class DropListener implements Listener {
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
             Player p = e.getPlayer();
-            if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Items.Prevent-Item-Pickup")) {
+            if (ConfigUtil.getBoolean("Settings.Parkour-Items.Prevent-Item-Pickup", true)) {
                 if (HubParkourAPI.isInParkour(p)) {
                     e.setCancelled(true);
                 }

@@ -9,11 +9,13 @@ import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.listeners.*;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.managers.DatabaseManager;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import me.block2block.hubparkour.utils.HubParkourExpansion;
 import me.block2block.hubparkour.utils.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -28,9 +30,8 @@ public class Main extends JavaPlugin {
 
     private static Main instance;
 
-    private static FileConfiguration config;
-
     private static boolean holograms;
+    private static boolean placeholders = false;
     private static DatabaseManager dbManager;
 
     private static boolean pre1_13 = false;
@@ -50,6 +51,7 @@ public class Main extends JavaPlugin {
             case "v1_16_R1":
             case "v1_16_R2":
             case "v1_16_R3":
+            case "v1_17_R1":
                 pre1_13 = false;
                 post1_8 = true;
                 post1_9 = true;
@@ -66,12 +68,12 @@ public class Main extends JavaPlugin {
             case "v1_9_R2":
                 //Elytras are present in this version, register Elytra listener.
                 Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
-                getLogger().info("Pre-1.13 server version detected.");
+                getLogger().info("Legacy server version detected (1.8-1.12).");
                 pre1_13 = true;
                 post1_8 = true;
                 break;
             default:
-                getLogger().info("Pre-1.13 server version detected.");
+                getLogger().info("Legacy server version detected (1.8-1.12).");
                 pre1_13 = true;
                 post1_8 = false;
         }
@@ -82,14 +84,16 @@ public class Main extends JavaPlugin {
         if (!configFile.exists()) {
             configFile.getParentFile().mkdirs();
             if (pre1_13) {
+                getLogger().info("Generating 1.8-1.12 configuration file.");
                 copy(getResource("config1_8.yml"), configFile);
             } else {
+                getLogger().info("Generating 1.13+ configuration file.");
                 copy(getResource("config1_13.yml"), configFile);
             }
 
         }
 
-        config = new YamlConfiguration();
+        FileConfiguration config = new YamlConfiguration();
         try {
             config.load(configFile);
         } catch (Exception e) {
@@ -97,20 +101,24 @@ public class Main extends JavaPlugin {
         }
         config.options().copyHeader(true);
 
+        ConfigUtil.init(config, configFile);
+
         if (!loadTypes()) {
             return;
         }
 
+
+
         holograms = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
 
         if (holograms) {
-            getLogger().info("HolographicDisplays detected.");
+            getLogger().info("HolographicDisplays has been detected detected.");
         }
 
         dbManager = new DatabaseManager();
 
         try {
-            dbManager.setup(getConfig().getString("Settings.Database.Type").equalsIgnoreCase("mysql"));
+            dbManager.setup(ConfigUtil.getString("Settings.Database.Type", "SQLite").equalsIgnoreCase("mysql"));
         } catch (Exception e) {
             getLogger().severe("There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:\n");
             e.printStackTrace();
@@ -125,6 +133,8 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ItemClickListener(), this);
         Bukkit.getPluginManager().registerEvents(new DropListener(), this);
         Bukkit.getPluginManager().registerEvents(new LeaveListener(), this);
+        Bukkit.getPluginManager().registerEvents(new MountListener(), this);
+        Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
 
         getCommand("parkour").setExecutor(new CommandParkour());
         getCommand("parkour").setTabCompleter(new ParkourTabComplete());
@@ -139,20 +149,24 @@ public class Main extends JavaPlugin {
                 }
             }
 
-            if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
+            if (isHolograms()) {
                 getLogger().info("Generating holograms for parkour " + parkour.getName() + "...");
                 parkour.generateHolograms();
+                getLogger().info("Holograms successfully generated for parkour " + parkour.getName() + "!");
             }
         }
 
         for (LeaderboardHologram hologram : CacheManager.getLeaderboards()) {
-            if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
-                getLogger().info("Generating leaderboard hologram for parkour " + hologram.getParkour().getName() + "...");
+            if (isHolograms()) {
+                getLogger().info("Generating leaderboard hologram for parkour " + hologram.getParkour().getName() + " (ID: " + hologram.getId() + ") ...");
                 hologram.generate();
+                getLogger().info("Leaderboard hologram for parkour " + hologram.getParkour().getName() + " (ID: " + hologram.getId() + ") successfully generated!");
             }
         }
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            placeholders = true;
+            getLogger().info("PlaceholderAPI detected, registering HubParkour placeholder expansion.");
             new HubParkourExpansion(this).register();
         }
 
@@ -163,7 +177,7 @@ public class Main extends JavaPlugin {
 
         getLogger().info("Plugin successfully enabled!");
 
-        if (getConfig().getBoolean("Settings.Version-Checker.Enabled")) {
+        if (ConfigUtil.getBoolean("Settings.Version-Checker.Enabled", true)) {
             String version = newVersionCheck();
             if (version != null) {
                 getLogger().info("HubParkour v" + version + " is out now! I highly recommend you download the new version!");
@@ -175,7 +189,7 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if (getConfig().getBoolean("Settings.Holograms") && isHolograms()) {
+        if (isHolograms()) {
             for (Parkour parkour : CacheManager.getParkours()) {
                 parkour.removeHolograms();
             }
@@ -211,20 +225,19 @@ public class Main extends JavaPlugin {
         }
     }
 
-    public FileConfiguration getConfig() {
-        return config;
-    }
-
     public static String c(boolean prefix, String message) {
-        return ChatColor.translateAlternateColorCodes('&',((prefix)?Main.getInstance().getConfig().getString("Messages.Prefix"):"&r") + message);
+        return ChatColor.translateAlternateColorCodes('&',((prefix)?ConfigUtil.getString("Messages.Prefix", "&2Parkour>> &r"):"&r") + message);
     }
 
     public static boolean isHolograms(){return holograms;}
 
     private boolean loadTypes() {
-        Material start = ((getConfig().getString("Settings.Pressure-Plates.Start").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.Start")):null);
-        Material checkpoint = ((getConfig().getString("Settings.Pressure-Plates.Checkpoint").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.Checkpoint")):null);
-        Material end = ((getConfig().getString("Settings.Pressure-Plates.End").toLowerCase().contains("plate"))?Material.matchMaterial(getConfig().getString("Settings.Pressure-Plates.End")):null);
+
+        String startMaterial = ConfigUtil.getString("Settings.Pressure-Plates.Start", ((isPre1_13())?"WOOD_PLATE":"OAK_PRESSURE_PLATE")), checkpointMaterial = ConfigUtil.getString("Settings.Pressure-Plates.Checkpoint",  ((isPre1_13())?"GOLD_PLATE":"LIGHT_WEIGHTED_PRESSURE_PLATE")), endMaterial = ConfigUtil.getString("Settings.Pressure-Plates.End", ((isPre1_13())?"IRON_PLATE":"HEAVY_WEIGHTED_PRESSURE_PLATE"));
+
+        Material start = ((startMaterial.toLowerCase().contains("plate"))?Material.matchMaterial(startMaterial):null);
+        Material checkpoint = ((checkpointMaterial.toLowerCase().contains("plate"))?Material.matchMaterial(checkpointMaterial):null);
+        Material end = ((endMaterial.toLowerCase().contains("plate"))?Material.matchMaterial(endMaterial):null);
 
         if (start == null || checkpoint == null || end == null) {
             getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. The plugin will now be disabled.");
@@ -240,9 +253,9 @@ public class Main extends JavaPlugin {
     }
 
     private boolean loadItems() {
-        Material reset = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Reset.Item"));
-        Material checkpoint = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Checkpoint.Item"));
-        Material cancel = Material.matchMaterial(getConfig().getString("Settings.Parkour-Items.Cancel.Item"));
+        Material reset = Material.matchMaterial(ConfigUtil.getString("Settings.Parkour-Items.Reset.Item", ((isPre1_13()?"WOOD_DOOR":"OAK_DOOR"))));
+        Material checkpoint = Material.matchMaterial(ConfigUtil.getString("Settings.Parkour-Items.Checkpoint.Item", ((isPre1_13()?"GOLD_PLATE":"LIGHT_WEIGHTED_PRESSURE_PLATE"))));
+        Material cancel = Material.matchMaterial(ConfigUtil.getString("Settings.Parkour-Items.Cancel.Item", ((isPre1_13()?"BED":"RED_BED"))));
 
         if (reset == null || checkpoint == null || cancel == null) {
             getLogger().info("There are invalid values in your config.yml for the parkour items. Please correct the error and restart your server. The plugin will now be disabled.");
@@ -250,18 +263,18 @@ public class Main extends JavaPlugin {
             return false;
         }
 
-        if (getConfig().getInt("Settings.Parkour-Items.Cancel.Slot") != -1) {
-            ItemStack item = ItemUtil.ci(cancel, getConfig().getString("Settings.Parkour-Items.Cancel.Name"), 1, "", (short) getConfig().getInt("Settings.Parkour-Items.Cancel.Item-Data"));
+        if (ConfigUtil.getInt("Settings.Parkour-Items.Cancel.Slot", 6) != -1) {
+            ItemStack item = ItemUtil.ci(cancel, ConfigUtil.getString("Settings.Parkour-Items.Cancel.Name", "&cCancel"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Cancel.Item-Data", 0));
             CacheManager.setItem(2, item);
         }
 
-        if (getConfig().getInt("Settings.Parkour-Items.Reset.Slot") != -1) {
-            ItemStack item = ItemUtil.ci(reset, getConfig().getString("Settings.Parkour-Items.Reset.Name"), 1, "", (short) getConfig().getInt("Settings.Parkour-Items.Reset.Item-Data"));
+        if (ConfigUtil.getInt("Settings.Parkour-Items.Reset.Slot", 5) != -1) {
+            ItemStack item = ItemUtil.ci(reset, ConfigUtil.getString("Settings.Parkour-Items.Reset.Name", "&cReset"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Reset.Item-Data", 0));
             CacheManager.setItem(0, item);
         }
 
-        if (getConfig().getInt("Settings.Parkour-Items.Checkpoint.Slot") != -1) {
-            ItemStack item = ItemUtil.ci(checkpoint, getConfig().getString("Settings.Parkour-Items.Checkpoint.Name"), 1, "", (short) getConfig().getInt("Settings.Parkour-Items.Checkpoint.Item-Data"));
+        if (ConfigUtil.getInt("Settings.Parkour-Items.Checkpoint.Slot", 4) != -1) {
+            ItemStack item = ItemUtil.ci(checkpoint, ConfigUtil.getString("Settings.Parkour-Items.Checkpoint.Name", "&aTeleport to Last Checkpoint"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Checkpoint.Item-Data", 0));
             CacheManager.setItem(1, item);
         }
 
@@ -310,5 +323,9 @@ public class Main extends JavaPlugin {
 
     public static boolean isPost1_9() {
         return post1_9;
+    }
+
+    public static boolean isPlaceholders() {
+        return placeholders;
     }
 }

@@ -12,7 +12,9 @@ import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.api.items.ResetItem;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.utils.ConfigUtil;
 import me.block2block.hubparkour.utils.TitleUtil;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -21,9 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("DuplicatedCode")
 public class HubParkourPlayer implements IHubParkourPlayer {
@@ -37,14 +37,16 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     private int lastReached = 0;
     private long startTime;
     private long previous = -2;
+    private List<Checkpoint> previouslyReachedCheckpoints;
+    private boolean lastRunCompleted;
     private ItemStack[] inventory;
     private ItemStack[] extraContents;
     private ItemStack[] armorContents;
     private ItemStack[] storageContents;
     private BukkitTask actionBarTask;
-    private GameMode prevGamemode;
-    private double prevHealth;
-    private int prevHunger;
+    private final GameMode prevGamemode;
+    private final double prevHealth;
+    private final int prevHunger;
 
     @SuppressWarnings("unused")
     public HubParkourPlayer(Player p, Parkour parkour) {
@@ -55,33 +57,46 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         prevGamemode = player.getGameMode();
         prevHealth = player.getHealth();
         prevHunger = player.getFoodLevel();
-        if (Main.getInstance().getConfig().getBoolean("Settings.Health.Heal-To-Full")) {
+        if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
             player.setHealth(20);
         }
-        if (Main.getInstance().getConfig().getBoolean("Settings.Hunger.Saturate-To-Full")) {
+        if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
             player.setFoodLevel(30);
         }
-        if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Gamemode.Enabled")) {
-            GameMode mode = GameMode.valueOf(Main.getInstance().getConfig().getString("Settings.Parkour-Gamemode.Gamemode"));
+        if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
+            GameMode mode = GameMode.valueOf(ConfigUtil.getString("Settings.Parkour-Gamemode.Gamemode", "ADVENTURE"));
             player.setGameMode(mode);
         }
         new BukkitRunnable() {
             @Override
             public void run() {
+                lastRunCompleted = Main.getInstance().getDbManager().wasCompletedLastRun(p, parkour);
+                if ((ConfigUtil.getBoolean("Settings.Repeat-Rewards", true) || ConfigUtil.getBoolean("Settings.Exploit-Prevention.Checkpoint-Rewards-Everytime", false)) && lastRunCompleted) {
+                    //The last run was completed and repeat rewards are enabled, delete all previously reached checkpoints so they can reach them again.
+                    previouslyReachedCheckpoints = new ArrayList<>();
+                    Main.getInstance().getDbManager().resetReachedCheckpoints(p, parkour);
+                } else {
+                    previouslyReachedCheckpoints = Main.getInstance().getDbManager().getReachedCheckpoints(p, parkour);
+                }
                 previous = Main.getInstance().getDbManager().getTime(p, parkour);
                 splitTimes = Main.getInstance().getDbManager().getSplitTimes(p, parkour);
+                Main.getInstance().getDbManager().resetLastRun(p, parkour);
             }
         }.runTaskAsynchronously(Main.getInstance());
-        parkourItems.add(new ResetItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Reset.Slot")));
-        parkourItems.add(new CheckpointItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Checkpoint.Slot")));
-        parkourItems.add(new CancelItem(this, Main.getInstance().getConfig().getInt("Settings.Parkour-Items.Cancel.Slot")));
-        if (Main.getInstance().getConfig().getBoolean("Settings.Action-Bar.Enabled")) {
+        parkourItems.add(new ResetItem(this, ConfigUtil.getInt("Settings.Parkour-Items.Reset.Slot", 5)));
+        parkourItems.add(new CheckpointItem(this, ConfigUtil.getInt("Settings.Parkour-Items.Checkpoint.Slot", 4)));
+        parkourItems.add(new CancelItem(this, ConfigUtil.getInt("Settings.Parkour-Items.Cancel.Slot", 6)));
+        if (ConfigUtil.getBoolean("Settings.Action-Bar.Enabled", true)) {
             actionBarTask = new BukkitRunnable(){
                 @Override
                 public void run() {
-                    TitleUtil.sendActionBar(player, Main.c(false, Main.getInstance().getConfig().getString("Messages.Parkour.Action-Bar").replace("{current-time}", "" + ((System.currentTimeMillis() - startTime) / 1000f)).replace("{parkour-name}", parkour.getName()).replace("{current-checkpoint}", lastReached + "").replace("{current-splittime}", "" + ((System.currentTimeMillis() - currentSplit)/1000f))), ChatColor.WHITE, false);
+                    String message = Main.c(false, ConfigUtil.getString("Messages.Parkour.Action-Bar", "&a&lCurrent Time: &r{current-time} - &a&lParkour: &r{parkour-name}&r - &a&lCurrent Checkpoint: &r#{current-checkpoint}").replace("{current-time}", ConfigUtil.formatTime((System.currentTimeMillis() - startTime))).replace("{parkour-name}", parkour.getName()).replace("{current-checkpoint}", lastReached + "").replace("{current-splittime}", "" + ((System.currentTimeMillis() - currentSplit)/1000f)));
+                    if (Main.isPlaceholders()) {
+                        message = PlaceholderAPI.setPlaceholders(player, message);
+                    }
+                    TitleUtil.sendActionBar(player, message, ChatColor.WHITE, false);
                 }
-            }.runTaskTimerAsynchronously(Main.getInstance(), 0, Main.getInstance().getConfig().getInt("Settings.Action-Bar.Update-Interval"));
+            }.runTaskTimerAsynchronously(Main.getInstance(), 0, ConfigUtil.getInt("Settings.Action-Bar.Update-Interval", 2));
         }
     }
 
@@ -93,10 +108,14 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         if (!checkpoints.contains(checkpoint)) {
             lastReached = checkpoint.getCheckpointNo();
             long ms = System.currentTimeMillis() - currentSplit;
-            float time = ms/1000f;
+            Map<String, String> bindings = new HashMap<>();
+            bindings.put("checkpoint", checkpoint.getCheckpointNo() + "");
+            bindings.put("new-time", ConfigUtil.formatTime(ms));
             if (splitTimes.containsKey(checkpoint.getCheckpointNo())) {
+                bindings.put("old-time", ConfigUtil.formatTime(splitTimes.get(checkpoint.getCheckpointNo())));
                 if (splitTimes.get(checkpoint.getCheckpointNo()) > ms) {
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoints.Reached.Beat-Split-Time").replace("{checkpoint}","" + checkpoint.getCheckpointNo()).replace("{new-time}","" + time).replace("{old-time}","" + (splitTimes.get(checkpoint.getCheckpointNo())/1000f))));
+
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.Checkpoints.Reached.Beat-Split-Time", "You have reached checkpoint &a#{checkpoint}&r in &a{new-time}s&r and beat your personal best of &a{old-time}s&r!", true, bindings);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -105,10 +124,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     }.runTaskAsynchronously(Main.getInstance());
                     splitTimes.put(checkpoint.getCheckpointNo(), ms);
                 } else {
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoints.Reached.Not-Beat-Split-Time").replace("{checkpoint}","" + checkpoint.getCheckpointNo()).replace("{new-time}","" + time).replace("{old-time}","" + (splitTimes.get(checkpoint.getCheckpointNo())/1000f))));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.Checkpoints.Reached.Not-Beat-Split-Time", "You have reached checkpoint &a#{checkpoint}&r in &a{new-time}s&r (personal best: {old-time}s)!", true, bindings);
                 }
             } else {
-                player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Checkpoints.Reached.New-Split-Time").replace("{checkpoint}","" + checkpoint.getCheckpointNo()).replace("{new-time}","" + time)));
+                ConfigUtil.sendMessage(player, "Messages.Parkour.Checkpoints.Reached.New-Split-Time", "You have reached checkpoint &a#{checkpoint}&r in &a{new-time}s&r!", true, bindings);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -118,6 +137,29 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                 splitTimes.put(checkpoint.getCheckpointNo(), ms);
             }
             checkpoints.add(checkpoint);
+
+            //Give checkpoint reward if not already reached.
+            if (!previouslyReachedCheckpoints.contains(checkpoint)) {
+                if (parkour.getCheckpointCommand() != null) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                }
+            } else {
+                if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Checkpoint-Rewards-Everytime", false)) {
+                    if (parkour.getCheckpointCommand() != null) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                    }
+                }
+            }
+
+            previouslyReachedCheckpoints.add(checkpoint);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Main.getInstance().getDbManager().reachedCheckpoint(player, parkour, checkpoint);
+                }
+            }.runTaskAsynchronously(Main.getInstance());
+
         }
     }
 
@@ -134,20 +176,20 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             }
             switch (cause) {
                 case FLY:
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Fly")));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Fly", "You are not allowed to fly while doing the parkour. Parkour failed!", true, Collections.emptyMap());
                     break;
                 case ELYTRA_USE:
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Elytra-Use")));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Elytra-Use", "You are not allowed to use an Elytra while doing the parkour. Parkour failed!", true, Collections.emptyMap());
                     break;
                 case TELEPORTATION:
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Teleportation")));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Teleportation", "You are not allowed to teleport while doing the parkour. Parkour failed!", true, Collections.emptyMap());
                     break;
                 case NEW_PARKOUR:
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Parkour-Change")));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Parkour-Change", "You have started another parkour, parkour failed!", true, Collections.emptyMap());
                     break;
             }
         } else {
-            if (Main.getInstance().getConfig().getBoolean("Settings.Must-Complete-All-Checkpoints")) {
+            if (ConfigUtil.getBoolean("Settings.Must-Complete-All-Checkpoints", true)) {
                 if (checkpoints.size() != parkour.getNoCheckpoints()) {
                     ParkourPlayerFailEvent failEvent = new ParkourPlayerFailEvent(this.parkour, this, ParkourPlayerFailEvent.FailCause.NOT_ENOUGH_CHECKPOINTS);
                     Bukkit.getPluginManager().callEvent(failEvent);
@@ -158,15 +200,15 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                         actionBarTask.cancel();
                         actionBarTask = null;
                     }
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Not-Enough-Checkpoints")));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Not-Enough-Checkpoints", "You did not reach enough checkpoints, parkour failed!", true, Collections.emptyMap());
                     parkour.playerEnd(this);
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Health.Heal-To-Full")) {
+                    if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
                         player.setHealth(prevHealth);
                     }
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Hunger.Saturate-To-Full")) {
+                    if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
                         player.setFoodLevel(prevHunger);
                     }
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Gamemode.Enabled")) {
+                    if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
                         player.setGameMode(prevGamemode);
                     }
                     CacheManager.playerEnd(this);
@@ -176,10 +218,8 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             }
 
             long finishMili = System.currentTimeMillis() - startTime;
-            float finishTime = finishMili/1000f;
 
             long splitMs = System.currentTimeMillis() - currentSplit;
-            float splitTime = splitMs/1000f;
 
             ParkourPlayerFinishEvent finishEvent = new ParkourPlayerFinishEvent(this.parkour, this, finishMili, finishMili + startTime, startTime);
             Bukkit.getPluginManager().callEvent(finishEvent);
@@ -197,9 +237,19 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                 check = checkpoints.get(checkpoints.size() - 1).getCheckpointNo() + 1;
             }
 
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Main.getInstance().getDbManager().completedLastRun(player, parkour);
+                }
+            }.runTaskAsynchronously(Main.getInstance());
+
+            Map<String, String> bindings = new HashMap<>();
+            bindings.put("new-time", ConfigUtil.formatTime(splitMs));
             if (splitTimes.containsKey(check)) {
+                bindings.put("old-time", ConfigUtil.formatTime(splitTimes.get(check)));
                 if (splitTimes.get(check) > splitMs) {
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Split-Time.Beat-Split-Time").replace("{new-time}","" + splitTime).replace("{old-time}","" + (splitTimes.get(check)/1000f))));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Split-Time.Beat-Split-Time", "You have reached reached the finish point in &a{new-time}s&r and beat your personal best of &a{old-time}s&r!", true, bindings);
                     int finalCheck = check;
                     new BukkitRunnable() {
                         @Override
@@ -208,10 +258,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Split-Time.Not-Beat-Split-Time").replace("{new-time}","" + splitTime).replace("{old-time}","" + (splitTimes.get(check)/1000f))));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Split-Time.Not-Beat-Split-Time", "You have reached reached the finish point in &a{new-time}s&r (personal best: {old-time}s)!", true, bindings);
                 }
             } else {
-                player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Split-Time.New-Split-Time").replace("{new-time}","" + splitTime)));
+                ConfigUtil.sendMessage(player, "Messages.Parkour.End.Split-Time.New-Split-Time", "You have reached the finish point in &a{new-time}s&r!", true, bindings);
                 int finalCheck = check;
                 new BukkitRunnable() {
                     @Override
@@ -222,46 +272,56 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             }
 
             if (previous > 0) {
-                if (Main.getInstance().getConfig().getBoolean("Settings.Repeat-Rewards")) {
+                if (ConfigUtil.getBoolean("Settings.Repeat-Rewards", true)) {
                     if (parkour.getEndCommand() != null) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
                     }
-                    if (parkour.getCheckpointCommand() != null) {
-                        for (int i = 0;i < checkpoints.size();i++) {
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
-                        }
-                    }
                 }
+                bindings.clear();
+                bindings.put("time",ConfigUtil.formatTime(finishMili));
+                bindings.put("parkour-name", parkour.getName());
                 if (finishMili < previous) {
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Beat-Previous-Personal-Best").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));
+
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Beat-Previous-Personal-Best", "You beat your previous record and you managed to complete the &a{parkour-name} &rparkour in &a{time} &rseconds!", true, bindings);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             Main.getInstance().getDbManager().newTime(player, finishMili, true, parkour);
                             int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
-                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName()).replace("{suffix}",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))))));
+
+                            bindings.clear();
+                            bindings.put("position","" + position);
+                            bindings.put("suffix",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))));
+                            bindings.put("parkour-name",parkour.getName());
+
+                            ConfigUtil.sendMessage(player, "Messages.Parkour.Leaderboard.Leaderboard-Place", "You are in &a{position}{suffix} place&r for the &a{parkour-name}&r parkour!", true, bindings);
                             for (ILeaderboardHologram hologram : parkour.getLeaderboards()) {
                                 hologram.refresh();
                             }
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Not-Beat-Previous-Personal-Best").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Not-Beat-Previous-Personal-Best", "You didn't beat your previous record, but you managed to complete the &a{parkour-name} &rparkour in &a{time} &rseconds!", true, bindings);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
-                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}", parkour.getName()).replace("{suffix}", ((position % 10 == 1) ? "st" : ((position % 10 == 2) ? "nd" : ((position % 10 == 3) ? "rd" : "th"))))));
+                            bindings.clear();
+                            bindings.put("position","" + position);
+                            bindings.put("suffix",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))));
+                            bindings.put("parkour-name",parkour.getName());
+
+                            ConfigUtil.sendMessage(player, "Messages.Parkour.Leaderboard.Leaderboard-Place", "You are in &a{position}{suffix} place&r for the &a{parkour-name}&r parkour!", true, bindings);
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                     parkour.playerEnd(this);
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Health.Heal-To-Full")) {
+                    if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
                         player.setHealth(prevHealth);
                     }
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Hunger.Saturate-To-Full")) {
+                    if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
                         player.setFoodLevel(prevHunger);
                     }
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Gamemode.Enabled")) {
+                    if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
                         player.setGameMode(prevGamemode);
                     }
                     CacheManager.playerEnd(this);
@@ -278,28 +338,39 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
                         }
                     }
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.First-Time").replace("{time}","" + finishTime).replace("{parkour-name}",parkour.getName())));
+
+                    bindings.clear();
+                    bindings.put("time",ConfigUtil.formatTime(finishMili));
+                    bindings.put("parkour-name", parkour.getName());
+
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.First-Time", "Well done! You completed the &a{parkour-name}&r parkour in &a{time}&r seconds! Your reward will be applied shortly!", true, bindings);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             Main.getInstance().getDbManager().newTime(player, finishMili, false, parkour);
                             int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
-                            player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.Leaderboard.Leaderboard-Place").replace("{position}", "" + position).replace("{parkour-name}",parkour.getName()).replace("{suffix}",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))))));
+                            bindings.clear();
+                            bindings.put("position","" + position);
+                            bindings.put("suffix",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))));
+                            bindings.put("parkour-name",parkour.getName());
+
+                            ConfigUtil.sendMessage(player, "Messages.Parkour.Leaderboard.Leaderboard-Place", "You are in &a{position}{suffix} place&r for the &a{parkour-name}&r parkour!", true, bindings);
                             for (ILeaderboardHologram hologram : parkour.getLeaderboards()) {
                                 hologram.refresh();
                             }
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {
-                    player.sendMessage(Main.c(true, Main.getInstance().getConfig().getString("Messages.Parkour.End.Failed.Too-Quick")));
+
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Too-Quick", "You completed the parkour too quickly, parkour failed!", true, Collections.emptyMap());
                     parkour.playerEnd(this);
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Health.Heal-To-Full")) {
+                    if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
                         player.setHealth(prevHealth);
                     }
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Hunger.Saturate-To-Full")) {
+                    if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
                         player.setFoodLevel(prevHunger);
                     }
-                    if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Gamemode.Enabled")) {
+                    if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
                         player.setGameMode(prevGamemode);
                     }
                     CacheManager.playerEnd(this);
@@ -310,7 +381,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
         }
         parkour.playerEnd(this);
-        if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Gamemode.Enabled")) {
+        if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
             player.setGameMode(prevGamemode);
         }
         CacheManager.playerEnd(this);
@@ -355,7 +426,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             extraContents = player.getInventory().getExtraContents();
             storageContents = player.getInventory().getStorageContents();
         }
-        if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start")) {
+        if (ConfigUtil.getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start", true)) {
             player.getInventory().clear();
         }
         for (ParkourItem item : parkourItems) {
@@ -367,7 +438,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         for (ParkourItem item : parkourItems) {
             item.removeItem();
         }
-        if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start")) {
+        if (ConfigUtil.getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start", true)) {
             if (inventory != null) {
                 player.getInventory().setContents(inventory);
             }
@@ -403,13 +474,13 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     }
 
     public void setToPrevState() {
-        if (Main.getInstance().getConfig().getBoolean("Settings.Parkour-Gamemode.Enabled")) {
+        if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
             player.setGameMode(prevGamemode);
         }
-        if (Main.getInstance().getConfig().getBoolean("Settings.Health.Heal-To-Full")) {
+        if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
             player.setHealth(prevHealth);
         }
-        if (Main.getInstance().getConfig().getBoolean("Settings.Hunger.Saturate-To-Full")) {
+        if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
             player.setFoodLevel(prevHunger);
         }
     }

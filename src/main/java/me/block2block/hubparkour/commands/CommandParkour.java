@@ -288,7 +288,7 @@ public class CommandParkour implements CommandExecutor {
                                             if (args.length >= 3) {
                                                 int id = -1;
                                                 try {
-                                                    id = Integer.parseInt(args[1]);
+                                                    id = Integer.parseInt(args[2]);
                                                 } catch (NumberFormatException ignored) {
                                                 }
                                                 Parkour parkour;

@@ -356,7 +356,12 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
                             ConfigUtil.sendMessage(player, "Messages.Parkour.Leaderboard.Leaderboard-Place", "You are in &a{position}{suffix} place&r for the &a{parkour-name}&r parkour!", true, bindings);
                             for (ILeaderboardHologram hologram : parkour.getLeaderboards()) {
-                                hologram.refresh();
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        hologram.refresh();
+                                    }
+                                }.runTask(Main.getInstance());
                             }
                         }
                     }.runTaskAsynchronously(Main.getInstance());

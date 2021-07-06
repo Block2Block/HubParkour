@@ -33,6 +33,40 @@ public class PressurePlateListener implements Listener {
     @EventHandler
     public void onPressurePlate(PlayerMoveEvent e) {
         if (e.getFrom().getBlock().getType().equals(e.getTo().getBlock().getType())) {
+            if (CacheManager.isParkour(e.getPlayer())) {
+                if (ConfigUtil.getBoolean("Settings.Incompatibility-Workarounds.VoidSpawn.Enabled", false)) {
+                    Main.getInstance().getLogger().info("test3");
+                    if (ConfigUtil.getBoolean("Settings.Teleport.On-Void", true)) {
+                        Main.getInstance().getLogger().info("test2 " + ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -1) + " " + e.getTo().getY());
+                        if (ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -1) > e.getTo().getY()) {
+                            Main.getInstance().getLogger().info("test");
+                            Player p = e.getPlayer();
+                            p.setFallDistance(0);
+                            HubParkourPlayer player = CacheManager.getPlayer(p);
+
+                            Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                            if (player.getLastReached() != 0) {
+                                l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                            }
+                            l.setX(l.getX() + 0.5);
+                            l.setY(l.getY() + 0.5);
+                            l.setZ(l.getZ() + 0.5);
+                            double health = p.getHealth();
+                            p.setVelocity(new Vector(0, 0, 0));
+                            p.teleport(l);
+                            ConfigUtil.sendMessage(p, "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
+                            FallListener.getHasTeleported().add(p);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    FallListener.getHasTeleported().remove(p);
+                                }
+                            }.runTaskLater(Main.getInstance(), 5);
+                            return;
+                        }
+                    }
+                }
+            }
             return;
         }
         if (CacheManager.isParkour(e.getPlayer())) {
@@ -74,8 +108,11 @@ public class PressurePlateListener implements Listener {
                 }
             }
             if (ConfigUtil.getBoolean("Settings.Incompatibility-Workarounds.VoidSpawn.Enabled", false)) {
+                Main.getInstance().getLogger().info("test3");
                 if (ConfigUtil.getBoolean("Settings.Teleport.On-Void", true)) {
-                    if (ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -5) > e.getTo().getY()) {
+                    Main.getInstance().getLogger().info("test2 " + ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -1) + " " + e.getTo().getY());
+                    if (ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -1) > e.getTo().getY()) {
+                        Main.getInstance().getLogger().info("test");
                         Player p = e.getPlayer();
                         p.setFallDistance(0);
                         HubParkourPlayer player = CacheManager.getPlayer(p);

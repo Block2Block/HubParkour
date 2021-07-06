@@ -1,6 +1,7 @@
 package me.block2block.hubparkour.listeners;
 
 import me.block2block.hubparkour.Main;
+import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerLeaveEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerTeleportEvent;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
@@ -15,6 +16,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,35 +45,60 @@ public class ItemClickListener implements Listener {
                         switch (type) {
                             case 0:
                                 //Reset.
+                                if (FallListener.getHasTeleported().contains(p)) {
+                                    return;
+                                }
                                 ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint());
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return;
                                 }
+                                p.setFallDistance(0);
                                 Location l = CacheManager.getPlayer(p).getParkour().getRestartPoint().getLocation().clone();
                                 l.setX(l.getX() + 0.5);
                                 l.setY(l.getY() + 0.5);
                                 l.setZ(l.getZ() + 0.5);
+                                p.setVelocity(new Vector(0, 0, 0));
                                 p.teleport(l);
                                 ConfigUtil.sendMessage(p, "Messages.Commands.Reset.Successful", "You have been teleported to the start.", true, Collections.emptyMap());
-                                break;
+                                FallListener.getHasTeleported().add(p);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        FallListener.getHasTeleported().remove(p);
+                                    }
+                                }.runTaskLater(Main.getInstance(), 5);
+                                return;
                             case 1:
                                 //Checkpoint.
+                                if (FallListener.getHasTeleported().contains(p)) {
+                                    return;
+                                }
                                 ParkourPlayerTeleportEvent event2 = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint());
                                 Bukkit.getPluginManager().callEvent(event2);
                                 if (event2.isCancelled()) {
                                     return;
                                 }
+                                p.setFallDistance(0);
                                 Location l2 = player.getParkour().getRestartPoint().getLocation().clone();
                                 if (player.getLastReached() != 0) {
                                     l2 = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
                                 }
+
                                 l2.setX(l2.getX() + 0.5);
                                 l2.setY(l2.getY() + 0.5);
                                 l2.setZ(l2.getZ() + 0.5);
+                                p.setVelocity(new Vector(0, 0, 0));
                                 p.teleport(l2);
                                 ConfigUtil.sendMessage(p, "Messages.Commands.Checkpoint.Successful", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
-                                break;
+                                FallListener.getHasTeleported().add(p);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        FallListener.getHasTeleported().remove(p);
+                                    }
+                                }.runTaskLater(Main.getInstance(), 5);
+                                return;
                             case 2:
                                 //Cancel.
                                 ParkourPlayerLeaveEvent leaveEvent = new ParkourPlayerLeaveEvent(player.getParkour(), player);
@@ -83,13 +110,11 @@ public class ItemClickListener implements Listener {
                                 new BukkitRunnable(){
                                     @Override
                                     public void run() {
-                                        player.removeItems();
-                                        player.getParkour().playerEnd(player);
-                                        CacheManager.playerEnd(player);
+                                        player.end(ParkourPlayerFailEvent.FailCause.LEAVE);
                                     }
                                 }.runTaskLater(Main.getInstance(), 1);
                                 ConfigUtil.sendMessage(p, "Messages.Commands.Leave.Left", "You have left the parkour and your progress has been reset.", true, Collections.emptyMap());
-                                break;
+                                return;
                         }
                     }
                 }

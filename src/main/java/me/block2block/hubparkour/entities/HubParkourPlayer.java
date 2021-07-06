@@ -314,19 +314,6 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                             ConfigUtil.sendMessage(player, "Messages.Parkour.Leaderboard.Leaderboard-Place", "You are in &a{position}{suffix} place&r for the &a{parkour-name}&r parkour!", true, bindings);
                         }
                     }.runTaskAsynchronously(Main.getInstance());
-                    parkour.playerEnd(this);
-                    if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-                        player.setHealth(prevHealth);
-                    }
-                    if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
-                        player.setFoodLevel(prevHunger);
-                    }
-                    if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
-                        player.setGameMode(prevGamemode);
-                    }
-                    CacheManager.playerEnd(this);
-                    removeItems();
-                    return;
                 }
             } else {
                 if (previous == -1) {
@@ -366,31 +353,24 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {
-
                     ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Too-Quick", "You completed the parkour too quickly, parkour failed!", true, Collections.emptyMap());
-                    parkour.playerEnd(this);
-                    if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-                        player.setHealth(prevHealth);
-                    }
-                    if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
-                        player.setFoodLevel(prevHunger);
-                    }
-                    if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
-                        player.setGameMode(prevGamemode);
-                    }
-                    CacheManager.playerEnd(this);
-                    removeItems();
-                    return;
                 }
             }
 
         }
+        removeItems();
         parkour.playerEnd(this);
+        if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
+            player.setHealth(prevHealth);
+        }
+        if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
+            player.setFoodLevel(prevHunger);
+        }
         if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
             player.setGameMode(prevGamemode);
         }
         CacheManager.playerEnd(this);
-        removeItems();
+
     }
 
     public int getLastReached() {

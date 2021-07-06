@@ -1,6 +1,6 @@
 name: HubParkour
 main: me.block2block.hubparkour.Main
-version: "2.5.1"
+version: "2.5.2"
 author: Block2Block
 prefix: HubParkour
 load: POSTWORLD
@@ -36,28 +36,28 @@ permissions:
       hubparkour.command.leaderboard: true
       hubparkour.command.teleport: true
   hubparkour.admin.setup:
-    default: true
+    default: op
     description: Allows access to the /parkour setup command and setup related commands.
   hubparkour.admin.delete:
-    default: true
+    default: op
     description: Allows access to the /parkour delete command.
   hubparkour.admin.list:
-    default: true
+    default: op
     description: Allows access to the /parkour list command.
   hubparkour.admin.hologram:
-    default: true
+    default: op
     description: Allows access to the /parkour hologram command.
   hubparkour.admin.removetime:
-    default: true
+    default: op
     description: Allows access to the /parkour removetime command.
   hubparkour.admin.cleartimes:
-    default: true
+    default: op
     description: Allows access to the /parkour cleartimes command.
   hubparkour.admin.edit:
-    default: true
+    default: op
     description: Allows access to the /parkour edit command.
   hubparkour.admin.reload:
-    default: true
+    default: op
     description: Allows access to the /parkour reload command.
   hubparkour.admin.*:
     default: op

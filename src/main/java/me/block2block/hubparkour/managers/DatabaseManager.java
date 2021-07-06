@@ -523,11 +523,27 @@ public class DatabaseManager {
                 statement.setInt(1, parkour.getId());
                 boolean result = statement.execute();
 
+                statement = connection.prepareStatement("DELETE FROM hp_splittimes WHERE `parkour_id` = ?");
+                statement.setInt(1, parkour.getId());
+                result = statement.execute();
+
+                statement = connection.prepareStatement("DELETE FROM hp_reachedcheckpoints WHERE `parkour_id` = ?");
+                statement.setInt(1, parkour.getId());
+                result = statement.execute();
+
                 statement = connection.prepareStatement("DELETE FROM hp_locations WHERE `parkour_id` = ?");
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
 
                 statement = connection.prepareStatement("DELETE FROM hp_parkours WHERE `id` = ?");
+                statement.setInt(1, parkour.getId());
+                result = statement.execute();
+
+                statement = connection.prepareStatement("DELETE FROM hp_holograms WHERE `parkour_id` = ?");
+                statement.setInt(1, parkour.getId());
+                result = statement.execute();
+
+                statement = connection.prepareStatement("DELETE FROM hp_lastruncompleted WHERE `parkour_id` = ?");
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
             } catch (Exception e) {

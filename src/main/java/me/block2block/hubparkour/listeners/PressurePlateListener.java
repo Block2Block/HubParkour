@@ -16,8 +16,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -64,9 +67,39 @@ public class PressurePlateListener implements Listener {
                     l.setY(l.getY() + 0.5);
                     l.setZ(l.getZ() + 0.5);
                     e.getPlayer().setFallDistance(0);
+                    e.getPlayer().setVelocity(new Vector(0, 0, 0));
                     e.getPlayer().teleport(l);
                     ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                     return;
+                }
+            }
+            if (ConfigUtil.getBoolean("Settings.Incompatibility-Workarounds.VoidSpawn.Enabled", false)) {
+                if (ConfigUtil.getBoolean("Settings.Teleport.On-Void", true)) {
+                    if (ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -5) > e.getTo().getY()) {
+                        Player p = e.getPlayer();
+                        p.setFallDistance(0);
+                        HubParkourPlayer player = CacheManager.getPlayer(p);
+
+                        Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                        if (player.getLastReached() != 0) {
+                            l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                        }
+                        l.setX(l.getX() + 0.5);
+                        l.setY(l.getY() + 0.5);
+                        l.setZ(l.getZ() + 0.5);
+                        double health = p.getHealth();
+                        p.setVelocity(new Vector(0, 0, 0));
+                        p.teleport(l);
+                        ConfigUtil.sendMessage(p, "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
+                        FallListener.getHasTeleported().add(p);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                FallListener.getHasTeleported().remove(p);
+                            }
+                        }.runTaskLater(Main.getInstance(), 5);
+                        return;
+                    }
                 }
             }
         }

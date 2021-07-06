@@ -4,6 +4,7 @@ import me.block2block.hubparkour.Main;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
 import me.block2block.hubparkour.api.events.admin.ParkourDeleteEvent;
+import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerLeaveEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerTeleportEvent;
 import me.block2block.hubparkour.api.plates.PressurePlate;
@@ -22,6 +23,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -48,6 +50,7 @@ public class CommandParkour implements CommandExecutor {
                                 l.setX(l.getX() + 0.5);
                                 l.setY(l.getY() + 0.5);
                                 l.setZ(l.getZ() + 0.5);
+                                p.setVelocity(new Vector(0, 0, 0));
                                 p.teleport(l);
                                 ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Reset.Successful", "You have been teleported to the start.", true, Collections.emptyMap());
                             } else {
@@ -73,6 +76,7 @@ public class CommandParkour implements CommandExecutor {
                                 l.setX(l.getX() + 0.5);
                                 l.setY(l.getY() + 0.5);
                                 l.setZ(l.getZ() + 0.5);
+                                p.setVelocity(new Vector(0, 0, 0));
                                 p.teleport(l);
                                 ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Checkpoint.Successful", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                             } else {
@@ -132,9 +136,7 @@ public class CommandParkour implements CommandExecutor {
                                 if (leaveEvent.isCancelled()) {
                                     return true;
                                 }
-                                player.removeItems();
-                                player.getParkour().playerEnd(player);
-                                CacheManager.playerEnd(player);
+                                player.end(ParkourPlayerFailEvent.FailCause.LEAVE);
                                 ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Leave.Left", "You have left the parkour and your progress has been reset.", true, Collections.emptyMap());
                             } else {
                                 ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Leave.Not-In-Parkour", "You must have started a parkour in order to leave it.", true, Collections.emptyMap());

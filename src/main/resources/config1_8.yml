@@ -343,6 +343,16 @@ Settings:
     #This MUST be in all caps. Adventure mode is recommended to prevent visual glitches when trying to place blocks.
     Gamemode: "ADVENTURE"
 
+  #Certain plugins can prevent certain features from working correctly.
+  #Enabling these options will allow you to continue using HubParkour with plugins that may cause issues.
+  #PLEASE NOTE: These settings are NOT RECOMMENDED as these can cause more lag and are more computationally expensive.
+  Incompatibility-Workarounds:
+    #VoidSpawn causes issues with fall detection. Enabling this uses a more computationally expensive method to detect when a player has fallen into the void.
+    VoidSpawn:
+      Enabled: false
+      #The minimum Y value the player get reach before being teleported. -1 is recommended. Any lower and VoidSpawn can glitch out.
+      Min-Y: -1
+
   #Settings related to items given when the parkour is started. Specify the slot for them to be put in. Use -1 to disable a specific item.
   Parkour-Items:
     Prevent-Item-Pickup: true

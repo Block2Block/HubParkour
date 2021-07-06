@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +62,7 @@ public class FallListener implements Listener {
                 l.setX(l.getX() + 0.5);
                 l.setY(l.getY() + 0.5);
                 l.setZ(l.getZ() + 0.5);
-                double health = p.getHealth();
+                p.setVelocity(new Vector(0, 0, 0));
                 p.teleport(l);
                 ConfigUtil.sendMessage(p, "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                 if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
@@ -75,5 +76,9 @@ public class FallListener implements Listener {
                 }
             }
         }
+    }
+
+    public static List<Player> getHasTeleported() {
+        return hasTeleported;
     }
 }

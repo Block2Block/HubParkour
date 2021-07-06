@@ -35,11 +35,8 @@ public class PressurePlateListener implements Listener {
         if (e.getFrom().getBlock().getType().equals(e.getTo().getBlock().getType())) {
             if (CacheManager.isParkour(e.getPlayer())) {
                 if (ConfigUtil.getBoolean("Settings.Incompatibility-Workarounds.VoidSpawn.Enabled", false)) {
-                    Main.getInstance().getLogger().info("test3");
                     if (ConfigUtil.getBoolean("Settings.Teleport.On-Void", true)) {
-                        Main.getInstance().getLogger().info("test2 " + ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -1) + " " + e.getTo().getY());
                         if (ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -1) > e.getTo().getY()) {
-                            Main.getInstance().getLogger().info("test");
                             Player p = e.getPlayer();
                             p.setFallDistance(0);
                             HubParkourPlayer player = CacheManager.getPlayer(p);
@@ -108,11 +105,8 @@ public class PressurePlateListener implements Listener {
                 }
             }
             if (ConfigUtil.getBoolean("Settings.Incompatibility-Workarounds.VoidSpawn.Enabled", false)) {
-                Main.getInstance().getLogger().info("test3");
                 if (ConfigUtil.getBoolean("Settings.Teleport.On-Void", true)) {
-                    Main.getInstance().getLogger().info("test2 " + ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -1) + " " + e.getTo().getY());
                     if (ConfigUtil.getInt("Settings.Incompatibility-Workarounds.VoidSpawn.Min-Y", -1) > e.getTo().getY()) {
-                        Main.getInstance().getLogger().info("test");
                         Player p = e.getPlayer();
                         p.setFallDistance(0);
                         HubParkourPlayer player = CacheManager.getPlayer(p);

@@ -16,7 +16,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.5.3: Bug Fix&#10;- Fixed VoidSpawn compatibility in older versions.&#10;- Fixed wrong default value.">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -437,13 +437,11 @@
       <workItem from="1625588696516" duration="9834000" />
       <workItem from="1625607334694" duration="1276000" />
       <workItem from="1625608755770" duration="3000" />
-    </task>
-    <task id="LOCAL-00001" summary="Did some database stuff">
-      <created>1578935241432</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1578935241432</updated>
+      <workItem from="1625608799399" duration="1166000" />
+      <workItem from="1625648989135" duration="596000" />
+      <workItem from="1625936107255" duration="1505000" />
+      <workItem from="1626027801878" duration="13000" />
+      <workItem from="1626210949786" duration="274000" />
     </task>
     <task id="LOCAL-00002" summary="Moved a few things">
       <created>1580468534533</created>
@@ -781,7 +779,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625608499312</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages">
+      <created>1625608878832</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1625608878833</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -827,7 +832,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="Added readme.md" />
     <MESSAGE value="Updating readme.md" />
     <MESSAGE value="v2.1.1&#10;Bug Fixes:&#10; - Fixed an issue where setup would not properly complete with newer MC server versions.&#10; - Fixed a bug where when using MySQL, the database tables would not correctly generate." />
     <MESSAGE value="v2.1.2&#10;Bug Fixes:&#10; - Fixed a bug where holograms would not properly delete themselves from the database resulting in regeneration after a server restart.&#10; - Fixed a bug where updating the hologram would only remove the first line, leaving all other lines active resulting in duplicate entries into the hologram." />
@@ -852,6 +856,7 @@
     <MESSAGE value="v2.5.1: Bug fixes&#10;- Fixed a bug where when creating a hologram, parkour ID's would not work.&#10;- Fixed a bug where holograms would cause an error when trying to refresh them after a parkour was completed." />
     <MESSAGE value="v2.5.2: VoidSpawn compatibility update and bug fixes&#10;- Fixed a bug where /parkour delete wouldn't delete all data and could cause errors.&#10;- Fixed a bug where leaving the parkour would not give items back properly.&#10;- Fixed duplicate messages sometimes being sent when teleporting.&#10;- Fixed a bug where admin permissions were granted to all users by default.&#10;- Added a new compatibility mode for VoidSpawn (enable in the config, recommended to keep disabled)&#10;- Got rid of some duplicate code." />
     <MESSAGE value="v2.5.3: Bug Fix&#10;- Fixed VoidSpawn compatibility in older versions.&#10;- Fixed wrong default value." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.5.3: Bug Fix&#10;- Fixed VoidSpawn compatibility in older versions.&#10;- Fixed wrong default value." />
+    <MESSAGE value="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages" />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages" />
   </component>
 </project>

@@ -1,6 +1,6 @@
 name: HubParkour
 main: me.block2block.hubparkour.Main
-version: "2.5.3"
+version: "2.5.4"
 author: Block2Block
 prefix: HubParkour
 load: POSTWORLD

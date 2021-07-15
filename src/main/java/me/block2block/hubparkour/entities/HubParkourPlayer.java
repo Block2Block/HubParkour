@@ -247,9 +247,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             Map<String, String> bindings = new HashMap<>();
             bindings.put("new-time", ConfigUtil.formatTime(splitMs));
             if (splitTimes.containsKey(check)) {
-                bindings.put("old-time", ConfigUtil.formatTime(splitTimes.get(check)));
-                if (splitTimes.get(check) > splitMs) {
-                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Split-Time.Beat-Split-Time", "You have reached reached the finish point in &a{new-time}s&r and beat your personal best of &a{old-time}s&r!", true, bindings);
+                long oldSplit = splitTimes.get(check);
+                bindings.put("old-time", ConfigUtil.formatTime(oldSplit));
+                if (oldSplit > splitMs) {
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Split-Time.Beat-Split-Time", "You have reached the finish point in &a{new-time}s&r and beat your personal best of &a{old-time}s&r!", true, bindings);
                     int finalCheck = check;
                     new BukkitRunnable() {
                         @Override
@@ -258,7 +259,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                         }
                     }.runTaskAsynchronously(Main.getInstance());
                 } else {
-                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Split-Time.Not-Beat-Split-Time", "You have reached reached the finish point in &a{new-time}s&r (personal best: {old-time}s)!", true, bindings);
+                    ConfigUtil.sendMessage(player, "Messages.Parkour.End.Split-Time.Not-Beat-Split-Time", "You have reached the finish point in &a{new-time}s&r (personal best: {old-time}s)!", true, bindings);
                 }
             } else {
                 ConfigUtil.sendMessage(player, "Messages.Parkour.End.Split-Time.New-Split-Time", "You have reached the finish point in &a{new-time}s&r!", true, bindings);
@@ -291,7 +292,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
                             bindings.clear();
                             bindings.put("position","" + position);
-                            bindings.put("suffix",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))));
+                            bindings.put("suffix",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?((position == 13)?"th":"rd"):"th"))));
                             bindings.put("parkour-name",parkour.getName());
 
                             ConfigUtil.sendMessage(player, "Messages.Parkour.Leaderboard.Leaderboard-Place", "You are in &a{position}{suffix} place&r for the &a{parkour-name}&r parkour!", true, bindings);
@@ -313,7 +314,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                             int position = Main.getInstance().getDbManager().leaderboardPosition(player, parkour);
                             bindings.clear();
                             bindings.put("position","" + position);
-                            bindings.put("suffix",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?"rd":"th"))));
+                            bindings.put("suffix",((position % 10 == 1)?"st":((position % 10 == 2)?"nd":((position % 10 == 3)?((position == 13)?"th":"rd"):"th"))));
                             bindings.put("parkour-name",parkour.getName());
 
                             ConfigUtil.sendMessage(player, "Messages.Parkour.Leaderboard.Leaderboard-Place", "You are in &a{position}{suffix} place&r for the &a{parkour-name}&r parkour!", true, bindings);

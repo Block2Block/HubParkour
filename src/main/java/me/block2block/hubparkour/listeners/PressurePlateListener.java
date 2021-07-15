@@ -178,6 +178,7 @@ public class PressurePlateListener implements Listener {
                                             p.setGliding(false);
                                         }
                                     }
+                                    player.giveItems();
 
                                     Map<String, String> bindings = new HashMap<>();
                                     bindings.put("parkour-name", parkour.getName());

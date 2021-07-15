@@ -241,8 +241,8 @@ Messages:
     End:
       Split-Time:
         New-Split-Time: "You have reached the finish point in &a{new-time}s&r!"
-        Beat-Split-Time: "You have reached reached the finish point in &a{new-time}s&r and beat your personal best of &a{old-time}s&r!"
-        Not-Beat-Split-Time: "You have reached reached the finish point in &a{new-time}s&r (personal best: {old-time}s)!"
+        Beat-Split-Time: "You have reached the finish point in &a{new-time}s&r and beat your personal best of &a{old-time}s&r!"
+        Not-Beat-Split-Time: "You have reached the finish point in &a{new-time}s&r (personal best: {old-time}s)!"
       Beat-Previous-Personal-Best: "You beat your previous record and you managed to complete the &a{parkour-name} &rparkour in &a{time} &rseconds!"
       Not-Beat-Previous-Personal-Best: "You didn't beat your previous record, but you managed to complete the &a{parkour-name} &rparkour in &a{time} &rseconds!"
       First-Time: "Well done! You completed the &a{parkour-name}&r parkour in &a{time}&r seconds! Your reward will be applied shortly!"

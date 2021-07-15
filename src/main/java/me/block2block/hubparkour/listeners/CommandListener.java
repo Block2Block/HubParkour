@@ -17,7 +17,7 @@ public class CommandListener implements Listener {
         if (CacheManager.isParkour(e.getPlayer())) {
             ArrayList<String> args = new ArrayList<>(Arrays.asList(e.getMessage().split(" ")));
             String commandLabel = args.remove(0).substring(1);
-            if (!commandLabel.equalsIgnoreCase("parkour") && !commandLabel.equalsIgnoreCase("pk")) {
+            if (!commandLabel.equalsIgnoreCase("parkour") && !commandLabel.equalsIgnoreCase("pk") && !commandLabel.equalsIgnoreCase("hubparkour:parkour") && !commandLabel.equalsIgnoreCase("hubparkour:pk")) {
                 if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Block-Commands", true)) {
                     e.setCancelled(true);
                     ConfigUtil.sendMessage(e.getPlayer(), "Messages.Parkour.Cannot-Execute-Commands", "You cannot execute commands from other plugins while doing a parkour. To leave your current parkour, do /parkour leave.", true, Collections.emptyMap());

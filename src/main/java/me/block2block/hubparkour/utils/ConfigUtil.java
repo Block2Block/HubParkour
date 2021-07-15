@@ -196,6 +196,7 @@ public class ConfigUtil {
         }
 
         if (format.contains("mm")) {
+
             minutes = ms / 60000;
             ms -= (minutes * 60000);
         }
@@ -205,7 +206,7 @@ public class ConfigUtil {
             ms -= (seconds * 1000);
         }
 
-        return format.replace("hh", hours + "").replace("mm", minutes + "").replace("ss", seconds + "").replace("MMM", ms + "");
+        return format.replace("hh", hours + "").replace("mm", minutes + "").replace("ss", seconds + "").replace("MMM", ((ms < 100)?((ms < 10)?"00":"0"):"") + ms);
     }
 
     public static void reload() {

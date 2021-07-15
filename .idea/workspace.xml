@@ -16,8 +16,17 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.5.4: Bug Fix&#10;- Fixed a bug where leaderboard holograms would generate an error when refreshed after a user has completed the parkour">
+      <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/CommandListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/CommandListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/ConfigUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/ConfigUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_13.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config1_13.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_8.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config1_8.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -442,13 +451,9 @@
       <workItem from="1625936107255" duration="1505000" />
       <workItem from="1626027801878" duration="13000" />
       <workItem from="1626210949786" duration="274000" />
-    </task>
-    <task id="LOCAL-00002" summary="Moved a few things">
-      <created>1580468534533</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1580468534533</updated>
+      <workItem from="1626371245421" duration="1163000" />
+      <workItem from="1626375986310" duration="3958000" />
+      <workItem from="1626381508422" duration="306000" />
     </task>
     <task id="LOCAL-00003" summary="Finished off the plugin ready for testing">
       <created>1580848722679</created>
@@ -786,7 +791,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625608878833</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="v2.5.4: Bug Fix&#10;- Fixed a bug where leaderboard holograms would generate an error when refreshed after a user has completed the parkour">
+      <created>1626371533677</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1626371533677</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -832,7 +844,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="Updating readme.md" />
     <MESSAGE value="v2.1.1&#10;Bug Fixes:&#10; - Fixed an issue where setup would not properly complete with newer MC server versions.&#10; - Fixed a bug where when using MySQL, the database tables would not correctly generate." />
     <MESSAGE value="v2.1.2&#10;Bug Fixes:&#10; - Fixed a bug where holograms would not properly delete themselves from the database resulting in regeneration after a server restart.&#10; - Fixed a bug where updating the hologram would only remove the first line, leaving all other lines active resulting in duplicate entries into the hologram." />
     <MESSAGE value="v2.1.2&#10;Bug Fixes:&#10; - Fixed a bug where holograms would not properly delete themselves from the database resulting in regeneration after a server restart.&#10; - Fixed a bug where updating the hologram would only remove the first line, leaving all other lines active resulting in duplicate entries into the hologram." />
@@ -857,6 +868,7 @@
     <MESSAGE value="v2.5.2: VoidSpawn compatibility update and bug fixes&#10;- Fixed a bug where /parkour delete wouldn't delete all data and could cause errors.&#10;- Fixed a bug where leaving the parkour would not give items back properly.&#10;- Fixed duplicate messages sometimes being sent when teleporting.&#10;- Fixed a bug where admin permissions were granted to all users by default.&#10;- Added a new compatibility mode for VoidSpawn (enable in the config, recommended to keep disabled)&#10;- Got rid of some duplicate code." />
     <MESSAGE value="v2.5.3: Bug Fix&#10;- Fixed VoidSpawn compatibility in older versions.&#10;- Fixed wrong default value." />
     <MESSAGE value="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages" />
+    <MESSAGE value="v2.5.4: Bug Fix&#10;- Fixed a bug where leaderboard holograms would generate an error when refreshed after a user has completed the parkour" />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.5.4: Bug Fix&#10;- Fixed a bug where leaderboard holograms would generate an error when refreshed after a user has completed the parkour" />
   </component>
 </project>

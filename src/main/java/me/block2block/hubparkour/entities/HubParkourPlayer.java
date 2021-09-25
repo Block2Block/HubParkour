@@ -203,7 +203,11 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Not-Enough-Checkpoints", "You did not reach enough checkpoints, parkour failed!", true, Collections.emptyMap());
                     parkour.playerEnd(this);
                     if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-                        player.setHealth(prevHealth);
+                        double health = prevHealth;
+                        if (health > player.getMaxHealth()) {
+                            health = player.getMaxHealth();
+                        }
+                        player.setHealth(health);
                     }
                     if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
                         player.setFoodLevel(prevHunger);
@@ -367,7 +371,11 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         removeItems();
         parkour.playerEnd(this);
         if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-            player.setHealth(prevHealth);
+            double health = prevHealth;
+            if (health > player.getMaxHealth()) {
+                health = player.getMaxHealth();
+            }
+            player.setHealth(health);
         }
         if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
             player.setFoodLevel(prevHunger);
@@ -469,7 +477,11 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             player.setGameMode(prevGamemode);
         }
         if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-            player.setHealth(prevHealth);
+            double health = prevHealth;
+            if (health > player.getMaxHealth()) {
+                health = player.getMaxHealth();
+            }
+            player.setHealth(health);
         }
         if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
             player.setFoodLevel(prevHunger);

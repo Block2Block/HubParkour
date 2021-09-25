@@ -797,7 +797,7 @@ public class DatabaseManager {
 
     public long getRecordTime(Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` DESC");
+            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC");
             statement.setInt(1, parkour.getId());
             ResultSet set = statement.executeQuery();
             if (set.next()) {
@@ -815,7 +815,7 @@ public class DatabaseManager {
 
     public String getRecordHolder(Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` DESC");
+            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC");
             statement.setInt(1, parkour.getId());
             ResultSet set = statement.executeQuery();
             if (set.next()) {

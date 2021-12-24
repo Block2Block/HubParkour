@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AnalysisUIOptions">
-    <option name="SCOPE_TYPE" value="3" />
+    <option name="SCOPE_TYPE" value="4" />
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
@@ -16,10 +16,90 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.5.5: More bug fixes&#10;- Fixed a bug where starting a new parkour while already in one would not give you the parkour items.&#10;- Fixed a bug where when the milliseconds was less than 100/10, 0's would be missing from the times resulting in times appearing wrong.&#10;- Fixed a bug where when including the plugin in a command, HubParkour commands were not whitelisted from command blocking.&#10;- Fixed some default config messages having &quot;reached&quot; twice.">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.5.6: Placeholder and health bugfixes.&#10;- Fixed a bug with the besttime and recordholder placeholders showing last instead of first place.&#10;- Fixed a bug with the plugin when setting health after finishing a parkour when the player had more than normal health when starting the parkour.">
+      <change afterPath="$PROJECT_DIR$/.idea/HubParkour.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/hubparkour-api.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/BackendAPI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/ParkourRun.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerTogglePlayersEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/items/HideItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/items/ShowItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/plates/RestartPoint.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/signs/ClickableSign.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/plugin.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkourAPIImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Statistics.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/JoinListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/SignListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/signs/StartClickableSign.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/signs/StatsClickableSign.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/signs/TeleportClickableSign.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/HubParkourAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/HubParkourAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/IHubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/ILeaderboardHologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/ILeaderboardHologram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/IParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/IParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/ParkourEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/ParkourEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourDeleteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourDeleteEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourSetupEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourSetupEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerCheckpointEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerCheckpointEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerFailEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerFailEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerFinishEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerFinishEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerLeaveEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerLeaveEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerStartEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerStartEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerTeleportEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerTeleportEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/items/CancelItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/items/CancelItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/items/CheckpointItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/items/CheckpointItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/items/ParkourItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/items/ParkourItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/items/ResetItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/items/ResetItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/Checkpoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/plates/Checkpoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/EndPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/plates/EndPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/PressurePlate.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/plates/PressurePlate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/RestartPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/plates/BorderPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/api/plates/StartPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/plates/StartPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/commands/ParkourTabComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/ParkourTabComplete.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/EditWizard.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/EditWizard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/entities/SetupWizard.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/SetupWizard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/BreakListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/BreakListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/CommandListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/CommandListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ElytraListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/ElytraListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/FlyListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/HungerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/HungerListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/LeaveListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/LeaveListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/MountListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/MountListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PotionListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/PotionListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/SetupListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/ConfigUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/ConfigUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/HubParkourExpansion.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/HubParkourExpansion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/ItemUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/ItemUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/TitleUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/TitleUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/block2block/hubparkour/utils/database/MySQLConnectionPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/database/MySQLConnectionPool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_13.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/config1_13.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config1_8.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/config1_8.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +188,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
@@ -132,7 +215,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
+    <property name="jdk.selected.JAVA_MODULE" value="11" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -142,27 +226,32 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="me.block2block.hubparkour.api.items" />
-      <recent name="me.block2block.hubparkour.api.events.admin" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Java Projects\HubParkour\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Programming Projects\Java\HubParkour\plugin\src\main\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="me.block2block.hubparkour.signs" />
+      <recent name="me.block2block.hubparkour.api.plates" />
+      <recent name="me.block2block.hubparkour.api.items" />
+      <recent name="me.block2block.hubparkour.api.events.admin" />
     </key>
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
-      <command value="mvn clean package -Xlint:deprecation" />
       <command value="mvn deploy" />
-      <command value="mvn clean package deploy" />
+      <command value="mvn clean package -Xlint:deprecation" />
       <command value="mvn clean package" />
+      <command value="mvn clean package deploy" />
     </option>
   </component>
   <component name="RunManager">
@@ -462,13 +551,23 @@
       <workItem from="1630508009971" duration="52000" />
       <workItem from="1632163490995" duration="78000" />
       <workItem from="1632592286030" duration="134000" />
-    </task>
-    <task id="LOCAL-00004" summary="Finished off the plugin ready for testing">
-      <created>1580848756300</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1580848756300</updated>
+      <workItem from="1632592783214" duration="367000" />
+      <workItem from="1632593164560" duration="34000" />
+      <workItem from="1632594437515" duration="2000" />
+      <workItem from="1639420186779" duration="3554000" />
+      <workItem from="1639424398950" duration="1446000" />
+      <workItem from="1639493661187" duration="17332000" />
+      <workItem from="1639585451601" duration="7354000" />
+      <workItem from="1639762172417" duration="5642000" />
+      <workItem from="1639767872371" duration="2152000" />
+      <workItem from="1639770063699" duration="1128000" />
+      <workItem from="1639849720693" duration="3386000" />
+      <workItem from="1639931206824" duration="593000" />
+      <workItem from="1640021543398" duration="595000" />
+      <workItem from="1640189840773" duration="1814000" />
+      <workItem from="1640277224247" duration="8639000" />
+      <workItem from="1640353262339" duration="8616000" />
+      <workItem from="1640362386397" duration="8126000" />
     </task>
     <task id="LOCAL-00005" summary="Added travis CI, optimised imports">
       <created>1581070072254</created>
@@ -806,7 +905,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626381931161</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="v2.5.6: Placeholder and health bugfixes.&#10;- Fixed a bug with the besttime and recordholder placeholders showing last instead of first place.&#10;- Fixed a bug with the plugin when setting health after finishing a parkour when the player had more than normal health when starting the parkour.">
+      <created>1632593002908</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1632593002908</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -846,13 +952,11 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.1.2&#10;Bug Fixes:&#10; - Fixed a bug where holograms would not properly delete themselves from the database resulting in regeneration after a server restart.&#10; - Fixed a bug where updating the hologram would only remove the first line, leaving all other lines active resulting in duplicate entries into the hologram." />
     <MESSAGE value="v2.1.2&#10;Bug Fixes:&#10; - Fixed a bug where holograms would not properly delete themselves from the database resulting in regeneration after a server restart.&#10; - Fixed a bug where updating the hologram would only remove the first line, leaving all other lines active resulting in duplicate entries into the hologram." />
     <MESSAGE value="Bug fixes&#10; - Fixed a bug where if a checkpoint was achieved twice (by going onto the pressure plate twice), the plugin no longer things you haven't completed all of the checkpoints.&#10; - Patched an exploit which would allow a user to use /parkour checkpoint after restarting the parkour to achieve quicker parkour times." />
     <MESSAGE value="Minecraft 1.16 Support" />
@@ -877,6 +981,7 @@
     <MESSAGE value="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages" />
     <MESSAGE value="v2.5.4: Bug Fix&#10;- Fixed a bug where leaderboard holograms would generate an error when refreshed after a user has completed the parkour" />
     <MESSAGE value="v2.5.5: More bug fixes&#10;- Fixed a bug where starting a new parkour while already in one would not give you the parkour items.&#10;- Fixed a bug where when the milliseconds was less than 100/10, 0's would be missing from the times resulting in times appearing wrong.&#10;- Fixed a bug where when including the plugin in a command, HubParkour commands were not whitelisted from command blocking.&#10;- Fixed some default config messages having &quot;reached&quot; twice." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.5.5: More bug fixes&#10;- Fixed a bug where starting a new parkour while already in one would not give you the parkour items.&#10;- Fixed a bug where when the milliseconds was less than 100/10, 0's would be missing from the times resulting in times appearing wrong.&#10;- Fixed a bug where when including the plugin in a command, HubParkour commands were not whitelisted from command blocking.&#10;- Fixed some default config messages having &quot;reached&quot; twice." />
+    <MESSAGE value="v2.5.6: Placeholder and health bugfixes.&#10;- Fixed a bug with the besttime and recordholder placeholders showing last instead of first place.&#10;- Fixed a bug with the plugin when setting health after finishing a parkour when the player had more than normal health when starting the parkour." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.5.6: Placeholder and health bugfixes.&#10;- Fixed a bug with the besttime and recordholder placeholders showing last instead of first place.&#10;- Fixed a bug with the plugin when setting health after finishing a parkour when the player had more than normal health when starting the parkour." />
   </component>
 </project>

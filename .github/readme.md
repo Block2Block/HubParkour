@@ -17,19 +17,21 @@ Maven:
 <repositories>
        <repository>
             <id>hp-repo</id>
-            <url>http://nexus.block2block.me/repository/HubParkour/</url>
+            <url>https://nexus.block2block.me/repository/HubParkour/</url>
         </repository>
 </repositories>
 
 <dependencies>
     <dependency>
-        <groupId>me.block2block</groupId>
-        <artifactId>HubParkour</artifactId>
-        <version>2.5.6</version>
+        <groupId>me.block2block.hubparkour</groupId>
+        <artifactId>hubparkour-api</artifactId>
+        <version>2.6</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
 ```
+
+Note: in future releases, the API version numbers will not match with the update version of the plugin. Check this page for the latest version number, or check Nexus for all available versions.
 
 ### Usage
 
@@ -40,8 +42,8 @@ There are also several Events that come as a part of the plugin that can be list
 ### Example
 
 ```java
-import me.block2block.hubparkour.api.HubParkourAPI;
-import me.block2block.hubparkour.api.events.player.ParkourPlayerStartEvent;
+import me.block2block.api.HubParkourAPI;
+import me.block2block.api.events.player.ParkourPlayerStartEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

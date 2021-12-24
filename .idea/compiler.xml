@@ -6,9 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="plugin" />
         <module name="HubParkourRewrite" />
-        <module name="HubParkour" />
+        <module name="hubparkour-api" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="HubParkour" target="1.8" />
+      <module name="hubparkour-root" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

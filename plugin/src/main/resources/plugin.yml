@@ -1,0 +1,98 @@
+name: HubParkour
+main: me.block2block.hubparkour.HubParkour
+version: "2.6"
+author: Block2Block
+website: https://block2block.me/
+description: This is an all-in-one lightweight Parkour plugin for your Hub server!
+database: true
+prefix: HubParkour
+load: POSTWORLD
+api-version: "1.13"
+softdepend: [HolographicDisplays, PlaceholderAPI, Multiverse-Core]
+commands:
+  parkour:
+    aliases: [pk]
+    description: The plugins main commands.
+permissions:
+  hubparkour.command.reset:
+    default: true
+    description: Allows access to the /parkour reset command.
+  hubparkour.command.checkpoint:
+    default: true
+    description: Allows access to the /parkour checkpoint command.
+  hubparkour.command.leave:
+    default: true
+    description: Allows access to the /parkour leave command.
+  hubparkour.command.leaderboard:
+    default: true
+    description: Allows access to the /parkour leaderboard command.
+  hubparkour.command.teleport:
+    default: true
+    description: Allows access to the /parkour teleport command.
+  hubparkour.command.stats:
+    default: true
+    description: Allows access to the /parkour stats command.
+  hubparkour.command.*:
+    default: true
+    description: Allows access to all player non-admin commands of HubParkour.
+    children:
+      hubparkour.command.reset: true
+      hubparkour.command.checkpoint: true
+      hubparkour.command.leave: true
+      hubparkour.command.leaderboard: true
+      hubparkour.command.teleport: true
+      hubparkour.command.stats: true
+  hubparkour.admin.setup:
+    default: op
+    description: Allows access to the /parkour setup command and setup related commands.
+  hubparkour.admin.signs:
+    default: op
+    description: Allows place HubParkour signs.
+  hubparkour.admin.delete:
+    default: op
+    description: Allows access to the /parkour delete command.
+  hubparkour.admin.list:
+    default: op
+    description: Allows access to the /parkour list command.
+  hubparkour.admin.hologram:
+    default: op
+    description: Allows access to the /parkour hologram command.
+  hubparkour.admin.removetime:
+    default: op
+    description: Allows access to the /parkour removetime command.
+  hubparkour.admin.cleartimes:
+    default: op
+    description: Allows access to the /parkour cleartimes command.
+  hubparkour.admin.resetalltimes:
+    default: op
+    description: Allows access to the /parkour resetalltimes command.
+  hubparkour.admin.resettimes:
+    default: op
+    description: Allows access to the /parkour resettimes command.
+  hubparkour.admin.edit:
+    default: op
+    description: Allows access to the /parkour edit command.
+  hubparkour.admin.reload:
+    default: op
+    description: Allows access to the /parkour reload command.
+  hubparkour.admin.*:
+    default: op
+    description: Allows access to all admin commands of HubParkour.
+    children:
+      hubparkour.admin.setup: true
+      hubparkour.admin.signs: true
+      hubparkour.admin.delete: true
+      hubparkour.admin.list: true
+      hubparkour.admin.hologram: true
+      hubparkour.admin.removetime: true
+      hubparkour.admin.cleartimes: true
+      hubparkour.admin.edit: true
+      hubparkour.admin.reload: true
+      hubparkour.admin.resettimes: true
+      hubparkour.admin.resetalltimes: true
+  hubparkour.*:
+    default: op
+    description: Allows access to all admin commands of HubParkour.
+    children:
+      hubparkour.admin.*: true
+      hubparkour.commands.*: true

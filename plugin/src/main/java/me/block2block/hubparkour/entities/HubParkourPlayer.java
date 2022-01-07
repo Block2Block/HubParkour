@@ -340,7 +340,12 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                                             return;
                                         }
                                     }
-                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                     new BukkitRunnable(){
+                                         @Override
+                                         public void run() {
+                                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                         }
+                                     }.runTask(HubParkour.getInstance());
                                     HubParkour.getInstance().getDbManager().updateTimestamp(player.getUniqueId(), parkour.getId(), -1, timestamp);
                                 }
                             }.runTaskAsynchronously(HubParkour.getInstance());
@@ -410,7 +415,12 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                                             return;
                                         }
                                     }
-                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                        }
+                                    }.runTask(HubParkour.getInstance());
                                     HubParkour.getInstance().getDbManager().updateTimestamp(player.getUniqueId(), parkour.getId(), -1, timestamp);
                                 }
                             }.runTaskAsynchronously(HubParkour.getInstance());

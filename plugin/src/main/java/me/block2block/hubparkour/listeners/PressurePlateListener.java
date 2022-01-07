@@ -14,6 +14,7 @@ import org.apache.commons.lang3.Range;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -128,6 +129,26 @@ public class PressurePlateListener implements Listener {
                     e.getPlayer().teleport(l);
                     ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                     return;
+                }
+            } else if (!HubParkour.isPre1_13()) {
+                if (e.getTo().getBlock().getBlockData() instanceof Waterlogged) {
+                    Waterlogged waterlogged = (Waterlogged) e.getTo().getBlock().getBlockData();
+                    if (waterlogged.isWaterlogged() && ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
+                        HubParkourPlayer player = CacheManager.getPlayer(e.getPlayer());
+
+                        Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                        if (player.getLastReached() != 0) {
+                            l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                        }
+                        l.setX(l.getX() + 0.5);
+                        l.setY(l.getY() + 0.5);
+                        l.setZ(l.getZ() + 0.5);
+                        e.getPlayer().setFallDistance(0);
+                        e.getPlayer().setVelocity(new Vector(0, 0, 0));
+                        e.getPlayer().teleport(l);
+                        ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
+                        return;
+                    }
                 }
             }
             {

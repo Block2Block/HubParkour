@@ -1186,7 +1186,7 @@ public class DatabaseManager {
                 statement.setInt(4, checkpoint);
                 statement.execute();
             } else {
-                statement = connection.prepareStatement("INSERT INTO hp_rewardtimestamps VALUES (?, ?, ?, ?,)");
+                statement = connection.prepareStatement("INSERT INTO hp_rewardtimestamps VALUES (?, ?, ?, ?)");
                 statement.setString(1, uuid.toString());
                 statement.setInt(2, id);
                 statement.setInt(3, checkpoint);

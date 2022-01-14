@@ -16,12 +16,8 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6: Parkour signs, borders, hide players and more!&#10;- 1.18 version support.&#10;- Version support should now be automatic, unless changes are needed due to API changes.&#10;- New parkour statistics feature.&#10;- New positional placeholders for PlaceholderAPI&#10;- 2 new admin commands to reset all of the times of a specific player on all parkours, or for all players on all parkours.&#10;- New ability to hide/show players while in a parkour.&#10;- New parkour borders, which teleports the user back when they fall outside of it.&#10;- New HubParkour signs for teleporting to, starting and getting stats for specific parkours.&#10;- New rewards cooldown feature to set a cooldown for rewards.&#10;- The developer API has be rejigged so that only the API is exposed to the developer unless the JAR is added directly as a library in your IDE to aid development.&#10;- The organisation of the source code has been moved around, so as to aid the deployment of the API.&#10;- Fixed a bug where commands were case sensitive.&#10;- Fixed a bug where the wrong permission nodes were being used for /parkour input, /parkour done and /parkour cancel.&#10;- Fixed a bug when editing a parkour name.&#10;- Fixed a bug with SSL requirements with MySQL would cause the plugin not to load.&#10;- Fixed a bug where a user would receive double rewards if they completed the parkour for the first time.">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6.1: Bug fixes&#10;- Fixed a bug where commands would not get executed properly for rewards.&#10;- Fixed a bug where waterlogged blocks would not count as water when Teleport-On-Water is enabled.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -494,14 +490,12 @@
       <workItem from="1640802551715" duration="139000" />
       <workItem from="1640888741352" duration="1764000" />
       <workItem from="1641036705997" duration="14000" />
-      <workItem from="1641559592086" duration="455000" />
-    </task>
-    <task id="LOCAL-00006" summary="After testing myself, fixed several bugs. Awaiting external testing.">
-      <created>1581240077702</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1581240077702</updated>
+      <workItem from="1641559592086" duration="1195000" />
+      <workItem from="1641567201454" duration="1000" />
+      <workItem from="1641567847900" duration="1000" />
+      <workItem from="1641567873093" duration="1000" />
+      <workItem from="1641743183470" duration="37000" />
+      <workItem from="1642000688741" duration="2000" />
     </task>
     <task id="LOCAL-00007" summary="Fixing issues with setup, fixing some minor formatting issues">
       <created>1581349742657</created>
@@ -839,7 +833,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640370858585</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="v2.6.1: Bug fixes&#10;- Fixed a bug where commands would not get executed properly for rewards.&#10;- Fixed a bug where waterlogged blocks would not count as water when Teleport-On-Water is enabled.">
+      <created>1641560131329</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1641560131329</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -884,7 +885,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="Bug fixes&#10; - Fixed a bug where if a checkpoint was achieved twice (by going onto the pressure plate twice), the plugin no longer things you haven't completed all of the checkpoints.&#10; - Patched an exploit which would allow a user to use /parkour checkpoint after restarting the parkour to achieve quicker parkour times." />
     <MESSAGE value="Minecraft 1.16 Support" />
     <MESSAGE value="v2.2&#10; - New Elytra and Teleportation exploit prevention (toggleable).&#10; - New Parkour Items in the hotbar.&#10; - Parkour checkpoints and restart points now take into account direction when setting up the parkour.&#10; - Added new /parkour removetime to allow you to remove people from the leaderboard.&#10; - Added new options in the config to allow users to start a new parkour when they are already in one.&#10; - Potion effects are removed when starting the parkour (toggleable).&#10; - Flying and gliding with Elytras is now toggled off when starting the parkour (toggleable).&#10; - Change MySQL connection handling to stop the server trying to keep 1 connection going continuously.&#10; - Fixed a bug where the plugin would insert the restart point twice into the Database.&#10; - Lots of misc improvements." />
     <MESSAGE value="Slight fix for Travis CI Build management" />
@@ -909,6 +909,7 @@
     <MESSAGE value="v2.5.5: More bug fixes&#10;- Fixed a bug where starting a new parkour while already in one would not give you the parkour items.&#10;- Fixed a bug where when the milliseconds was less than 100/10, 0's would be missing from the times resulting in times appearing wrong.&#10;- Fixed a bug where when including the plugin in a command, HubParkour commands were not whitelisted from command blocking.&#10;- Fixed some default config messages having &quot;reached&quot; twice." />
     <MESSAGE value="v2.5.6: Placeholder and health bugfixes.&#10;- Fixed a bug with the besttime and recordholder placeholders showing last instead of first place.&#10;- Fixed a bug with the plugin when setting health after finishing a parkour when the player had more than normal health when starting the parkour." />
     <MESSAGE value="v2.6: Parkour signs, borders, hide players and more!&#10;- 1.18 version support.&#10;- Version support should now be automatic, unless changes are needed due to API changes.&#10;- New parkour statistics feature.&#10;- New positional placeholders for PlaceholderAPI&#10;- 2 new admin commands to reset all of the times of a specific player on all parkours, or for all players on all parkours.&#10;- New ability to hide/show players while in a parkour.&#10;- New parkour borders, which teleports the user back when they fall outside of it.&#10;- New HubParkour signs for teleporting to, starting and getting stats for specific parkours.&#10;- New rewards cooldown feature to set a cooldown for rewards.&#10;- The developer API has be rejigged so that only the API is exposed to the developer unless the JAR is added directly as a library in your IDE to aid development.&#10;- The organisation of the source code has been moved around, so as to aid the deployment of the API.&#10;- Fixed a bug where commands were case sensitive.&#10;- Fixed a bug where the wrong permission nodes were being used for /parkour input, /parkour done and /parkour cancel.&#10;- Fixed a bug when editing a parkour name.&#10;- Fixed a bug with SSL requirements with MySQL would cause the plugin not to load.&#10;- Fixed a bug where a user would receive double rewards if they completed the parkour for the first time." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.6: Parkour signs, borders, hide players and more!&#10;- 1.18 version support.&#10;- Version support should now be automatic, unless changes are needed due to API changes.&#10;- New parkour statistics feature.&#10;- New positional placeholders for PlaceholderAPI&#10;- 2 new admin commands to reset all of the times of a specific player on all parkours, or for all players on all parkours.&#10;- New ability to hide/show players while in a parkour.&#10;- New parkour borders, which teleports the user back when they fall outside of it.&#10;- New HubParkour signs for teleporting to, starting and getting stats for specific parkours.&#10;- New rewards cooldown feature to set a cooldown for rewards.&#10;- The developer API has be rejigged so that only the API is exposed to the developer unless the JAR is added directly as a library in your IDE to aid development.&#10;- The organisation of the source code has been moved around, so as to aid the deployment of the API.&#10;- Fixed a bug where commands were case sensitive.&#10;- Fixed a bug where the wrong permission nodes were being used for /parkour input, /parkour done and /parkour cancel.&#10;- Fixed a bug when editing a parkour name.&#10;- Fixed a bug with SSL requirements with MySQL would cause the plugin not to load.&#10;- Fixed a bug where a user would receive double rewards if they completed the parkour for the first time." />
+    <MESSAGE value="v2.6.1: Bug fixes&#10;- Fixed a bug where commands would not get executed properly for rewards.&#10;- Fixed a bug where waterlogged blocks would not count as water when Teleport-On-Water is enabled." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.6.1: Bug fixes&#10;- Fixed a bug where commands would not get executed properly for rewards.&#10;- Fixed a bug where waterlogged blocks would not count as water when Teleport-On-Water is enabled." />
   </component>
 </project>

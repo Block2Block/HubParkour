@@ -16,8 +16,8 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6.2: SQL Bugfix&#10;- Fixed a bug with SQL where timestamps for reward cooldowns wouldn't get pushed into the Database properly.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed.">
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -499,13 +499,7 @@
       <workItem from="1642154802242" duration="652000" />
       <workItem from="1642156764953" duration="134000" />
       <workItem from="1642347043956" duration="1210000" />
-    </task>
-    <task id="LOCAL-00008" summary="Added safeguard to prevent people from choosing the same location for 2 different points (besides the restart point)">
-      <created>1581350897788</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1581350897788</updated>
+      <workItem from="1642721849188" duration="858000" />
     </task>
     <task id="LOCAL-00009" summary="Version 2.0">
       <created>1581431988291</created>
@@ -843,7 +837,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642155044551</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed.">
+      <created>1642722038345</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1642722038346</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -888,7 +889,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.2&#10; - New Elytra and Teleportation exploit prevention (toggleable).&#10; - New Parkour Items in the hotbar.&#10; - Parkour checkpoints and restart points now take into account direction when setting up the parkour.&#10; - Added new /parkour removetime to allow you to remove people from the leaderboard.&#10; - Added new options in the config to allow users to start a new parkour when they are already in one.&#10; - Potion effects are removed when starting the parkour (toggleable).&#10; - Flying and gliding with Elytras is now toggled off when starting the parkour (toggleable).&#10; - Change MySQL connection handling to stop the server trying to keep 1 connection going continuously.&#10; - Fixed a bug where the plugin would insert the restart point twice into the Database.&#10; - Lots of misc improvements." />
     <MESSAGE value="Slight fix for Travis CI Build management" />
     <MESSAGE value="Whoops" />
     <MESSAGE value="v2.2.1&#10; - Fixed a bug where Yaw and Pitch would not push to the database properly.&#10; - Improved reliability of teleport exploit detection." />
@@ -913,6 +913,7 @@
     <MESSAGE value="v2.6: Parkour signs, borders, hide players and more!&#10;- 1.18 version support.&#10;- Version support should now be automatic, unless changes are needed due to API changes.&#10;- New parkour statistics feature.&#10;- New positional placeholders for PlaceholderAPI&#10;- 2 new admin commands to reset all of the times of a specific player on all parkours, or for all players on all parkours.&#10;- New ability to hide/show players while in a parkour.&#10;- New parkour borders, which teleports the user back when they fall outside of it.&#10;- New HubParkour signs for teleporting to, starting and getting stats for specific parkours.&#10;- New rewards cooldown feature to set a cooldown for rewards.&#10;- The developer API has be rejigged so that only the API is exposed to the developer unless the JAR is added directly as a library in your IDE to aid development.&#10;- The organisation of the source code has been moved around, so as to aid the deployment of the API.&#10;- Fixed a bug where commands were case sensitive.&#10;- Fixed a bug where the wrong permission nodes were being used for /parkour input, /parkour done and /parkour cancel.&#10;- Fixed a bug when editing a parkour name.&#10;- Fixed a bug with SSL requirements with MySQL would cause the plugin not to load.&#10;- Fixed a bug where a user would receive double rewards if they completed the parkour for the first time." />
     <MESSAGE value="v2.6.1: Bug fixes&#10;- Fixed a bug where commands would not get executed properly for rewards.&#10;- Fixed a bug where waterlogged blocks would not count as water when Teleport-On-Water is enabled." />
     <MESSAGE value="v2.6.2: SQL Bugfix&#10;- Fixed a bug with SQL where timestamps for reward cooldowns wouldn't get pushed into the Database properly." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.6.2: SQL Bugfix&#10;- Fixed a bug with SQL where timestamps for reward cooldowns wouldn't get pushed into the Database properly." />
+    <MESSAGE value="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed." />
   </component>
 </project>

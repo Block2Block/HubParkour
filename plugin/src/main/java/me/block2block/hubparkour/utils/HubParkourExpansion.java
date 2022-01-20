@@ -22,7 +22,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
 
     @Override
     public String getIdentifier() {
-        return "me/block2block/hubparkour";
+        return "hubparkour";
     }
 
     @Override

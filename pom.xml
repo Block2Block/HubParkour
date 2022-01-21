@@ -11,7 +11,7 @@
     <version>2.6</version>
 
     <modules>
-        <module>HubParkour-API</module>
+        <module>hubparkour-api</module>
         <module>plugin</module>
     </modules>
 

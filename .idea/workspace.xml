@@ -16,9 +16,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed.">
-      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.travis.yml" afterDir="false" />
-    </list>
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="whoops, this will fix travis" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -499,21 +497,7 @@
       <workItem from="1642154802242" duration="652000" />
       <workItem from="1642156764953" duration="134000" />
       <workItem from="1642347043956" duration="1210000" />
-      <workItem from="1642721849188" duration="858000" />
-    </task>
-    <task id="LOCAL-00009" summary="Version 2.0">
-      <created>1581431988291</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1581431988291</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Changed version from 2.0-ALPHA to 2.0">
-      <created>1581433087553</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1581433087553</updated>
+      <workItem from="1642721849188" duration="1208000" />
     </task>
     <task id="LOCAL-00011" summary="v2.0.1">
       <created>1581436588728</created>
@@ -844,7 +828,21 @@
       <option name="project" value="LOCAL" />
       <updated>1642722038346</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="Hopefully a fix for Travis">
+      <created>1642723001017</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1642723001017</updated>
+    </task>
+    <task id="LOCAL-00059" summary="whoops, this will fix travis">
+      <created>1642723206923</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1642723206923</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -889,8 +887,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="Slight fix for Travis CI Build management" />
-    <MESSAGE value="Whoops" />
     <MESSAGE value="v2.2.1&#10; - Fixed a bug where Yaw and Pitch would not push to the database properly.&#10; - Improved reliability of teleport exploit detection." />
     <MESSAGE value="v2.2.2&#10; - Added support for 1.16.2" />
     <MESSAGE value="v2.2.3&#10; - You can no longer drop parkour items.&#10; - You can now enable an option to clear inventory on parkour start.&#10; - Fixed a few issues with parkour items not being given, taken away or glitching. &#10; - Players leaving is now handled appropriately and patched an associated memory leak.&#10; - When loaded for the first time, there is no longer an issue with pressure plate and parkour item names being wrong, it changes based on your current version.&#10; - You can now have duplicate pressure plates (have more than 1 type with the same type of plate)&#10; - You can now have duplicate items (have more than 1 parkour item with the same material)" />
@@ -914,6 +910,8 @@
     <MESSAGE value="v2.6.1: Bug fixes&#10;- Fixed a bug where commands would not get executed properly for rewards.&#10;- Fixed a bug where waterlogged blocks would not count as water when Teleport-On-Water is enabled." />
     <MESSAGE value="v2.6.2: SQL Bugfix&#10;- Fixed a bug with SQL where timestamps for reward cooldowns wouldn't get pushed into the Database properly." />
     <MESSAGE value="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed." />
+    <MESSAGE value="Hopefully a fix for Travis" />
+    <MESSAGE value="whoops, this will fix travis" />
+    <option name="LAST_COMMIT_MESSAGE" value="whoops, this will fix travis" />
   </component>
 </project>

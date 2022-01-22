@@ -1,7 +1,7 @@
 package me.block2block.hubparkour.api.events.admin;
 
-import me.block2block.hubparkour.api.events.ParkourEvent;
 import me.block2block.hubparkour.api.IParkour;
+import me.block2block.hubparkour.api.events.ParkourEvent;
 import org.bukkit.entity.Player;
 
 /**

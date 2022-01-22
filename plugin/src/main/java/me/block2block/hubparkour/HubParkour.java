@@ -1,8 +1,8 @@
 package me.block2block.hubparkour;
 
 import me.block2block.hubparkour.api.BackendAPI;
-import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.api.plates.PressurePlate;
+import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;

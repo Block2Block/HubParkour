@@ -7,8 +7,6 @@ import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.signs.StartClickableSign;
 import me.block2block.hubparkour.signs.StatsClickableSign;
 import me.block2block.hubparkour.signs.TeleportClickableSign;
-import me.block2block.hubparkour.utils.ConfigUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;

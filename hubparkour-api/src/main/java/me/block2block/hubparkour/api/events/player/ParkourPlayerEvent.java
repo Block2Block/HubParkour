@@ -1,8 +1,8 @@
 package me.block2block.hubparkour.api.events.player;
 
 import me.block2block.hubparkour.api.IHubParkourPlayer;
-import me.block2block.hubparkour.api.events.ParkourEvent;
 import me.block2block.hubparkour.api.IParkour;
+import me.block2block.hubparkour.api.events.ParkourEvent;
 import org.bukkit.event.Cancellable;
 
 /**

@@ -1,9 +1,9 @@
 package me.block2block.hubparkour.listeners;
 
+import me.block2block.hubparkour.api.HubParkourAPI;
 import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
-import me.block2block.hubparkour.api.HubParkourAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

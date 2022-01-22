@@ -1,9 +1,9 @@
 package me.block2block.hubparkour.managers;
 
 import me.block2block.hubparkour.HubParkour;
+import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.api.signs.ClickableSign;
 import me.block2block.hubparkour.entities.*;
-import me.block2block.hubparkour.api.plates.PressurePlate;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

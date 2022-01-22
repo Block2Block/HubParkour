@@ -7,7 +7,6 @@ import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 
 public class JoinListener implements Listener {
 

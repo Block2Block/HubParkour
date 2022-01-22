@@ -8,9 +8,9 @@ import me.block2block.hubparkour.api.events.player.ParkourPlayerTogglePlayersEve
 import me.block2block.hubparkour.api.items.HideItem;
 import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.api.items.ShowItem;
+import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
-import me.block2block.hubparkour.entities.HubParkourPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

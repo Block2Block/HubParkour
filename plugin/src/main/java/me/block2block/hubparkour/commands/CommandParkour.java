@@ -1,10 +1,10 @@
 package me.block2block.hubparkour.commands;
 
+import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
 import me.block2block.hubparkour.api.events.admin.ParkourDeleteEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
-import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerLeaveEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerTeleportEvent;
 import me.block2block.hubparkour.api.plates.PressurePlate;

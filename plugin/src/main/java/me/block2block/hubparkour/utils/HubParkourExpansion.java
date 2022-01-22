@@ -1,9 +1,9 @@
 package me.block2block.hubparkour.utils;
 
 import me.block2block.hubparkour.HubParkour;
+import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
-import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -98,7 +98,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             if (parkour == null) {
                 return "Not a valid parkour";
             }
-            long ms = HubParkour.getInstance().getDbManager().getRecordTime(parkour);
+            long ms = HubParkour.getInstance().getDbManager().getPositionTime(parkour, position);
             if (ms == -1) {
                 return "Position not filled.";
             }
@@ -112,11 +112,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             if (parkour == null) {
                 return "Not a valid parkour";
             }
-            long ms = HubParkour.getInstance().getDbManager().getRecordTime(parkour);
-            if (ms == -1) {
-                return "Position not filled.";
-            }
-            return ConfigUtil.formatTime(ms);
+            return HubParkour.getInstance().getDbManager().getPositionHolder(parkour, position);
         }
 
         if (identifier.matches("^recordholder_[0-9]{1,10}$")) {

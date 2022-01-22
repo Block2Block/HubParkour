@@ -1,6 +1,5 @@
 package me.block2block.hubparkour.signs;
 
-import me.block2block.hubparkour.api.IParkour;
 import me.block2block.hubparkour.api.signs.ClickableSign;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.utils.ConfigUtil;

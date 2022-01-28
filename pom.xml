@@ -15,8 +15,12 @@
         <module>plugin</module>
     </modules>
 
-    <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-    </properties>
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Releases</name>
+            <url>https://nexus.block2block.me/repository/HubParkour/</url>
+        </repository>
+    </distributionManagement>
 
 </project>

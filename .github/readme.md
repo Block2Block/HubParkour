@@ -31,7 +31,7 @@ Maven:
 </dependencies>
 ```
 
-Note: in future releases, the API version numbers will not match with the update version of the plugin. Check this page for the latest version number, or check Nexus for all available versions.
+**Note:** Old versions of the API have been removed from Nexus as it was causing issues with the current deployment. Please update your API version.
 
 ### Usage
 

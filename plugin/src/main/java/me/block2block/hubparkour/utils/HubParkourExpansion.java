@@ -112,7 +112,11 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             if (parkour == null) {
                 return "Not a valid parkour";
             }
-            return HubParkour.getInstance().getDbManager().getPositionHolder(parkour, position);
+            String name = HubParkour.getInstance().getDbManager().getPositionHolder(parkour, position);
+            if (name == null) {
+                return "Position not filled";
+            }
+            return name;
         }
 
         if (identifier.matches("^recordholder_[0-9]{1,10}$")) {

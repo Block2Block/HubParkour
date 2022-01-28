@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AnalysisUIOptions">
-    <option name="SCOPE_TYPE" value="4" />
-  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
@@ -16,22 +13,12 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Fixed travis not getting the plugin jar properly">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports.">
+      <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourDeleteEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/admin/ParkourDeleteEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/events/player/ParkourPlayerEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/DropListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/ItemClickListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/JoinListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/JoinListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/SignListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/SignListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/signs/TeleportClickableSign.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/signs/TeleportClickableSign.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/HubParkourExpansion.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/HubParkourExpansion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,8 +169,8 @@
     <option name="myCommands">
       <command value="mvn deploy" />
       <command value="mvn clean package -Xlint:deprecation" />
-      <command value="mvn clean package deploy" />
       <command value="mvn clean package" />
+      <command value="mvn clean package deploy" />
     </option>
   </component>
   <component name="RunManager">
@@ -515,14 +502,11 @@
       <workItem from="1642347043956" duration="1210000" />
       <workItem from="1642721849188" duration="1957000" />
       <workItem from="1642795559444" duration="1072000" />
-      <workItem from="1642867566352" duration="650000" />
-    </task>
-    <task id="LOCAL-00012" summary="Updating version from 2.0 to 2.0.1">
-      <created>1581436683711</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1581436683711</updated>
+      <workItem from="1642867566352" duration="1185000" />
+      <workItem from="1642877262607" duration="697000" />
+      <workItem from="1643042753723" duration="2000" />
+      <workItem from="1643389356578" duration="985000" />
+      <workItem from="1643390903995" duration="342000" />
     </task>
     <task id="LOCAL-00013" summary="v2.0.2">
       <created>1581436892160</created>
@@ -860,7 +844,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642723406485</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports.">
+      <created>1642874119061</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1642874119061</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -905,8 +896,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.2.2&#10; - Added support for 1.16.2" />
-    <MESSAGE value="v2.2.3&#10; - You can no longer drop parkour items.&#10; - You can now enable an option to clear inventory on parkour start.&#10; - Fixed a few issues with parkour items not being given, taken away or glitching. &#10; - Players leaving is now handled appropriately and patched an associated memory leak.&#10; - When loaded for the first time, there is no longer an issue with pressure plate and parkour item names being wrong, it changes based on your current version.&#10; - You can now have duplicate pressure plates (have more than 1 type with the same type of plate)&#10; - You can now have duplicate items (have more than 1 parkour item with the same material)" />
     <MESSAGE value="v2.2.4&#10; - Added support for 1.16.4" />
     <MESSAGE value="v2.3&#10; - New edit mode to edit parkours that already exist.&#10; - New action bar to view parkour stats as you're doing the parkour.&#10; - New option to enable repeat rewards&#10; - Teleport on void and fall have now been separated in the config.&#10; - New Teleport on Water and Lava options.&#10; - New command to reset player times on specific parkours.&#10; - Players can no longer pick up items while in a parkour (toggle-able).&#10; - Players can no longer move parkour items out of their inventory.&#10; - New option to disable the ability to receive potion effects while doing a parkour (toggle-able). Due to limitations with the Spigot API, this option is only available to those who use server versions 1.13+.&#10; - New option to disable fall damage (only works when teleport on fall is disabled)&#10; - Modified how times are removed from the leaderboard (the time is now deleted completely from the Database)&#10; - Fixed a bug where if a player was in a parkour when the server restarted, they would not receive their inventory back.&#10; - Several API changes to accommodate Edit Mode (JavaDocs have already been updated).&#10; - Removed several unused imports." />
     <MESSAGE value="v2.3.1&#10; - Fixed a bug where the action bar messages would spam error messages in console and not work in newer version of Minecraft." />
@@ -930,6 +919,8 @@
     <MESSAGE value="Hopefully a fix for Travis" />
     <MESSAGE value="whoops, this will fix travis" />
     <MESSAGE value="Fixed travis not getting the plugin jar properly" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed travis not getting the plugin jar properly" />
+    <MESSAGE value="v2.6.4: Placeholder Bugfix" />
+    <MESSAGE value="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports." />
   </component>
 </project>

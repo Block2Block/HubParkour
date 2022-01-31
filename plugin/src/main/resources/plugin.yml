@@ -1,6 +1,6 @@
 name: HubParkour
 main: me.block2block.hubparkour.HubParkour
-version: "2.6.5"
+version: "2.6.6"
 author: Block2Block
 website: https://block2block.me/
 description: This is an all-in-one lightweight Parkour plugin for your Hub server!
@@ -8,7 +8,7 @@ database: true
 prefix: HubParkour
 load: POSTWORLD
 api-version: "1.13"
-softdepend: [HolographicDisplays, PlaceholderAPI, Multiverse-Core]
+softdepend: ['HolographicDisplays', 'PlaceholderAPI', 'Multiverse-Core']
 commands:
   parkour:
     aliases: [pk]

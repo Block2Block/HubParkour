@@ -13,6 +13,7 @@ import me.block2block.hubparkour.managers.DatabaseManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
 import me.block2block.hubparkour.utils.HubParkourExpansion;
 import me.block2block.hubparkour.utils.ItemUtil;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -44,6 +45,8 @@ public class HubParkour extends JavaPlugin {
         instance = this;
 
         BackendAPI.setImplementation(new HubParkourAPIImpl());
+
+        new Metrics(this, 14109);
 
         switch (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]) {
             case "v1_12_R1":

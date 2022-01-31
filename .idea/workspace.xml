@@ -13,13 +13,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports.">
-      <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/HubParkourExpansion.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/HubParkourExpansion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-    </list>
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6.6: Command bugfix&#10; - Fixed an issue where checkpoint reward commands would cause an exception." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -169,8 +163,8 @@
     <option name="myCommands">
       <command value="mvn deploy" />
       <command value="mvn clean package -Xlint:deprecation" />
-      <command value="mvn clean package" />
       <command value="mvn clean package deploy" />
+      <command value="mvn clean package" />
     </option>
   </component>
   <component name="RunManager">
@@ -506,21 +500,9 @@
       <workItem from="1642877262607" duration="697000" />
       <workItem from="1643042753723" duration="2000" />
       <workItem from="1643389356578" duration="985000" />
-      <workItem from="1643390903995" duration="342000" />
-    </task>
-    <task id="LOCAL-00013" summary="v2.0.2">
-      <created>1581436892160</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1581436892160</updated>
-    </task>
-    <task id="LOCAL-00014" summary="v2.0.2">
-      <created>1581437360309</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1581437360309</updated>
+      <workItem from="1643390903995" duration="662000" />
+      <workItem from="1643392286625" duration="1166000" />
+      <workItem from="1643642156469" duration="299000" />
     </task>
     <task id="LOCAL-00015" summary="v2.0.3">
       <created>1581437574624</created>
@@ -851,7 +833,21 @@
       <option name="project" value="LOCAL" />
       <updated>1642874119061</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="v2.6.5: Another Placeholder Bugfix&#10; - Fixed an issue where the positionname placeholder wouldn't be recognised if the position did not yet exist.&#10; - Fixed an issue with resolving dependencies for API users.">
+      <created>1643391384514</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1643391384515</updated>
+    </task>
+    <task id="LOCAL-00063" summary="v2.6.6: Command bugfix&#10; - Fixed an issue where checkpoint reward commands would cause an exception.">
+      <created>1643642390111</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1643642390111</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -896,8 +892,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.2.4&#10; - Added support for 1.16.4" />
-    <MESSAGE value="v2.3&#10; - New edit mode to edit parkours that already exist.&#10; - New action bar to view parkour stats as you're doing the parkour.&#10; - New option to enable repeat rewards&#10; - Teleport on void and fall have now been separated in the config.&#10; - New Teleport on Water and Lava options.&#10; - New command to reset player times on specific parkours.&#10; - Players can no longer pick up items while in a parkour (toggle-able).&#10; - Players can no longer move parkour items out of their inventory.&#10; - New option to disable the ability to receive potion effects while doing a parkour (toggle-able). Due to limitations with the Spigot API, this option is only available to those who use server versions 1.13+.&#10; - New option to disable fall damage (only works when teleport on fall is disabled)&#10; - Modified how times are removed from the leaderboard (the time is now deleted completely from the Database)&#10; - Fixed a bug where if a player was in a parkour when the server restarted, they would not receive their inventory back.&#10; - Several API changes to accommodate Edit Mode (JavaDocs have already been updated).&#10; - Removed several unused imports." />
     <MESSAGE value="v2.3.1&#10; - Fixed a bug where the action bar messages would spam error messages in console and not work in newer version of Minecraft." />
     <MESSAGE value="v2.3.1&#10; - Fixed a bug where the action bar messages would spam error messages in console and not work in newer versions of Minecraft.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
     <MESSAGE value="v2.4: Parkour Splitting&#10; - New Parkour Split times for each checkpoint hit.&#10; - New parkour split variable for the action bar (use {current-splittime} to put it in the action bar, the default message has not changed).&#10; - New options to set gamemode while doing the parkour.&#10; - New health and hunger options.&#10; - Fixed a bug with the API where Event listeners would not work as intended.&#10; - Fixed a bug where leaving would not result in edit or setup mode being exited.&#10; - Fixed a bug where cancel would not work when in the delete/add checkpoints edit mode.&#10; - Fixed a bug where when clicking on a block with parkour items, messages would get sent twice.&#10; - Fixed a bug where an error would occur generating holograms if the parkour points were in a world that could not be found.&#10; - Fixed an occasional NPE when a player clicked an item.&#10; - Some internal changes to how SQLite databases are handled.&#10; - Stopped players from being able to backtrack checkpoints by going over previous checkpoints." />
@@ -921,6 +915,8 @@
     <MESSAGE value="Fixed travis not getting the plugin jar properly" />
     <MESSAGE value="v2.6.4: Placeholder Bugfix" />
     <MESSAGE value="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports." />
+    <MESSAGE value="v2.6.5: Another Placeholder Bugfix&#10; - Fixed an issue where the positionname placeholder wouldn't be recognised if the position did not yet exist.&#10; - Fixed an issue with resolving dependencies for API users." />
+    <MESSAGE value="v2.6.6: Command bugfix&#10; - Fixed an issue where checkpoint reward commands would cause an exception." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.6.6: Command bugfix&#10; - Fixed an issue where checkpoint reward commands would cause an exception." />
   </component>
 </project>

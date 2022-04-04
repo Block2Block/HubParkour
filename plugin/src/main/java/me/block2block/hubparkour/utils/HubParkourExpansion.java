@@ -55,7 +55,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             String[] args = identifier.split("_");
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             return parkour.getNoCheckpoints() + "";
         }
@@ -64,7 +64,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             String[] args = identifier.split("_");
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             return parkour.getName() + "";
         }
@@ -73,7 +73,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             String[] args = identifier.split("_");
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             return parkour.getPlayers().size() + "";
         }
@@ -82,11 +82,11 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             String[] args = identifier.split("_");
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             long ms = HubParkour.getInstance().getDbManager().getRecordTime(parkour);
             if (ms == -1) {
-                return "Not yet completed";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Yet-Completed", "Not yet completed");
             }
             return ConfigUtil.formatTime(ms);
         }
@@ -96,11 +96,11 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             int position = Integer.parseInt(args[2]);
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             long ms = HubParkour.getInstance().getDbManager().getPositionTime(parkour, position);
             if (ms == -1) {
-                return "Position not filled.";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Position-Not-Filled", "Position not filled");
             }
             return ConfigUtil.formatTime(ms);
         }
@@ -110,11 +110,11 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             int position = Integer.parseInt(args[2]);
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             String name = HubParkour.getInstance().getDbManager().getPositionHolder(parkour, position);
             if (name == null) {
-                return "Position not filled";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Position-Not-Filled", "Position not filled");
             }
             return name;
         }
@@ -123,11 +123,11 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             String[] args = identifier.split("_");
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             String holder = HubParkour.getInstance().getDbManager().getRecordHolder(parkour);
             if (holder == null) {
-                return "Not yet completed";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Yet-Completed", "Not yet completed");
             }
             return holder;
         }
@@ -142,7 +142,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
 
         if(identifier.equals("currentparkour")){
             if (CacheManager.getPlayer(player) == null) {
-                return "Not in parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-In-Parkour", "Not in eted");
             }
             return CacheManager.getPlayer(player).getParkour().getName() + "";
         }
@@ -179,7 +179,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             String[] args = identifier.split("_");
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             long ms = HubParkour.getInstance().getDbManager().getTime(player, parkour);
             if (ms == -1) {
@@ -192,7 +192,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             String[] args = identifier.split("_");
             Parkour parkour = CacheManager.getParkour(Integer.parseInt(args[1]));
             if (parkour == null) {
-                return "Not a valid parkour";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Valid-Parkour", "Not a valid parkour");
             }
             List<Checkpoint> checkpointList = HubParkour.getInstance().getDbManager().getReachedCheckpoints(player, parkour);
             Checkpoint highest = null;

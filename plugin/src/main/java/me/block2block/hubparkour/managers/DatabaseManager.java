@@ -678,7 +678,7 @@ public class DatabaseManager {
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes");
             statement.execute();
-            statement = connection.prepareStatement("DELETE FROM hp_splittimes WHERE");
+            statement = connection.prepareStatement("DELETE FROM hp_splittimes");
             statement.execute();
         } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
@@ -970,9 +970,9 @@ public class DatabaseManager {
 
     public long getPositionTime(Parkour parkour, int position) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT ?-1,1");
+            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT ?,1");
             statement.setInt(1, parkour.getId());
-            statement.setInt(2, position);
+            statement.setInt(2, position - 1);
             ResultSet set = statement.executeQuery();
             if (set.next()) {
                 return set.getLong(1);
@@ -989,9 +989,9 @@ public class DatabaseManager {
 
     public String getPositionHolder(Parkour parkour, int position) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT ?-1,1");
+            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT ?,1");
             statement.setInt(1, parkour.getId());
-            statement.setInt(2, position);
+            statement.setInt(2, position - 1);
             ResultSet set = statement.executeQuery();
             if (set.next()) {
                 return set.getString(1);

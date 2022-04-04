@@ -800,6 +800,7 @@ public class CommandParkour implements CommandExecutor {
                         } else {
                             ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
+                        break;
                     default:
                         StringBuilder sb = new StringBuilder();
 

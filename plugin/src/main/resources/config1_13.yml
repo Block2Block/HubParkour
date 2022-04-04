@@ -48,6 +48,17 @@ Messages:
       Header: "&9&lLeaderboard for {parkour-name}"
       Line: "&3#{place}&r - &b{player-name}&r - &b{player-time}"
 
+  #Any PlaceholderAPI messages that have no other applicable message.
+  PlaceholderAPI:
+    Position-Not-Filled: "Position not filled"
+    Not-Valid-Parkour: "Not a valid parkour"
+    Not-Yet-Completed: "Not yet completed"
+    Not-Yet-Filled: "Position not filled"
+    Not-In-Parkour: "Not in parkour"
+    Not-Applicable: "N/A"
+    Loading: "Loading..."
+    Not-Reached-Checkpoint: "Not reached a checkpoint"
+
   Signs:
     Sign-Deleted: "The sign has been successfully deleted."
     Teleport:

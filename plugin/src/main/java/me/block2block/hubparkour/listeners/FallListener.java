@@ -23,7 +23,7 @@ public class FallListener implements Listener {
     private static List<Player> hasTeleported = new ArrayList<>();
 
     @SuppressWarnings("unused")
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onFall(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
 

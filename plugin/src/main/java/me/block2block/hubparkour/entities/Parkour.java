@@ -57,7 +57,7 @@ public class Parkour implements IParkour {
         for (BorderPoint borderPoint : borderPoints) {
             borderPoint.setParkour(this);
         }
-        rewardCooldown = rewardCooldown;
+        this.rewardCooldown = rewardCooldown;
     }
 
     @SuppressWarnings("unused")

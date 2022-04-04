@@ -7,6 +7,7 @@ import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.signs.StartClickableSign;
 import me.block2block.hubparkour.signs.StatsClickableSign;
 import me.block2block.hubparkour.signs.TeleportClickableSign;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -19,12 +20,14 @@ public class SignListener implements Listener {
 
     @EventHandler
     public void onSignClick(PlayerInteractEvent e) {
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-            if (e.getClickedBlock().getType().name().toLowerCase().contains("sign")){
-                Sign bukkitSign = (Sign) e.getClickedBlock().getState();
-                if (CacheManager.getSigns().containsKey(bukkitSign.getLocation())) {
-                    ClickableSign clickableSign = CacheManager.getSigns().get(bukkitSign.getLocation());
-                    clickableSign.onClick(e.getPlayer());
+        if (e.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+                if (e.getClickedBlock().getType().name().toLowerCase().contains("sign")){
+                    Sign bukkitSign = (Sign) e.getClickedBlock().getState();
+                    if (CacheManager.getSigns().containsKey(bukkitSign.getLocation())) {
+                        ClickableSign clickableSign = CacheManager.getSigns().get(bukkitSign.getLocation());
+                        clickableSign.onClick(e.getPlayer());
+                    }
                 }
             }
         }

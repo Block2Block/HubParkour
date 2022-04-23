@@ -183,7 +183,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             }
             long ms = HubParkour.getInstance().getDbManager().getTime(player, parkour);
             if (ms == -1) {
-                return "Not yet completed";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Yet-Completed", "Not yet completed");
             }
             return ConfigUtil.formatTime(ms);
         }
@@ -205,7 +205,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
 
             }
             if (highest == null) {
-                return "Not reached a checkpoint";
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-Reached-Checkpoint", "Not reached a checkpoint");
             } else {
                 return highest.getCheckpointNo() + "";
             }

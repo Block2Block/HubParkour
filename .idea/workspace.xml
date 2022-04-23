@@ -15,18 +15,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.6.7: Metrics bugfix&#10; - Fixed an issue where metrics would prevent the plugin from loading.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
       <changelist_data name="Block2Block" email="accounts@block2block.me" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/ParkourTabComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/ParkourTabComplete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/FallListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/SignListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/SignListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/HubParkourExpansion.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/HubParkourExpansion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/config1_13.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/config1_13.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/config1_8.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/config1_8.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hubparkour-api/hubparkour-api.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/plugin.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -526,6 +516,7 @@
       <workItem from="1647893911760" duration="181000" />
       <workItem from="1648987868653" duration="110000" />
       <workItem from="1649086327356" duration="425000" />
+      <workItem from="1649879034333" duration="655000" />
     </task>
     <task id="LOCAL-00018" summary="Update v2.0.6">
       <created>1582899358808</created>

@@ -45,7 +45,7 @@ public class MySQLConnectionPool {
         String connectionURL = "jdbc:mysql://"
                 + hostname + ":" + port;
         if (database != null) {
-            connectionURL = connectionURL + "/" + database + "?verifyServerCertificate=false&useSSL=false&requireSSL=false";
+            connectionURL = connectionURL + "/" + database + "?verifyServerCertificate=false&useSSL=false&requireSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC";
         }
 
         Class.forName("com.mysql.jdbc.Driver");

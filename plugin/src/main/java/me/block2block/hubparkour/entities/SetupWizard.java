@@ -205,12 +205,12 @@ public class SetupWizard {
                 Range<Double> rangeY = Range.between(location.getY(), other.getY());
                 Range<Double> rangeZ = Range.between(location.getZ(), other.getZ());
                 if (!rangeX.contains(restartPoint.getLocation().getX()) || !rangeY.contains(restartPoint.getLocation().getY()) || !rangeZ.contains(restartPoint.getLocation().getZ())) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border.Restart", "Your restart point is currently plates outside your border! Please try again!", true, Collections.emptyMap());
                     currentStage = 4;
                     return;
                 }
                 if (!rangeX.contains(startPoint.getLocation().getX()) || !rangeY.contains(startPoint.getLocation().getY()) || !rangeZ.contains(startPoint.getLocation().getZ())) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border.", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
                     currentStage = 4;
                     return;
                 }

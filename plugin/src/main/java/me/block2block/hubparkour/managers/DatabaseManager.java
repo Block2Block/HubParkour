@@ -1180,7 +1180,7 @@ public class DatabaseManager {
             ResultSet set = statement.executeQuery();
             if (set.next()) {
                 statement = connection.prepareStatement("UPDATE hp_rewardtimestamps SET timestamp = ? WHERE uuid = ? AND parkour_id = ? AND checkpoint = ?");
-                statement.setLong(1, timestamp);
+                statement.setTimestamp(1, new Timestamp(timestamp));
                 statement.setString(2, uuid.toString());
                 statement.setInt(3, id);
                 statement.setInt(4, checkpoint);
@@ -1190,7 +1190,7 @@ public class DatabaseManager {
                 statement.setString(1, uuid.toString());
                 statement.setInt(2, id);
                 statement.setInt(3, checkpoint);
-                statement.setLong(4, timestamp);
+                statement.setTimestamp(4, new Timestamp(timestamp));
                 statement.execute();
             }
         } catch (SQLException e) {
@@ -1208,7 +1208,7 @@ public class DatabaseManager {
             statement.setInt(3, checkpoint);
             ResultSet set = statement.executeQuery();
             if (set.next()) {
-                return set.getLong(1);
+                return set.getTimestamp(1).getTime();
             } else {
                 return -1;
             }

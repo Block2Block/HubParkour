@@ -276,7 +276,11 @@ Messages:
         Select-First-Border-Point: "Please use the setup stick and select your first new border point. This will take the location of where you are standing, and does not take into account where you are looking. If you do not wish to use border points, then enter 'done' or execute /parkour done."
         Select-Second-Border-Point: "Please use the setup stick and select your second new border point."
         Border-Updated: "Border successfully updated!"
-        Plates-Outside-Border: "There are currently plates outside your border! Please try again!"
+        Plates-Outside-Border:
+            Restart: "Your restart point is currently outside your border! Please try again!"
+            End: "Your restart point is currently outside your border! Please try again!"
+            Start: "Your restart point is currently outside your border! Please try again!"
+            Checkpoint: "One of your checkpoints is currently outside your border! Please try again!"
 
         Please-Set-Reward-Cooldown: "Please specify a new cooldown for you rewards in hours (only applicable when you have repeat-rewards enabled). If you do not wish to have one, please type 'none'."
         Invalid-Cooldown: "That cooldown is not valid. Please try again. If you do not wish to have one, please type 'none'."
@@ -478,6 +482,7 @@ Settings:
         Database: "HubParkour"
         Username: "root"
         Password: ""
+        
       SQLite:
         #The file name MUST end in .db.
         File-Name: "hp-storage.db"

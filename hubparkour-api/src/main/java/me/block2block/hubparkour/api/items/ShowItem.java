@@ -32,6 +32,7 @@ public class ShowItem extends ParkourItem {
         return hiddenPlayers;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void removeItem() {
         if (slot >= 0 && slot < 9 && originalItem != null) {

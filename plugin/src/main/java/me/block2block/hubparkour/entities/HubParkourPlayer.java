@@ -16,6 +16,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -44,6 +45,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     private BukkitTask actionBarTask;
     private final GameMode prevGamemode;
     private final double prevHealth;
+    private final double prevMaxHealth;
     private final int prevHunger;
     private final ParkourRun parkourRun;
     private boolean touchedGround;
@@ -58,8 +60,12 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         currentSplit = startTime;
         prevGamemode = player.getGameMode();
         prevHealth = player.getHealth();
+        prevMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
         prevHunger = player.getFoodLevel();
         if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
+            if (prevMaxHealth < 20) {
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
+            }
             player.setHealth(20);
         }
         if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
@@ -251,11 +257,8 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Not-Enough-Checkpoints", "You did not reach enough checkpoints, parkour failed!", true, Collections.emptyMap());
                     parkour.playerEnd(this);
                     if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-                        double health = prevHealth;
-                        if (health > player.getMaxHealth()) {
-                            health = player.getMaxHealth();
-                        }
-                        player.setHealth(health);
+                        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
+                        player.setHealth(prevHealth);
                     }
                     if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
                         player.setFoodLevel(prevHunger);
@@ -469,11 +472,8 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         removeItems();
         parkour.playerEnd(this);
         if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-            double health = prevHealth;
-            if (health > player.getMaxHealth()) {
-                health = player.getMaxHealth();
-            }
-            player.setHealth(health);
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
+            player.setHealth(prevHealth);
         }
         if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
             player.setFoodLevel(prevHunger);

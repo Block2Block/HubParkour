@@ -1,8 +1,7 @@
 package me.block2block.hubparkour.entities;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
-import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
+import eu.decentsoftware.holograms.api.DHAPI;
+import eu.decentsoftware.holograms.api.holograms.Hologram;
 import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
@@ -16,14 +15,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Parkour implements IParkour {
 
     private final int id;
+    private UUID server;
     private String name;
     private StartPoint start;
     private EndPoint endPoint;
@@ -38,8 +35,9 @@ public class Parkour implements IParkour {
     private final List<BorderPoint> borderPoints;
 
     @SuppressWarnings("unused")
-    public Parkour(int id, String name, StartPoint start, EndPoint end, List<Checkpoint> checkpoints, RestartPoint restartPoint, List<BorderPoint> borderPoints, String checkpointCommand, String endCommand, int rewardCooldown) {
+    public Parkour(int id, UUID server, String name, StartPoint start, EndPoint end, List<Checkpoint> checkpoints, RestartPoint restartPoint, List<BorderPoint> borderPoints, String checkpointCommand, String endCommand, int rewardCooldown) {
         this.id = id;
+        this.server = server;
         this.start = start;
         this.start.setParkour(this);
         this.endPoint = end;
@@ -170,18 +168,25 @@ public class Parkour implements IParkour {
             if (l.getWorld() == null) {
                 continue;
             }
-            Hologram hologram = HologramsAPI.createHologram(HubParkour.getInstance(), l);
+            Hologram hologram = DHAPI.getHologram("hp:" + id + "." + p.getType() + ((p instanceof Checkpoint)?"." + ((Checkpoint) p).getCheckpointNo():""));
+            if (hologram == null) {
+                hologram = DHAPI.createHologram("hp:" + id + "." + p.getType() + ((p instanceof Checkpoint)?"." + ((Checkpoint) p).getCheckpointNo():""), l);
+            } else {
+                DHAPI.moveHologram(hologram, l);
+            }
             int counter = 0;
 
+            List<String> lines = new ArrayList<>();
 
             for (String s : ConfigUtil.getStringList("Messages.Holograms." + configKey, defaultValues)) {
                 s = ChatColor.translateAlternateColorCodes('&', s.replace("{parkour-name}",name).replace("{checkpoint}",((p instanceof Checkpoint)?((Checkpoint)p).getCheckpointNo() + "":"")));
                 if (HubParkour.isPlaceholders()) {
                     s = PlaceholderAPI.setPlaceholders(null, s);
                 }
-                TextLine textLine = hologram.appendTextLine(s);
+                lines.add(s);
                 counter++;
             }
+            DHAPI.setHologramLines(hologram, lines);
             holograms.put(p, hologram);
         }
 
@@ -244,11 +249,9 @@ public class Parkour implements IParkour {
             @Override
             public void run() {
                 if (HubParkour.isHolograms()) {
-                    removeHolograms();
                     generateHolograms();
                     for (ILeaderboardHologram hologram : leaderboardHolograms) {
-                        hologram.remove();
-                        hologram.generate();
+                        hologram.refresh();
                     }
                 }
             }
@@ -289,7 +292,6 @@ public class Parkour implements IParkour {
             }
         }.runTaskAsynchronously(HubParkour.getInstance());
         if (HubParkour.isHolograms()) {
-            removeHolograms();
             generateHolograms();
         }
     }
@@ -308,7 +310,6 @@ public class Parkour implements IParkour {
             }
         }.runTaskAsynchronously(HubParkour.getInstance());
         if (HubParkour.isHolograms()) {
-            removeHolograms();
             generateHolograms();
         }
     }
@@ -361,7 +362,6 @@ public class Parkour implements IParkour {
         }.runTaskAsynchronously(HubParkour.getInstance());
 
         if (HubParkour.isHolograms()) {
-            removeHolograms();
             generateHolograms();
         }
     }
@@ -393,6 +393,10 @@ public class Parkour implements IParkour {
                 HubParkour.getInstance().getDbManager().resetSplitTimes(id);
             }
         }.runTaskAsynchronously(HubParkour.getInstance());
+
+        if (HubParkour.isHolograms()) {
+            generateHolograms();
+        }
     }
 
     public void setBorders(List<BorderPoint> borderPoints) {
@@ -413,6 +417,11 @@ public class Parkour implements IParkour {
 
     public int getRewardCooldown() {
         return rewardCooldown;
+    }
+
+    @Override
+    public UUID getServer() {
+        return server;
     }
 
     public void setRewardCooldown(int rewardCooldown) {

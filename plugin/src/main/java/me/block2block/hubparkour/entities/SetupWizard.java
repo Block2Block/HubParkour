@@ -83,20 +83,38 @@ public class SetupWizard {
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Setup-Cancelled", "Parkour setup was cancelled. Any points that were setup have been deleted.", true, Collections.emptyMap());
                 }
                 return true;
-            case 9:
+            case 9: {
                 if (!message.equalsIgnoreCase("cancel")) {
                     String cooldown = message;
                     if (message.equalsIgnoreCase("none")) {
                         cooldown = "-1";
                     }
-
+                    currentStage++;
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Is-Parkour-Global", "Would you like this parkour to be global (appear on all of your servers)? Type 'y' to make this parkour global, or 'n' to make it server-specific. This cannot be changed once the parkour has been created.", true, Collections.emptyMap());
                     try {
                         this.cooldown = Integer.parseInt(cooldown);
                     } catch (NumberFormatException e) {
                         ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-Cooldown", "That cooldown is not valid. Please try again. If you do not wish to have one, please type 'none'.", true, Collections.emptyMap());
                         return true;
                     }
-                    final Parkour parkour = new Parkour(-1, name, startPoint, endPoint, checkpoints, restartPoint, borderPoints, checkpointCommand, endCommand, this.cooldown);
+
+
+                } else {
+                    CacheManager.exitSetup();
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Setup-Cancelled", "Parkour setup was cancelled. Any points that were setup have been deleted.", true, Collections.emptyMap());
+                }
+            }
+            case 10:
+                if (!message.equalsIgnoreCase("cancel")) {
+                    boolean global = false;
+                    if (message.equalsIgnoreCase("y")) {
+                        global = true;
+                    } else if (!message.equalsIgnoreCase("n")) {
+                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Is-Parkour-Global", "Would you like this parkour to be global (appear on all of your servers)? Type 'y' to make this parkour global, or 'n' to make it server-specific. This cannot be changed once the parkour has been created.", true, Collections.emptyMap());
+                        return true;
+                    }
+
+                    final Parkour parkour = new Parkour(-1, ((global?null:HubParkour.getServerUuid())), name, startPoint, endPoint, checkpoints, restartPoint, borderPoints, checkpointCommand, endCommand, cooldown);
                     ParkourSetupEvent setupEvent = new ParkourSetupEvent(parkour, player);
                     Bukkit.getPluginManager().callEvent(setupEvent);
                     new BukkitRunnable() {
@@ -201,27 +219,49 @@ public class SetupWizard {
             }
             case 5: {
                 Location other = borderPoints.get(0).getLocation();
-                Range<Double> rangeX = Range.between(location.getX(), other.getX());
-                Range<Double> rangeY = Range.between(location.getY(), other.getY());
-                Range<Double> rangeZ = Range.between(location.getZ(), other.getZ());
-                if (!rangeX.contains(restartPoint.getLocation().getX()) || !rangeY.contains(restartPoint.getLocation().getY()) || !rangeZ.contains(restartPoint.getLocation().getZ())) {
+
+                double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
+                if (location.getX() > other.getX()) {
+                    highX = location.getX();
+                    lowX = other.getX();
+                } else {
+                    highX = other.getX();
+                    lowX = location.getX();
+                }
+
+                if (location.getY() > other.getY()) {
+                    highY = location.getY();
+                    lowY = other.getY();
+                } else {
+                    highY = other.getY();
+                    lowY = location.getY();
+                }
+
+                if (location.getZ() > other.getZ()) {
+                    highZ = location.getZ();
+                    lowZ = other.getZ();
+                } else {
+                    highZ = other.getZ();
+                    lowZ = location.getZ();
+                }
+                if ((highX < restartPoint.getLocation().getX() || lowX > restartPoint.getLocation().getX()) || (highY < restartPoint.getLocation().getY() || lowY > restartPoint.getLocation().getY()) || (highZ < restartPoint.getLocation().getZ() || lowZ > restartPoint.getLocation().getZ())) {
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border.Restart", "Your restart point is currently plates outside your border! Please try again!", true, Collections.emptyMap());
                     currentStage = 4;
                     return;
                 }
-                if (!rangeX.contains(startPoint.getLocation().getX()) || !rangeY.contains(startPoint.getLocation().getY()) || !rangeZ.contains(startPoint.getLocation().getZ())) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border.", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                if ((highX < startPoint.getLocation().getX() || lowX > startPoint.getLocation().getX()) || (highY < startPoint.getLocation().getY() || lowY > startPoint.getLocation().getY()) || (highZ < startPoint.getLocation().getZ() || lowZ > startPoint.getLocation().getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border.Start", "Your start point is currently plates outside your border! Please try again!", true, Collections.emptyMap());
                     currentStage = 4;
                     return;
                 }
-                if (!rangeX.contains(endPoint.getLocation().getX()) || !rangeY.contains(endPoint.getLocation().getY()) || !rangeZ.contains(endPoint.getLocation().getZ())) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                if ((highX < endPoint.getLocation().getX() || lowX > endPoint.getLocation().getX()) || (highY < endPoint.getLocation().getY() || lowY > endPoint.getLocation().getY()) || (highZ < endPoint.getLocation().getZ() || lowZ > endPoint.getLocation().getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border.End", "Your end point is currently plates outside your border! Please try again!", true, Collections.emptyMap());
                     currentStage = 4;
                     return;
                 }
                 for (Checkpoint checkpoint : checkpoints) {
-                    if (!rangeX.contains(checkpoint.getLocation().getX()) || !rangeY.contains(checkpoint.getLocation().getY()) || !rangeZ.contains(checkpoint.getLocation().getZ())) {
-                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                    if ((highX < checkpoint.getLocation().getX() || lowX > checkpoint.getLocation().getX()) || (highY < checkpoint.getLocation().getY() || lowY > checkpoint.getLocation().getY()) || (highZ < checkpoint.getLocation().getZ() || lowZ > checkpoint.getLocation().getZ())) {
+                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border.Checkpoint", "One of your checkpoints is currently outside your border! Please try again!", true, Collections.emptyMap());
                         currentStage = 4;
                         return;
                     }

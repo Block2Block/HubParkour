@@ -31,7 +31,7 @@ public interface ILeaderboardHologram {
 
     /**
      * Get the parkour that this hologram belongs to.
-     * @return the parkour this hologram belongs to.
+     * @return the parkour this hologram belongs to, or <i>null</i> if this is an overall leaderboard hologram.
      */
     IParkour getParkour();
 

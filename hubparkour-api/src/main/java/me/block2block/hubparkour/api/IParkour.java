@@ -3,6 +3,7 @@ package me.block2block.hubparkour.api;
 import me.block2block.hubparkour.api.plates.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Represents a parkour.
@@ -198,5 +199,11 @@ public interface IParkour {
      * @return the current reward cooldown.
      */
     int getRewardCooldown();
+
+    /**
+     * Get the UUID of the server this parkour is attached to.
+     * @return the UUID of the server, or <i>null</i> if this parkour is global.
+     */
+    UUID getServer();
 }
 

@@ -45,7 +45,8 @@ Messages:
       - "&9&l&n{parkour-name}"
       - "&9&lCheckpoint #{checkpoint}"
     Leaderboard:
-      Header: "&9&lLeaderboard for {parkour-name}"
+      Header-Parkour: "&9&lLeaderboard for {parkour-name}"
+      Header-Overall: "&9&lOverall Leaderboard for All Parkours"
       Line: "&3#{place}&r - &b{player-name}&r - &b{player-time}"
 
   #Any PlaceholderAPI messages that have no other applicable message.
@@ -98,7 +99,7 @@ Messages:
       - "&a/parkour delete [parkour id or name] &r- Delete the parkour with the specific ID."
       - "&a/parkour list&r - Lists all active parkours."
       - "&a/parkour hologram list&r - List all active holograms and their ID's."
-      - "&a/parkour hologram create [parkour id or name]&r - Place a Leaderboard hologram for the specified parkour ID."
+      - "&a/parkour hologram create [parkour id or name]&r - Place a Leaderboard hologram for the specified parkour ID, or overall if none is specified."
       - "&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID."
       - "&a/parkour removetime [parkour id or name] [player name]&r - Reset a players leaderboard time."
       - "&a/parkour cleartimes [parkour id or name]&r - Completely clear all times for a specific parkour."
@@ -106,6 +107,7 @@ Messages:
       - "&a/parkour resetalltimes&r - Completely reset all times for all players."
       - "&a/parkour edit [parkour id or name]&r - Enables edit mode to modify information about a parkour."
       - "&a/parkour reload &r- Reload HubParkour's configuration."
+      - "&a/parkour import &r- Import SQLite database configuration into MySQL. Only works if MySQL is empty and has no data."
 
     #When a player does not have permission to execute a certain sub-command (only applicable to the admin commands).
     No-Permission: "You do not have permission to execute this command."
@@ -185,12 +187,20 @@ Messages:
         Success: "Times for all parkours reset for player {player-name}!"
       ResetAllTimes:
         Success: "All player times for all parkours have been reset!"
+      Import:
+        Must-Be-MySQL: "You must have MySQL database storage active in order to use the import command."
+        Must-Be-Empty: "You must have no data in MySQL in order to use the import command."
+        No-SQLite-File: "There is no SQLite file to import."
+        Updating-SQLite-Schema: "The SQLite Database Schema is out of date, updating..."
+        Importing: "Importing data from SQLite into MySQL, please wait..."
+        Import-Complete: "Import complete! Please restart your server in order for the data to be loaded!"
+        Import-Failed: "Import failed! Please try again!"
       Hologram:
         Must-Have-Holographic-Displays: "You must have Holographic Displays installed in order to use this command."
         Help:
           - "Available sub-commands:"
           - "&a/parkour hologram list&r - List all active holograms and their ID's."
-          - "&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID."
+          - "&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID, or overall if none is specified."
           - "&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID."
         List:
           Header: "All Active Holograms:"
@@ -214,7 +224,11 @@ Messages:
 
         Please-Set-Border: "Next, you need to set your border points. In order to do so, please click the stick while in the location you would like to set your border points. If you do not wish to use border points, then enter 'done' or execute /parkour done."
         Please-Set-Second-Border: "Great, now set your second border point! If you do not wish to use border points, then enter 'done' or execute /parkour done."
-        Plates-Outside-Border: "There are currently plates outside your border! Please try again!"
+        Plates-Outside-Border:
+          Restart: "Your restart point is currently outside your border! Please try again!"
+          End: "Your end point is currently outside your border! Please try again!"
+          Start: "Your start point is currently outside your border! Please try again!"
+          Checkpoint: "One of your checkpoints is currently outside your border! Please try again!"
 
         Please-Set-Name: "Now, you need to set a name for your parkour! Please enter a name for your parkour into chat or type it with /parkour input [name]. It must not be a duplicate. Names are compatible with formatting codes."
         Please-Set-End-Command: "The name has been set! Please now type out your reward command for the end of your parkour into chat or type it with /parkour input [name]. If you don't want one, just type 'none'. Available placeholders are {player-uuid} and {player-name}."
@@ -224,6 +238,8 @@ Messages:
         Name-Taken: "That name is already taken. Please try again."
 
         Invalid-Placement: "The place you are trying to setup that point is currently set for a different type of point. If this is a mistake, please type 'cancel' and re-setup your parkour."
+
+        Is-Parkour-Global: "Would you like this parkour to be global (appear on all of your servers)? Type 'y' to make this parkour global, or 'n' to make it server-specific. This cannot be changed once the parkour has been created."
 
         Setup-Complete: "Parkour setup complete!"
         Setup-Cancelled: "Parkour setup was cancelled. Any points that were setup have been deleted."
@@ -276,7 +292,12 @@ Messages:
         Select-First-Border-Point: "Please use the setup stick and select your first new border point. This will take the location of where you are standing, and does not take into account where you are looking. If you do not wish to use border points, then enter 'done' or execute /parkour done."
         Select-Second-Border-Point: "Please use the setup stick and select your second new border point."
         Border-Updated: "Border successfully updated!"
-        Plates-Outside-Border: "There are currently plates outside your border! Please try again!"
+        Outside-Border: "The new location of your plate is outside your border! Please try again or adjust your border points first."
+        Plates-Outside-Border:
+          Restart: "Your restart point is currently outside your border! Please try again!"
+          End: "Your end point is currently outside your border! Please try again!"
+          Start: "Your start point is currently outside your border! Please try again!"
+          Checkpoint: "One of your checkpoints is currently outside your border! Please try again!"
 
         Please-Set-Reward-Cooldown: "Please specify a new cooldown for you rewards in hours (only applicable when you have repeat-rewards enabled). If you do not wish to have one, please type 'none'."
         Invalid-Cooldown: "That cooldown is not valid. Please try again. If you do not wish to have one, please type 'none'."
@@ -302,6 +323,8 @@ Messages:
     Restarted: "You have restarted the parkour! Your time has been reset to 0!"
     Already-In-Parkour: "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave."
     Teleport: "You have been teleported to your last checkpoint."
+    #Confirms an action when clicking an item.
+    Confirm-Action: "Please click the item again to confirm your action."
     Currently-Being-Edited: "This parkour is currently in being modified by an admin. Please wait to attempt this parkour!"
     Cannot-Execute-Commands: "You cannot execute commands from other plugins while doing a parkour. To leave your current parkour, do /parkour leave."
     Cannot-Mount-In-Parkour: "You cannot mount an entity while in a parkour. To leave your current parkour, do /parkour leave."
@@ -339,9 +362,9 @@ Messages:
     Action-Bar: "&a&lCurrent Time: &r{current-time} - &a&lParkour: &r{parkour-name}&r - &a&lCurrent Checkpoint: &r#{current-checkpoint}"
 
 Settings:
-  #Hologram settings. Once HolographicDisplays is detected, holograms will then automatically generate.
+  #Hologram settings. Once DecentHolograms is detected, holograms will then automatically generate.
   #
-  #/parkour reload will not effect hologram settings changes. A server restart is required
+  #/parkour reload will not affect hologram settings changes. A server restart is required
   Holograms:
     #Whether checkpoint holograms should generate
     Checkpoint: true
@@ -382,7 +405,12 @@ Settings:
     #Whether or to toggle flying off for the user when the user starts the parkour.
     Remove-Fly: true
     #Whether to block the player from executing commands from other plugins while in a parkour.
-    Block-Commands: true
+    Block-Commands:
+      Enabled: true
+      #A list of whitelisted commands that can still be executed while in a parkour. Must be in lowercase to be recognised. Aliases need to be whitelisted separately.
+      Whitelist:
+        - "lag"
+        - "help"
     #Whether to stop players from mounting entities. This also blocks the player in the parkour from being stacked by other players.
     Block-Mounting: true
     #Whether to block a player in a parkour from being able to stack other people. Only needed if a plugin you have has stacker functionality.
@@ -439,16 +467,19 @@ Settings:
       Item: "LIGHT_WEIGHTED_PRESSURE_PLATE"
       Item-Data: 0
       Name: "&aTeleport to Last Checkpoint"
+      Confirmation: true
     Reset:
       Slot: 5
       Item: "OAK_DOOR"
       Item-Data: 0
       Name: "&cReset"
+      Confirmation: true
     Cancel:
       Slot: 6
       Item: "RED_BED"
       Item-Data: 0
       Name: "&cCancel"
+      Confirmation: true
     Hide:
       Slot: 8
       Hidden:
@@ -478,6 +509,7 @@ Settings:
         Database: "HubParkour"
         Username: "root"
         Password: ""
+        JDBC-Options: "verifyServerCertificate=false&useSSL=false&requireSSL=false"
       SQLite:
         #The file name MUST end in .db.
         File-Name: "hp-storage.db"

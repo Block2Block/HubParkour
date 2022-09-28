@@ -12,7 +12,6 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="hubparkour" target="1.5" />
       <module name="hubparkour-root" target="1.5" />
     </bytecodeTargetLevel>
   </component>

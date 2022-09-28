@@ -22,13 +22,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class ItemClickListener implements Listener {
 
     private final List<Player> cancelNextEvent = new ArrayList<>();
+    private final Map<Player, Integer> confirmationRequied = new HashMap<>();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e) {
@@ -57,21 +56,33 @@ public class ItemClickListener implements Listener {
                                 if (event.isCancelled()) {
                                     return;
                                 }
-                                p.setFallDistance(0);
-                                Location l = CacheManager.getPlayer(p).getParkour().getRestartPoint().getLocation().clone();
-                                l.setX(l.getX() + 0.5);
-                                l.setY(l.getY() + 0.5);
-                                l.setZ(l.getZ() + 0.5);
-                                p.setVelocity(new Vector(0, 0, 0));
-                                p.teleport(l);
-                                ConfigUtil.sendMessage(p, "Messages.Commands.Reset.Successful", "You have been teleported to the start.", true, Collections.emptyMap());
-                                FallListener.getHasTeleported().add(p);
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        FallListener.getHasTeleported().remove(p);
-                                    }
-                                }.runTaskLater(HubParkour.getInstance(), 5);
+                                if ((confirmationRequied.containsKey(p) && confirmationRequied.get(p) == 0) || !ConfigUtil.getBoolean("Settings.Parkour-Items.Reset.Confirmation", true)) {
+                                    confirmationRequied.remove(p);
+                                    p.setFallDistance(0);
+                                    Location l = CacheManager.getPlayer(p).getParkour().getRestartPoint().getLocation().clone();
+                                    l.setX(l.getX() + 0.5);
+                                    l.setY(l.getY() + 0.5);
+                                    l.setZ(l.getZ() + 0.5);
+                                    p.setVelocity(new Vector(0, 0, 0));
+                                    p.teleport(l);
+                                    ConfigUtil.sendMessage(p, "Messages.Commands.Reset.Successful", "You have been teleported to the start.", true, Collections.emptyMap());
+                                    FallListener.getHasTeleported().add(p);
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            FallListener.getHasTeleported().remove(p);
+                                        }
+                                    }.runTaskLater(HubParkour.getInstance(), 5);
+                                } else {
+                                    confirmationRequied.put(p, 0);
+                                    ConfigUtil.sendMessage(p, "Messages.Parkour.Confirm-Action", "Please click the item again to confirm your action.", true, Collections.emptyMap());
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            confirmationRequied.remove(p);
+                                        }
+                                    }.runTaskLater(HubParkour.getInstance(), 100);
+                                }
                                 return;
                             case 1:
                                 //Checkpoint.
@@ -83,25 +94,37 @@ public class ItemClickListener implements Listener {
                                 if (event2.isCancelled()) {
                                     return;
                                 }
-                                p.setFallDistance(0);
-                                Location l2 = player.getParkour().getRestartPoint().getLocation().clone();
-                                if (player.getLastReached() != 0) {
-                                    l2 = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
-                                }
 
-                                l2.setX(l2.getX() + 0.5);
-                                l2.setY(l2.getY() + 0.5);
-                                l2.setZ(l2.getZ() + 0.5);
-                                p.setVelocity(new Vector(0, 0, 0));
-                                p.teleport(l2);
-                                ConfigUtil.sendMessage(p, "Messages.Commands.Checkpoint.Successful", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
-                                FallListener.getHasTeleported().add(p);
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        FallListener.getHasTeleported().remove(p);
+                                if ((confirmationRequied.containsKey(p) && confirmationRequied.get(p) == 1) || !ConfigUtil.getBoolean("Settings.Parkour-Items.Checkpoint.Confirmation", true)) {
+                                    p.setFallDistance(0);
+                                    Location l2 = player.getParkour().getRestartPoint().getLocation().clone();
+                                    if (player.getLastReached() != 0) {
+                                        l2 = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
                                     }
-                                }.runTaskLater(HubParkour.getInstance(), 5);
+
+                                    l2.setX(l2.getX() + 0.5);
+                                    l2.setY(l2.getY() + 0.5);
+                                    l2.setZ(l2.getZ() + 0.5);
+                                    p.setVelocity(new Vector(0, 0, 0));
+                                    p.teleport(l2);
+                                    ConfigUtil.sendMessage(p, "Messages.Commands.Checkpoint.Successful", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
+                                    FallListener.getHasTeleported().add(p);
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            FallListener.getHasTeleported().remove(p);
+                                        }
+                                    }.runTaskLater(HubParkour.getInstance(), 5);
+                                } else {
+                                    confirmationRequied.put(p, 1);
+                                    ConfigUtil.sendMessage(p, "Messages.Parkour.Confirm-Action", "Please click the item again to confirm your action.", true, Collections.emptyMap());
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            confirmationRequied.remove(p);
+                                        }
+                                    }.runTaskLater(HubParkour.getInstance(), 100);
+                                }
                                 return;
                             case 2:
                                 //Cancel.
@@ -110,14 +133,25 @@ public class ItemClickListener implements Listener {
                                 if (leaveEvent.isCancelled()) {
                                     return;
                                 }
-                                //Delay to avoid clientside visual glitch
-                                new BukkitRunnable(){
-                                    @Override
-                                    public void run() {
-                                        player.end(ParkourPlayerFailEvent.FailCause.LEAVE);
-                                    }
-                                }.runTaskLater(HubParkour.getInstance(), 1);
-                                ConfigUtil.sendMessage(p, "Messages.Commands.Leave.Left", "You have left the parkour and your progress has been reset.", true, Collections.emptyMap());
+                                if ((confirmationRequied.containsKey(p) && confirmationRequied.get(p) == 2) || !ConfigUtil.getBoolean("Settings.Parkour-Items.Cancel.Confirmation", true)) {
+                                    //Delay to avoid clientside visual glitch
+                                    new BukkitRunnable(){
+                                        @Override
+                                        public void run() {
+                                            player.end(ParkourPlayerFailEvent.FailCause.LEAVE);
+                                        }
+                                    }.runTaskLater(HubParkour.getInstance(), 1);
+                                    ConfigUtil.sendMessage(p, "Messages.Commands.Leave.Left", "You have left the parkour and your progress has been reset.", true, Collections.emptyMap());
+                                } else {
+                                    confirmationRequied.put(p, 1);
+                                    ConfigUtil.sendMessage(p, "Messages.Parkour.Confirm-Action", "Please click the item again to confirm your action.", true, Collections.emptyMap());
+                                    new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            confirmationRequied.remove(p);
+                                        }
+                                    }.runTaskLater(HubParkour.getInstance(), 100);
+                                }
                                 return;
                             case 3: {
                                 ParkourPlayerTogglePlayersEvent toggleEvent = new ParkourPlayerTogglePlayersEvent(player.getParkour(), player, false);

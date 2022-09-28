@@ -16,9 +16,14 @@ public class ConfigUtil {
     private static FileConfiguration config;
     private static File configFile;
 
-    public static void init(FileConfiguration config, File configFile) {
+    private static FileConfiguration internal;
+    private static File internalFile;
+
+    public static void init(FileConfiguration config, File configFile, FileConfiguration internal, File internalFile) {
         ConfigUtil.config = config;
         ConfigUtil.configFile = configFile;
+        ConfigUtil.internal = internal;
+        ConfigUtil.internalFile = internalFile;
     }
 
     /**
@@ -210,5 +215,9 @@ public class ConfigUtil {
 
     public static void reload() {
         config = YamlConfiguration.loadConfiguration(configFile);
+    }
+
+    public static FileConfiguration getInternal() {
+        return internal;
     }
 }

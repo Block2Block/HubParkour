@@ -238,6 +238,39 @@ public class EditWizard {
         switch (currentModification) {
             case 4: {
                 StartPoint startPoint = new StartPoint(location);
+
+                Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
+
+
+                double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
+                if (borderA.getX() > borderB.getX()) {
+                    highX = borderA.getX();
+                    lowX = borderB.getX();
+                } else {
+                    highX = borderB.getX();
+                    lowX = borderA.getX();
+                }
+
+                if (borderA.getY() > borderB.getY()) {
+                    highY = borderA.getY();
+                    lowY = borderB.getY();
+                } else {
+                    highY = borderB.getY();
+                    lowY = borderA.getY();
+                }
+
+                if (borderA.getZ() > borderB.getZ()) {
+                    highZ = borderA.getZ();
+                    lowZ = borderB.getZ();
+                } else {
+                    highZ = borderB.getZ();
+                    lowZ = borderA.getZ();
+                }
+                if ((highX < location.getX() || lowX > location.getX()) || (highY < location.getY() || lowY > location.getY()) || (highZ < location.getZ() || lowZ > location.getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Outside-Border", "The new location of your plate is outside your border! Please try again or adjust your border points first.", true, Collections.emptyMap());
+                    return;
+                }
+
                 parkour.setStartPoint(startPoint);
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Start-Point-Set", "Your new start point has been set!", true, Collections.emptyMap());
                 returnToMainMenu();
@@ -245,6 +278,37 @@ public class EditWizard {
             }
             case 5: {
                 EndPoint endPoint = new EndPoint(location);
+                Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
+
+
+                double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
+                if (borderA.getX() > borderB.getX()) {
+                    highX = borderA.getX();
+                    lowX = borderB.getX();
+                } else {
+                    highX = borderB.getX();
+                    lowX = borderA.getX();
+                }
+
+                if (borderA.getY() > borderB.getY()) {
+                    highY = borderA.getY();
+                    lowY = borderB.getY();
+                } else {
+                    highY = borderB.getY();
+                    lowY = borderA.getY();
+                }
+
+                if (borderA.getZ() > borderB.getZ()) {
+                    highZ = borderA.getZ();
+                    lowZ = borderB.getZ();
+                } else {
+                    highZ = borderB.getZ();
+                    lowZ = borderA.getZ();
+                }
+                if ((highX < location.getX() || lowX > location.getX()) || (highY < location.getY() || lowY > location.getY()) || (highZ < location.getZ() || lowZ > location.getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Outside-Border", "The new location of your plate is outside your border! Please try again or adjust your border points first.", true, Collections.emptyMap());
+                    return;
+                }
                 parkour.setEndPoint(endPoint);
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.End-Point-Set", "Your new end point has been set!", true, Collections.emptyMap());
                 returnToMainMenu();
@@ -252,6 +316,37 @@ public class EditWizard {
             }
             case 6: {
                 RestartPoint restartPoint = new RestartPoint(location);
+                Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
+
+
+                double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
+                if (borderA.getX() > borderB.getX()) {
+                    highX = borderA.getX();
+                    lowX = borderB.getX();
+                } else {
+                    highX = borderB.getX();
+                    lowX = borderA.getX();
+                }
+
+                if (borderA.getY() > borderB.getY()) {
+                    highY = borderA.getY();
+                    lowY = borderB.getY();
+                } else {
+                    highY = borderB.getY();
+                    lowY = borderA.getY();
+                }
+
+                if (borderA.getZ() > borderB.getZ()) {
+                    highZ = borderA.getZ();
+                    lowZ = borderB.getZ();
+                } else {
+                    highZ = borderB.getZ();
+                    lowZ = borderA.getZ();
+                }
+                if ((highX < location.getX() || lowX > location.getX()) || (highY < location.getY() || lowY > location.getY()) || (highZ < location.getZ() || lowZ > location.getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Outside-Border", "The new location of your plate is outside your border! Please try again or adjust your border points first.", true, Collections.emptyMap());
+                    return;
+                }
                 parkour.setRestartPoint(restartPoint);
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Restart-Point-Set", "Your new restart point has been set!", true, Collections.emptyMap());
                 returnToMainMenu();
@@ -259,6 +354,37 @@ public class EditWizard {
             }
             case 10: {
                 Checkpoint checkpoint = new Checkpoint(location, after + 1);
+                Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
+
+
+                double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
+                if (borderA.getX() > borderB.getX()) {
+                    highX = borderA.getX();
+                    lowX = borderB.getX();
+                } else {
+                    highX = borderB.getX();
+                    lowX = borderA.getX();
+                }
+
+                if (borderA.getY() > borderB.getY()) {
+                    highY = borderA.getY();
+                    lowY = borderB.getY();
+                } else {
+                    highY = borderB.getY();
+                    lowY = borderA.getY();
+                }
+
+                if (borderA.getZ() > borderB.getZ()) {
+                    highZ = borderA.getZ();
+                    lowZ = borderB.getZ();
+                } else {
+                    highZ = borderB.getZ();
+                    lowZ = borderA.getZ();
+                }
+                if ((highX < location.getX() || lowX > location.getX()) || (highY < location.getY() || lowY > location.getY()) || (highZ < location.getZ() || lowZ > location.getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Outside-Border", "The new location of your plate is outside your border! Please try again or adjust your border points first.", true, Collections.emptyMap());
+                    return;
+                }
                 parkour.addCheckpoint(checkpoint, after + 1);
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Checkpoint-Add.Success", "The checkpoint has been successfully added!", true, Collections.emptyMap());
                 returnToCheckpointMenu();
@@ -271,27 +397,48 @@ public class EditWizard {
                 break;
             }
             case 12:
-                Range<Double> rangeX = Range.between(location.getX(), point.getLocation().getX());
-                Range<Double> rangeY = Range.between(location.getY(), point.getLocation().getY());
-                Range<Double> rangeZ = Range.between(location.getZ(), point.getLocation().getZ());
-                if (!rangeX.contains(parkour.getRestartPoint().getLocation().getX()) || !rangeY.contains(parkour.getRestartPoint().getLocation().getY()) || !rangeZ.contains(parkour.getRestartPoint().getLocation().getZ())) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Plates-Outside-Border", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
+                if (location.getX() > point.getLocation().getX()) {
+                    highX = location.getX();
+                    lowX = point.getLocation().getX();
+                } else {
+                    highX = point.getLocation().getX();
+                    lowX = location.getX();
+                }
+
+                if (location.getY() > point.getLocation().getY()) {
+                    highY = location.getY();
+                    lowY = point.getLocation().getY();
+                } else {
+                    highY = point.getLocation().getY();
+                    lowY = location.getY();
+                }
+
+                if (location.getZ() > point.getLocation().getZ()) {
+                    highZ = location.getZ();
+                    lowZ = point.getLocation().getZ();
+                } else {
+                    highZ = point.getLocation().getZ();
+                    lowZ = location.getZ();
+                }
+                if ((highX < parkour.getRestartPoint().getLocation().getX() || lowX > parkour.getRestartPoint().getLocation().getX()) || (highY < parkour.getRestartPoint().getLocation().getY() || lowY > parkour.getRestartPoint().getLocation().getY()) || (highZ < parkour.getRestartPoint().getLocation().getZ() || lowZ > parkour.getRestartPoint().getLocation().getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Plates-Outside-Border.Restart", "Your restart point is currently plates outside your border! Please try again!", true, Collections.emptyMap());
                     currentModification = 11;
                     return;
                 }
-                if (!rangeX.contains(parkour.getStart().getLocation().getX()) || !rangeY.contains(parkour.getStart().getLocation().getY()) || !rangeZ.contains(parkour.getStart().getLocation().getZ())) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Plates-Outside-Border", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                if ((highX < parkour.getStart().getLocation().getX() || lowX > parkour.getStart().getLocation().getX()) || (highY < parkour.getStart().getLocation().getY() || lowY > parkour.getStart().getLocation().getY()) || (highZ < parkour.getStart().getLocation().getZ() || lowZ > parkour.getStart().getLocation().getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Plates-Outside-Border.Start", "Your start point is currently plates outside your border! Please try again!", true, Collections.emptyMap());
                     currentModification = 11;
                     return;
                 }
-                if (!rangeX.contains(parkour.getEndPoint().getLocation().getX()) || !rangeY.contains(parkour.getEndPoint().getLocation().getY()) || !rangeZ.contains(parkour.getEndPoint().getLocation().getZ())) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Plates-Outside-Border", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                if ((highX < parkour.getEndPoint().getLocation().getX() || lowX > parkour.getEndPoint().getLocation().getX()) || (highY < parkour.getEndPoint().getLocation().getY() || lowY > parkour.getEndPoint().getLocation().getY()) || (highZ < parkour.getEndPoint().getLocation().getZ() || lowZ > parkour.getEndPoint().getLocation().getZ())) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Plates-Outside-Border.End", "Your end point is currently plates outside your border! Please try again!", true, Collections.emptyMap());
                     currentModification = 11;
                     return;
                 }
                 for (Checkpoint checkpoint : parkour.getCheckpoints()) {
-                    if (!rangeX.contains(checkpoint.getLocation().getX()) || !rangeY.contains(checkpoint.getLocation().getY()) || !rangeZ.contains(checkpoint.getLocation().getZ())) {
-                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Plates-Outside-Border", "There are currently plates outside your border! Please try again!", true, Collections.emptyMap());
+                    if ((highX < checkpoint.getLocation().getX() || lowX > checkpoint.getLocation().getX()) || (highY < checkpoint.getLocation().getY() || lowY > checkpoint.getLocation().getY()) || (highZ < checkpoint.getLocation().getZ() || lowZ > checkpoint.getLocation().getZ())) {
+                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Plates-Outside-Border.Checkpoint", "One of your checkpoints is currently outside your border! Please try again!", true, Collections.emptyMap());
                         currentModification = 11;
                         return;
                     }

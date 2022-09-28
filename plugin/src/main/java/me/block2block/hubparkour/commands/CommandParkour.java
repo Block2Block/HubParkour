@@ -14,6 +14,7 @@ import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.entities.Statistics;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.block2block.hubparkour.managers.DatabaseManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -25,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.io.File;
 import java.util.*;
 
 @SuppressWarnings("unused")
@@ -250,7 +252,7 @@ public class CommandParkour implements CommandExecutor {
                                         case "list":
                                             StringBuilder list = new StringBuilder(ConfigUtil.getString("Messages.Commands.Admin.Hologram.List.Header", "All Active Holograms:") + "\n");
                                             for (LeaderboardHologram hologram : CacheManager.getLeaderboards()) {
-                                                list.append(ConfigUtil.getString("Messages.Commands.Admin.Hologram.List.Line", "&aID: {id} &r- &a{parkour-name}").replace("{parkour-name}", hologram.getParkour().getName()).replace("{id}", "" + hologram.getId())).append("\n");
+                                                list.append(ConfigUtil.getString("Messages.Commands.Admin.Hologram.List.Line", "&aID: {id} &r- &a{parkour-name}").replace("{parkour-name}", ((hologram.getParkour() != null)?hologram.getParkour().getName():"Global")).replace("{id}", "" + hologram.getId())).append("\n");
                                             }
 
                                             list.append(ConfigUtil.getString("Messages.Commands.Admin.Hologram.List.Footer", ""));
@@ -293,35 +295,39 @@ public class CommandParkour implements CommandExecutor {
                                             }
                                             break;
                                         case "create":
-                                            if (args.length >= 3) {
-                                                int id = -1;
-                                                try {
-                                                    id = Integer.parseInt(args[2]);
-                                                } catch (NumberFormatException ignored) {
-                                                }
-                                                Parkour parkour;
-                                                if (id != -1) {
-                                                    parkour = CacheManager.getParkour(id);
-                                                } else {
-                                                    List<String> argsList = new ArrayList<>(Arrays.asList(args));
-                                                    argsList.remove(0);
-                                                    argsList.remove(0);
-                                                    parkour = CacheManager.getParkour(String.join(" ", argsList));
-                                                }
-                                                if (parkour == null) {
-                                                    ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Create.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
-                                                    return true;
-                                                }
+                                            if (args.length == 2) {
                                                 Location location = new Location(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ());
-                                                LeaderboardHologram hologram = new LeaderboardHologram(location, parkour);
-                                                parkour.addHologram(hologram);
+                                                LeaderboardHologram hologram = new LeaderboardHologram(location, null);
                                                 CacheManager.addHologram(hologram);
-
                                                 hologram.generate();
                                                 ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Create.Successful", "Hologram successfully created.", true, Collections.emptyMap());
-                                            } else {
-                                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Create.Not-Enough-Arguments", "Invalid Arguments. Correct Arguments: &a/parkour hologram create [parkour id]", true, Collections.emptyMap());
+                                                return true;
                                             }
+                                            int id = -1;
+                                            try {
+                                                id = Integer.parseInt(args[2]);
+                                            } catch (NumberFormatException ignored) {
+                                            }
+                                            Parkour parkour;
+                                            if (id != -1) {
+                                                parkour = CacheManager.getParkour(id);
+                                            } else {
+                                                List<String> argsList = new ArrayList<>(Arrays.asList(args));
+                                                argsList.remove(0);
+                                                argsList.remove(0);
+                                                parkour = CacheManager.getParkour(String.join(" ", argsList));
+                                            }
+                                            if (parkour == null) {
+                                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Create.Not-Valid-Parkour", "That is not a valid parkour ID. If you wish to see a list of all parkours and their IDs, do /parkour list.", true, Collections.emptyMap());
+                                                return true;
+                                            }
+                                            Location location = new Location(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ());
+                                            LeaderboardHologram hologram = new LeaderboardHologram(location, parkour);
+                                            parkour.addHologram(hologram);
+                                            CacheManager.addHologram(hologram);
+
+                                            hologram.generate();
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Create.Successful", "Hologram successfully created.", true, Collections.emptyMap());
                                             break;
                                         default:
                                             StringBuilder sb = new StringBuilder();
@@ -330,7 +336,7 @@ public class CommandParkour implements CommandExecutor {
                                             List<String> defaultList = new ArrayList<>();
                                             defaultList.add("Available sub-commands:");
                                             defaultList.add("&a/parkour hologram list&r - List all active holograms and their ID's.");
-                                            defaultList.add("&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID.");
+                                            defaultList.add("&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID, or overall if none is specified.");
                                             defaultList.add("&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID.");
 
                                             for (String s2 : ConfigUtil.getStringList("Messages.Commands.Admin.Hologram.Help", defaultList)) {
@@ -352,7 +358,7 @@ public class CommandParkour implements CommandExecutor {
                                     List<String> defaultList = new ArrayList<>();
                                     defaultList.add("Available sub-commands:");
                                     defaultList.add("&a/parkour hologram list&r - List all active holograms and their ID's.");
-                                    defaultList.add("&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID.");
+                                    defaultList.add("&a/parkour hologram create [parkour id]&r - Place a Leaderboard hologram for the specified parkour ID, or overall if none is specified.");
                                     defaultList.add("&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID.");
 
                                     for (String s : ConfigUtil.getStringList("Messages.Commands.Admin.Hologram.Help", defaultList)) {
@@ -670,6 +676,47 @@ public class CommandParkour implements CommandExecutor {
                             ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
                         }
                         break;
+                    case "import": {
+                        if (p.hasPermission("hubparkour.admin.resetalltimes")) {
+                            if (DatabaseManager.isMysql()) {
+                                new BukkitRunnable(){
+                                    @Override
+                                    public void run() {
+                                        if (HubParkour.getInstance().getDbManager().hasData()) {
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Import.Must-Be-Empty", "You must have no data in MySQL in order to use the import command.", true, Collections.emptyMap());
+                                            return;
+                                        }
+
+                                        File file = new File(HubParkour.getInstance().getDataFolder(), ConfigUtil.getString("Settings.Database.Details.SQLite.File-Name", "hp-storage.db"));
+                                        if (!file.exists()) {
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Import.No-SQLite-File", "There is no SQLite file to import.", true, Collections.emptyMap());
+                                            return;
+                                        }
+
+                                        int currentSchema = ConfigUtil.getInternal().getInt("dbschema.sqlite");
+                                        if (currentSchema < HubParkour.getCurrentSchema()) {
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Import.Updating-SQLite-Schema", "The SQLite Database Schema is out of date, updating...", true, Collections.emptyMap());
+                                            for (int i = currentSchema + 1;i <= HubParkour.getCurrentSchema();i++) {
+                                                HubParkour.getSchemaUpdates().get(i).execute();
+                                            }
+                                        }
+
+                                        ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Import.Importing", "Importing data from SQLite into MySQL, please wait...", true, Collections.emptyMap());
+                                        if (HubParkour.getInstance().getDbManager().importData()) {
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Import.Import-Complete", "Import complete! Please restart your server in order for the data to be loaded!", true, Collections.emptyMap());
+                                        } else {
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Import.Import-Failed", "Import failed! Please try again!", true, Collections.emptyMap());
+                                        }
+                                    }
+                                }.runTaskAsynchronously(HubParkour.getInstance());
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Import.Must-Be-MySQL", "You must have MySQL database storage active in order to use the import command.", true, Collections.emptyMap());
+                            }
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+                        break;
+                    }
                     case "stats":
                         if (p.hasPermission("hubparkour.command.stats")) {
                             new BukkitRunnable(){
@@ -828,7 +875,7 @@ public class CommandParkour implements CommandExecutor {
                             defaultList.add("&a/parkour delete [parkour id or name] &r- Delete the parkour with the specific ID.");
                             defaultList.add("&a/parkour list&r - Lists all active parkours.");
                             defaultList.add("&a/parkour hologram list&r - List all active holograms and their ID's.");
-                            defaultList.add("&a/parkour hologram create [parkour id or name]&r - Place a Leaderboard hologram for the specified parkour ID.");
+                            defaultList.add("&a/parkour hologram create [parkour id or name]&r - Place a Leaderboard hologram for the specified parkour ID, or overall if none is specified.");
                             defaultList.add("&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID.");
                             defaultList.add("&a/parkour removetime [parkour id or name] [player name]&r - Reset a players leaderboard time.");
                             defaultList.add("&a/parkour cleartimes [parkour id or name]&r - Completely clear all times for a specific parkour.");
@@ -836,6 +883,7 @@ public class CommandParkour implements CommandExecutor {
                             defaultList.add("&a/parkour resetalltimes&r - Completely reset all times for all players.");
                             defaultList.add("&a/parkour edit [parkour id or name]&r - Enables edit mode to modify information about a parkour.");
                             defaultList.add("&a/parkour reload &r- Reload HubParkour's configuration.");
+                            defaultList.add("&a/parkour import &r- Import SQLite database configuration into MySQL. Only works if MySQL is empty and has no data.");
 
                             for (String s : ConfigUtil.getStringList("Messages.Commands.Help-Admin", defaultList)) {
                                 sb.append(s).append("\n");
@@ -877,7 +925,7 @@ public class CommandParkour implements CommandExecutor {
                     defaultList.add("&a/parkour delete [parkour id or name] &r- Delete the parkour with the specific ID.");
                     defaultList.add("&a/parkour list&r - Lists all active parkours.");
                     defaultList.add("&a/parkour hologram list&r - List all active holograms and their ID's.");
-                    defaultList.add("&a/parkour hologram create [parkour id or name]&r - Place a Leaderboard hologram for the specified parkour ID.");
+                    defaultList.add("&a/parkour hologram create [parkour id or name]&r - Place a Leaderboard hologram for the specified parkour ID, or overall if none is specified.");
                     defaultList.add("&a/parkour hologram delete [hologram id]&r - Delete the hologram with the specified ID.");
                     defaultList.add("&a/parkour removetime [parkour id or name] [player name]&r - Reset a players leaderboard time.");
                     defaultList.add("&a/parkour cleartimes [parkour id or name]&r - Completely clear all times for a specific parkour.");
@@ -885,6 +933,7 @@ public class CommandParkour implements CommandExecutor {
                     defaultList.add("&a/parkour resetalltimes&r - Completely reset all times for all players.");
                     defaultList.add("&a/parkour edit [parkour id or name]&r - Enables edit mode to modify information about a parkour.");
                     defaultList.add("&a/parkour reload &r- Reload HubParkour's configuration.");
+                    defaultList.add("&a/parkour import &r- Import SQLite database configuration into MySQL. Only works if MySQL is empty and has no data.");
 
                     for (String s : ConfigUtil.getStringList("Messages.Commands.Help-Admin", defaultList)) {
                         sb.append(s).append("\n");

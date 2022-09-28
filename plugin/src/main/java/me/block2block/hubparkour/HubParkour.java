@@ -1,9 +1,11 @@
 package me.block2block.hubparkour;
 
 import me.block2block.hubparkour.api.BackendAPI;
+import me.block2block.hubparkour.api.db.DatabaseSchemaUpdate;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
+import me.block2block.hubparkour.dbschema.One;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
@@ -25,9 +27,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class HubParkour extends JavaPlugin {
+
+    private static final int CURRENT_SCHEMA = 1;
+    private static final Map<Integer, DatabaseSchemaUpdate> schemaUpdates = new HashMap<>();
 
     private static HubParkour instance;
 
@@ -38,6 +46,12 @@ public class HubParkour extends JavaPlugin {
     private static boolean pre1_13 = false;
     private static boolean post1_8 = true;
     private static boolean post1_9 = false;
+
+    private static UUID serverUuid;
+
+    static {
+        registerSchema(new One());
+    }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
@@ -79,6 +93,7 @@ public class HubParkour extends JavaPlugin {
                 break;
         }
 
+
         //Generating/Loading Config File
         if (!getDataFolder().exists()) getDataFolder().mkdir();
         File configFile = new File(getDataFolder(), "config.yml");
@@ -93,6 +108,15 @@ public class HubParkour extends JavaPlugin {
             }
         }
 
+        File internalFile = new File(getDataFolder(), "internal.yml");
+        if (!internalFile.exists()) {
+            internalFile.getParentFile().mkdirs();
+            getLogger().info("Generating internal yml file.");
+            copy(getResource("internal.yml"), internalFile);
+            getLogger().severe("Do not delete the internal.yml file in the HubParkour folder or the plugin will bug out. No support will be given if you do this.");
+        }
+
+
         FileConfiguration config = new YamlConfiguration();
         try {
             config.load(configFile);
@@ -101,27 +125,72 @@ public class HubParkour extends JavaPlugin {
         }
         config.options().copyHeader(true);
 
-        ConfigUtil.init(config, configFile);
+        FileConfiguration internal = new YamlConfiguration();
+        try {
+            internal.load(internalFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        internal.options().copyHeader(true);
+
+        ConfigUtil.init(config, configFile, internal, internalFile);
+
+        String suuid = internal.getString("uuid");
+
+        if (suuid.equals("")) {
+            serverUuid = UUID.randomUUID();
+            internal.set("uuid", serverUuid);
+        } else {
+            serverUuid = UUID.fromString(suuid);
+        }
+
+        getLogger().info("Server UUID has been registered as: " + serverUuid);
 
         if (!loadTypes()) {
             return;
         }
 
-
-
-        holograms = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
+        holograms = Bukkit.getPluginManager().isPluginEnabled("DecentHolograms");
 
         if (holograms) {
-            getLogger().info("HolographicDisplays has been detected detected.");
+            getLogger().info("DecentHolograms has been detected detected.");
         }
 
         dbManager = new DatabaseManager();
 
+        boolean tables;
+        boolean mysql = ConfigUtil.getString("Settings.Database.Type", "SQLite").equalsIgnoreCase("mysql");
+
         try {
-            dbManager.setup(ConfigUtil.getString("Settings.Database.Type", "SQLite").equalsIgnoreCase("mysql"));
+            tables = dbManager.setup(mysql);
+
         } catch (Exception e) {
             getLogger().severe("There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:\n");
             e.printStackTrace();
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        if (tables) {
+            int currentSchema;
+            if (mysql) {
+                currentSchema = internal.getInt("dbschema.mysql");
+            } else {
+                currentSchema = internal.getInt("dbschema.sqlite");
+            }
+            if (currentSchema < CURRENT_SCHEMA) {
+                getLogger().info("Your current database schema is currently " + (CURRENT_SCHEMA - currentSchema) + " versions out of date. Updating...");
+                for (int i = currentSchema + 1;i <= CURRENT_SCHEMA;i++) {
+                    schemaUpdates.get(i).execute();
+                }
+                getLogger().info("Database schema update complete!");
+            }
+        } else {
+            if (mysql) {
+                internal.set("dbschema.mysql", CURRENT_SCHEMA);
+            } else {
+                internal.set("dbschema.sqlite", CURRENT_SCHEMA);
+            }
         }
 
         Bukkit.getPluginManager().registerEvents(new SetupListener(), this);
@@ -341,5 +410,21 @@ public class HubParkour extends JavaPlugin {
 
     public static boolean isPlaceholders() {
         return placeholders;
+    }
+
+    private static void registerSchema(DatabaseSchemaUpdate schemaUpdate) {
+        schemaUpdates.put(schemaUpdate.getId(), schemaUpdate);
+    }
+
+    public static UUID getServerUuid() {
+        return serverUuid;
+    }
+
+    public static int getCurrentSchema() {
+        return CURRENT_SCHEMA;
+    }
+
+    public static Map<Integer, DatabaseSchemaUpdate> getSchemaUpdates() {
+        return schemaUpdates;
     }
 }

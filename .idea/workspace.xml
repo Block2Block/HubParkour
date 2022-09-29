@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="4" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
@@ -13,16 +16,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.7.2: Bugfixes&#10; - Fixed a bug where when updating the database schema from older versions, the internal YML file would not update correctly resulting in errors when attempting to update again. You will see 1 more error when loading the plugin while the plugin updates the internal values, once it has been updated it should no longer error out.&#10; - Fixed a bug where signs would not always be loaded correctly and prevent plugin loading.&#10; - Fixed a wrong message where it said Holographic Displays was still required.">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.7.2: Bugfixes&#10; - Fixed a bug where when updating the database schema from older versions, the internal YML file would not update correctly resulting in errors when attempting to update again. You will see 1 more error when loading the plugin while the plugin updates the internal values, once it has been updated it should no longer error out.&#10; - Fixed a bug where signs would not always be loaded correctly and prevent plugin loading.&#10; - If a sign has been removed from the world, the plugin will automatically place it back. It is recommended to delete the replaced sign and place a new one as it will default to a wall sign facing north.&#10; - Fixed a wrong message where it said Holographic Displays was still required.&#10; - Fixed an issue where sometimes holograms would not load due to a missing soft dependency.">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/config1_13.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/config1_13.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/config1_8.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/config1_8.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -537,14 +533,7 @@
       <workItem from="1664397282577" duration="12075000" />
       <workItem from="1664458297927" duration="501000" />
       <workItem from="1664479280383" duration="857000" />
-      <workItem from="1664480797642" duration="299000" />
-    </task>
-    <task id="LOCAL-00022" summary="Update v2.1&#10; - New HubParkour Developer API.&#10; - New Leaderboard Holograms.&#10; - Fixed the update checker not working.&#10; - Fixed a bug when ending the parkour where it would retrieve the wrong value from the database.&#10; - Did a bunch of code cleanup.">
-      <created>1588387185803</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1588387185803</updated>
+      <workItem from="1664480797642" duration="2678000" />
     </task>
     <task id="LOCAL-00023" summary="Update v2.1&#10; - New HubParkour Developer API.&#10; - New Leaderboard Holograms.&#10; - Fixed the update checker not working.&#10; - Fixed a bug when ending the parkour where it would retrieve the wrong value from the database.&#10; - Did a bunch of code cleanup.">
       <created>1588387194199</created>
@@ -882,7 +871,14 @@
       <option name="project" value="LOCAL" />
       <updated>1664416282294</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="v2.7.2: Bugfixes&#10; - Fixed a bug where when updating the database schema from older versions, the internal YML file would not update correctly resulting in errors when attempting to update again. You will see 1 more error when loading the plugin while the plugin updates the internal values, once it has been updated it should no longer error out.&#10; - Fixed a bug where signs would not always be loaded correctly and prevent plugin loading.&#10; - If a sign has been removed from the world, the plugin will automatically place it back. It is recommended to delete the replaced sign and place a new one as it will default to a wall sign facing north.&#10; - Fixed a wrong message where it said Holographic Displays was still required.&#10; - Fixed an issue where sometimes holograms would not load due to a missing soft dependency.">
+      <created>1664481139227</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1664481139227</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -927,7 +923,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.5.1: Bug fixes&#10;- Fixed a bug where when creating a hologram, parkour ID's would not work.&#10;- Fixed a bug where holograms would cause an error when trying to refresh them after a parkour was completed." />
     <MESSAGE value="v2.5.2: VoidSpawn compatibility update and bug fixes&#10;- Fixed a bug where /parkour delete wouldn't delete all data and could cause errors.&#10;- Fixed a bug where leaving the parkour would not give items back properly.&#10;- Fixed duplicate messages sometimes being sent when teleporting.&#10;- Fixed a bug where admin permissions were granted to all users by default.&#10;- Added a new compatibility mode for VoidSpawn (enable in the config, recommended to keep disabled)&#10;- Got rid of some duplicate code." />
     <MESSAGE value="v2.5.3: Bug Fix&#10;- Fixed VoidSpawn compatibility in older versions.&#10;- Fixed wrong default value." />
     <MESSAGE value="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages" />
@@ -952,6 +947,7 @@
     <MESSAGE value="Implement all features, awaiting testing" />
     <MESSAGE value="A ton of bugfixes" />
     <MESSAGE value="v2.7.1: Permission bugfix&#10; - Fixed a bug where the import permission did not exist." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.7.1: Permission bugfix&#10; - Fixed a bug where the import permission did not exist." />
+    <MESSAGE value="v2.7.2: Bugfixes&#10; - Fixed a bug where when updating the database schema from older versions, the internal YML file would not update correctly resulting in errors when attempting to update again. You will see 1 more error when loading the plugin while the plugin updates the internal values, once it has been updated it should no longer error out.&#10; - Fixed a bug where signs would not always be loaded correctly and prevent plugin loading.&#10; - If a sign has been removed from the world, the plugin will automatically place it back. It is recommended to delete the replaced sign and place a new one as it will default to a wall sign facing north.&#10; - Fixed a wrong message where it said Holographic Displays was still required.&#10; - Fixed an issue where sometimes holograms would not load due to a missing soft dependency." />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.7.2: Bugfixes&#10; - Fixed a bug where when updating the database schema from older versions, the internal YML file would not update correctly resulting in errors when attempting to update again. You will see 1 more error when loading the plugin while the plugin updates the internal values, once it has been updated it should no longer error out.&#10; - Fixed a bug where signs would not always be loaded correctly and prevent plugin loading.&#10; - If a sign has been removed from the world, the plugin will automatically place it back. It is recommended to delete the replaced sign and place a new one as it will default to a wall sign facing north.&#10; - Fixed a wrong message where it said Holographic Displays was still required.&#10; - Fixed an issue where sometimes holograms would not load due to a missing soft dependency." />
   </component>
 </project>

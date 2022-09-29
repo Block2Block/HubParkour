@@ -6,6 +6,7 @@ import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
 import me.block2block.hubparkour.dbschema.One;
+import me.block2block.hubparkour.dbschema.Two;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
@@ -34,7 +35,7 @@ import java.util.UUID;
 
 public class HubParkour extends JavaPlugin {
 
-    private static final int CURRENT_SCHEMA = 1;
+    private static final int CURRENT_SCHEMA = 2;
     private static final Map<Integer, DatabaseSchemaUpdate> schemaUpdates = new HashMap<>();
 
     private static HubParkour instance;
@@ -51,6 +52,7 @@ public class HubParkour extends JavaPlugin {
 
     static {
         registerSchema(new One());
+        registerSchema(new Two());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

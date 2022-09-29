@@ -185,16 +185,16 @@ public class HubParkour extends JavaPlugin {
                 }
                 getLogger().info("Database schema update complete!");
             }
+        }
+
+        if (mysql) {
+            internal.set("dbschema.mysql", CURRENT_SCHEMA);
         } else {
-            if (mysql) {
-                internal.set("dbschema.mysql", CURRENT_SCHEMA);
-            } else {
-                internal.set("dbschema.sqlite", CURRENT_SCHEMA);
-            }
-            try {
-                internal.save(internalFile);
-            } catch (IOException ignored) {
-            }
+            internal.set("dbschema.sqlite", CURRENT_SCHEMA);
+        }
+        try {
+            internal.save(internalFile);
+        } catch (IOException ignored) {
         }
 
         try {

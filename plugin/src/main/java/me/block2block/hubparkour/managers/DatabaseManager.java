@@ -14,6 +14,7 @@ import me.block2block.hubparkour.utils.ConfigUtil;
 import me.block2block.hubparkour.utils.database.MySQLConnectionPool;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -602,21 +603,27 @@ public class DatabaseManager {
                     Bukkit.getLogger().info("A parkour that a sign was for does not exist.");
                     continue;
                 }
+                Location location = new Location(world, result.getInt(3), result.getInt(4), result.getInt(5));
+                if (location.getBlock().getType() != Material.SIGN && location.getBlock().getType() != Material.WALL_SIGN) {
+                    Bukkit.getLogger().info("A registered sign has been removed from the world. Placing a sign back. It is recommended you remove then replace the sign.");
+                    location.getBlock().setType(Material.WALL_SIGN);
+                    continue;
+                }
                 switch (result.getInt(7)) {
                     case 0: {
-                        TeleportClickableSign sign = new TeleportClickableSign(parkour, (Sign) (new Location(world, result.getInt(3), result.getInt(4), result.getInt(5))).getBlock().getState());
+                        TeleportClickableSign sign = new TeleportClickableSign(parkour, (Sign) location.getBlock().getState());
                         CacheManager.getSigns().put(sign.getSignState().getLocation(), sign);
                         sign.refresh();
                         break;
                     }
                     case 1: {
-                        StatsClickableSign sign = new StatsClickableSign(parkour, (Sign) (new Location(world, result.getInt(3), result.getInt(4), result.getInt(5))).getBlock().getState());
+                        StatsClickableSign sign = new StatsClickableSign(parkour, (Sign) location.getBlock().getState());
                         CacheManager.getSigns().put(sign.getSignState().getLocation(), sign);
                         sign.refresh();
                         break;
                     }
                     case 2: {
-                        StartClickableSign sign = new StartClickableSign(parkour, (Sign) (new Location(world, result.getInt(3), result.getInt(4), result.getInt(5))).getBlock().getState());
+                        StartClickableSign sign = new StartClickableSign(parkour, (Sign) location.getBlock().getState());
                         CacheManager.getSigns().put(sign.getSignState().getLocation(), sign);
                         sign.refresh();
                         break;

@@ -33,7 +33,7 @@ Messages:
   #When a pressure plate is broken, this is the message that is displayed
   Break-Disallowed: "You are not allowed to break HubParkour Pressure Plates. In order to remove HubParkour Pressure Plates, please delete the parkour with /parkour delete [id]."
 
-  #All Hologram messages. Requires HolographicDisplays to be installed.
+  #All Hologram messages. Requires DecentHolograms to be installed.
   Holograms:
     Start:
       - "&9&l&n{parkour-name}"
@@ -196,7 +196,7 @@ Messages:
         Import-Complete: "Import complete! Please restart your server in order for the data to be loaded!"
         Import-Failed: "Import failed! Please try again!"
       Hologram:
-        Must-Have-Holographic-Displays: "You must have Holographic Displays installed in order to use this command."
+        Must-Have-DecentHolograms: "You must have DecentHolograms installed in order to use this command."
         Help:
           - "Available sub-commands:"
           - "&a/parkour hologram list&r - List all active holograms and their ID's."

@@ -375,7 +375,7 @@ public class CommandParkour implements CommandExecutor {
                                     p.sendMessage(HubParkour.c(true, s.trim()));
                                 }
                             } else {
-                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Must-Have-Holographic-Displays", "You must have Holographic Displays installed in order to use this command.", true, Collections.emptyMap());
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Hologram.Must-Have-DecentHolograms", "You must have DecentHolograms installed in order to use this command.", true, Collections.emptyMap());
                             }
                         } else {
                             ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());

@@ -679,7 +679,7 @@ public class CommandParkour implements CommandExecutor {
                         }
                         break;
                     case "import": {
-                        if (p.hasPermission("hubparkour.admin.resetalltimes")) {
+                        if (p.hasPermission("hubparkour.admin.import")) {
                             if (DatabaseManager.isMysql()) {
                                 new BukkitRunnable(){
                                     @Override

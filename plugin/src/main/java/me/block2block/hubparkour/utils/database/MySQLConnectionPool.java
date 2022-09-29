@@ -22,8 +22,8 @@ public class MySQLConnectionPool {
      *            Password
      */
     public MySQLConnectionPool(String hostname, String port, String username,
-                               String password) throws ClassNotFoundException {
-        this(hostname, port, null, username, password);
+                               String password, String jdbcOptions) throws ClassNotFoundException {
+        this(hostname, port, null, username, password, jdbcOptions);
     }
 
     /**
@@ -41,11 +41,11 @@ public class MySQLConnectionPool {
      *            Password
      */
     public MySQLConnectionPool(String hostname, String port, String database,
-                               String username, String password) throws ClassNotFoundException {
+                               String username, String password, String jdbcOptions) throws ClassNotFoundException {
         String connectionURL = "jdbc:mysql://"
                 + hostname + ":" + port;
         if (database != null) {
-            connectionURL = connectionURL + "/" + database + "?verifyServerCertificate=false&useSSL=false&requireSSL=false";
+            connectionURL = connectionURL + "/" + database + "?" + jdbcOptions;
         }
 
         Class.forName("com.mysql.jdbc.Driver");

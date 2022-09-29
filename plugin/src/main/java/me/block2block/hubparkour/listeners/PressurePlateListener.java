@@ -156,10 +156,34 @@ public class PressurePlateListener implements Listener {
                 HubParkourPlayer player = CacheManager.getPlayer(p);
                 Parkour parkour = player.getParkour();
                 if (player.getParkour().getBorders().size() == 2) {
-                    Range<Double> rangeX = Range.between(parkour.getBorders().get(0).getLocation().getX(), parkour.getBorders().get(1).getLocation().getX());
-                    Range<Double> rangeY = Range.between(parkour.getBorders().get(0).getLocation().getY(), parkour.getBorders().get(1).getLocation().getY());
-                    Range<Double> rangeZ = Range.between(parkour.getBorders().get(0).getLocation().getZ(), parkour.getBorders().get(1).getLocation().getZ());
-                    if (!rangeX.contains(p.getLocation().getX()) || !rangeY.contains(p.getLocation().getY()) || !rangeZ.contains(p.getLocation().getZ())) {
+                    Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
+
+
+                    double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
+                    if (borderA.getX() > borderB.getX()) {
+                        highX = borderA.getX();
+                        lowX = borderB.getX();
+                    } else {
+                        highX = borderB.getX();
+                        lowX = borderA.getX();
+                    }
+
+                    if (borderA.getY() > borderB.getY()) {
+                        highY = borderA.getY();
+                        lowY = borderB.getY();
+                    } else {
+                        highY = borderB.getY();
+                        lowY = borderA.getY();
+                    }
+
+                    if (borderA.getZ() > borderB.getZ()) {
+                        highZ = borderA.getZ();
+                        lowZ = borderB.getZ();
+                    } else {
+                        highZ = borderB.getZ();
+                        lowZ = borderA.getZ();
+                    }
+                    if ((highX < p.getLocation().getX() || lowX > p.getLocation().getX()) || (highY < p.getLocation().getY() || lowY > p.getLocation().getY()) || (highZ < p.getLocation().getZ() || lowZ > p.getLocation().getZ())) {
                         Location l = player.getParkour().getRestartPoint().getLocation().clone();
                         if (player.getLastReached() != 0) {
                             l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();

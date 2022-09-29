@@ -17,7 +17,7 @@ public class ParkourTabComplete implements TabCompleter {
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
         if (command.getName().equals("parkour")) {
             if (args.length == 1) {
-                List<String> subcommands = Arrays.asList("checkpoint", "reset", "leaderboard", "leave", "setup", "delete", "list", "hologram", "reload", "done", "cancel", "input", "teleport", "edit", "removetime", "cleartimes", "resetalltimes", "resettimes", "stats");
+                List<String> subcommands = Arrays.asList("checkpoint", "reset", "leaderboard", "leave", "setup", "delete", "list", "hologram", "reload", "done", "cancel", "input", "teleport", "edit", "removetime", "cleartimes", "resetalltimes", "resettimes", "stats", "import");
                 return getSubcommands(args, subcommands);
             } else {
                 if (args[0].toLowerCase().equals("hologram")) {

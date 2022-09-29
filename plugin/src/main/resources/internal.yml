@@ -1,0 +1,5 @@
+DO-NOT-DELETE-OR-MODIFY-THIS-FILE---PLUGIN-WILL-BUG-OUT-IF-YOU-DO: true
+dbschema:
+  mysql: 0
+  sqlite: 0
+server-uuid: ""

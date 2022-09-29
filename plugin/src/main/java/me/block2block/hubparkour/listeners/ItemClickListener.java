@@ -96,6 +96,7 @@ public class ItemClickListener implements Listener {
                                 }
 
                                 if ((confirmationRequied.containsKey(p) && confirmationRequied.get(p) == 1) || !ConfigUtil.getBoolean("Settings.Parkour-Items.Checkpoint.Confirmation", true)) {
+                                    confirmationRequied.remove(p);
                                     p.setFallDistance(0);
                                     Location l2 = player.getParkour().getRestartPoint().getLocation().clone();
                                     if (player.getLastReached() != 0) {
@@ -134,6 +135,7 @@ public class ItemClickListener implements Listener {
                                     return;
                                 }
                                 if ((confirmationRequied.containsKey(p) && confirmationRequied.get(p) == 2) || !ConfigUtil.getBoolean("Settings.Parkour-Items.Cancel.Confirmation", true)) {
+                                    confirmationRequied.remove(p);
                                     //Delay to avoid clientside visual glitch
                                     new BukkitRunnable(){
                                         @Override
@@ -143,7 +145,7 @@ public class ItemClickListener implements Listener {
                                     }.runTaskLater(HubParkour.getInstance(), 1);
                                     ConfigUtil.sendMessage(p, "Messages.Commands.Leave.Left", "You have left the parkour and your progress has been reset.", true, Collections.emptyMap());
                                 } else {
-                                    confirmationRequied.put(p, 1);
+                                    confirmationRequied.put(p, 2);
                                     ConfigUtil.sendMessage(p, "Messages.Parkour.Confirm-Action", "Please click the item again to confirm your action.", true, Collections.emptyMap());
                                     new BukkitRunnable() {
                                         @Override

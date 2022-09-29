@@ -2,6 +2,7 @@ package me.block2block.hubparkour.entities;
 
 
 import me.block2block.hubparkour.HubParkour;
+import me.block2block.hubparkour.api.HubParkourAPI;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
 import me.block2block.hubparkour.api.ParkourRun;
@@ -60,11 +61,19 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         currentSplit = startTime;
         prevGamemode = player.getGameMode();
         prevHealth = player.getHealth();
-        prevMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        if (HubParkour.isPre1_13()) {
+            prevMaxHealth = player.getMaxHealth();
+        } else {
+            prevMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        }
         prevHunger = player.getFoodLevel();
         if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
             if (prevMaxHealth < 20) {
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
+                if (HubParkour.isPre1_13()) {
+                    player.setMaxHealth(20);
+                } else {
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
+                }
             }
             player.setHealth(20);
         }
@@ -257,7 +266,11 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Not-Enough-Checkpoints", "You did not reach enough checkpoints, parkour failed!", true, Collections.emptyMap());
                     parkour.playerEnd(this);
                     if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-                        player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
+                        if (HubParkour.isPre1_13()) {
+                            player.setMaxHealth(prevMaxHealth);
+                        } else {
+                            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
+                        }
                         player.setHealth(prevHealth);
                     }
                     if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
@@ -472,7 +485,11 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         removeItems();
         parkour.playerEnd(this);
         if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
+            if (HubParkour.isPre1_13()) {
+                player.setMaxHealth(prevMaxHealth);
+            } else {
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
+            }
             player.setHealth(prevHealth);
         }
         if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {

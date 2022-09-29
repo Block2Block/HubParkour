@@ -44,17 +44,20 @@ public class DatabaseManager {
     public boolean setup(boolean isMySql) throws SQLException, ClassNotFoundException {
         isMysql = isMySql;
         if (isMysql) {
-            dbMySql = new MySQLConnectionPool(ConfigUtil.getString("Settings.Database.Details.MySQL.Hostname", "localhost"), ConfigUtil.getString("Settings.Database.Details.MySQL.Port", "3306"),ConfigUtil.getString("Settings.Database.Details.MySQL.Database", "HubParkour"), ConfigUtil.getString("Settings.Database.Details.MySQL.Username", "root"), ConfigUtil.getString("Settings.Database.Details.MySQL.Password", ""), ConfigUtil.getString("JDBC-Options","verifyServerCertificate=false&useSSL=false&requireSSL=false"));
+            dbMySql = new MySQLConnectionPool(ConfigUtil.getString("Settings.Database.Details.MySQL.Hostname", "localhost"), ConfigUtil.getString("Settings.Database.Details.MySQL.Port", "3306"),ConfigUtil.getString("Settings.Database.Details.MySQL.Database", "HubParkour"), ConfigUtil.getString("Settings.Database.Details.MySQL.Username", "root"), ConfigUtil.getString("Settings.Database.Details.MySQL.Password", ""), ConfigUtil.getString("Settings.Database.Details.MySQL.JDBC-Options","verifyServerCertificate=false&useSSL=false&requireSSL=false"));
         } else {
             setupSQLite(ConfigUtil.getString("Settings.Database.Details.SQLite.File-Name", "hp-storage.db"));
         }
 
         boolean tables = hasTables();
+        return tables;
+    }
+
+    public void load() throws SQLException, ClassNotFoundException {
         createTables();
         loadParkours();
         loadHolograms();
         loadSigns();
-        return tables;
     }
 
     @SuppressWarnings("unused")
@@ -489,7 +492,7 @@ public class DatabaseManager {
     @SuppressWarnings("unused")
     public void loadParkours() {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_parkours WHERE server = NULL OR server = ?");
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_parkours WHERE server IS NULL OR server = ?");
                 statement.setString(1, HubParkour.getServerUuid().toString());
                 ResultSet result = statement.executeQuery();
                 List<Parkour> parkours = new ArrayList<>();
@@ -526,7 +529,7 @@ public class DatabaseManager {
                         }
                     }
 
-                    CacheManager.addParkour(new Parkour(result.getInt(1), ((result.getString(5) == null)?null:UUID.fromString(result.getString(5))), result.getString(2), start, end, checkpoints, restart, borderPoints, checkCommand, endCommand, result.getInt(5)));
+                    CacheManager.addParkour(new Parkour(result.getInt(1), ((result.getString(6) == null)?null:UUID.fromString(result.getString(6))), result.getString(2), start, end, checkpoints, restart, borderPoints, checkCommand, endCommand, result.getInt(5)));
                 }
 
             } catch (SQLException e) {
@@ -539,7 +542,6 @@ public class DatabaseManager {
     public int getNoParkours() {
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT count(*) FROM hp_parkours");
-            statement.setString(1, HubParkour.getServerUuid().toString());
             ResultSet result = statement.executeQuery();
             result.next();
             return result.getInt(1);
@@ -565,13 +567,15 @@ public class DatabaseManager {
                     }
 
                     Parkour parkour = CacheManager.getParkour(result.getInt(2));
-                    if (parkour == null) {
+                    if (parkour == null && result.getInt(2) != 0) {
                         Bukkit.getLogger().info("A parkour that a leaderboard hologram was for does not exist.");
                         continue;
                     }
                     LeaderboardHologram hologram = new LeaderboardHologram(new Location(world, result.getInt(3), result.getInt(4), result.getInt(5)), parkour, result.getInt(1));
                     CacheManager.addHologram(hologram);
-                    parkour.addHologram(hologram);
+                    if (parkour != null) {
+                        parkour.addHologram(hologram);
+                    }
                 }
             } catch (SQLException e) {
                 Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
@@ -629,7 +633,11 @@ public class DatabaseManager {
     public int addHologram(LeaderboardHologram hologram) {
             try (Connection connection = getConnection()) {
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_holograms(parkour_id, x, y, z, world) VALUES (?, ?, ?, ?, ?)");
-                statement.setInt(1, hologram.getParkour().getId());
+                if (hologram.getParkour() != null) {
+                    statement.setInt(1, hologram.getParkour().getId());
+                } else {
+                    statement.setNull(1, Types.INTEGER);
+                }
                 statement.setInt(2, hologram.getLocation().getBlockX());
                 statement.setInt(3, hologram.getLocation().getBlockY());
                 statement.setInt(4, hologram.getLocation().getBlockZ());
@@ -637,12 +645,11 @@ public class DatabaseManager {
 
                 boolean success = statement.execute();
 
-                statement = connection.prepareStatement("SELECT hologram_id FROM hp_holograms WHERE parkour_id = ? AND x = ? AND y = ? AND z = ? AND world = ?");
-                statement.setInt(1, hologram.getParkour().getId());
-                statement.setInt(2, hologram.getLocation().getBlockX());
-                statement.setInt(3, hologram.getLocation().getBlockY());
-                statement.setInt(4, hologram.getLocation().getBlockZ());
-                statement.setString(5, hologram.getLocation().getWorld().getName());
+                statement = connection.prepareStatement("SELECT hologram_id FROM hp_holograms WHERE x = ? AND y = ? AND z = ? AND world = ?");
+                statement.setInt(1, hologram.getLocation().getBlockX());
+                statement.setInt(2, hologram.getLocation().getBlockY());
+                statement.setInt(3, hologram.getLocation().getBlockZ());
+                statement.setString(4, hologram.getLocation().getWorld().getName());
                 ResultSet results = statement.executeQuery();
 
                 results.next();
@@ -1346,17 +1353,14 @@ public class DatabaseManager {
             if (isMysql) {
                 sql = "DESCRIBE " + ConfigUtil.getString("Settings.Database.Details.MySQL.Database", "HubParkour") + ".hp_parkours";
             } else {
-                sql = "SELECT sql " +
-                        "FROM sqlite_schema " +
-                        "WHERE name = 'hp_parkours';";
+                sql = "SELECT name FROM sqlite_master " +
+                        "WHERE type='table'" +
+                        "ORDER BY name;";
             }
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet set = statement.executeQuery();
             return set.next();
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            error = true;
-            e.printStackTrace();
             return false;
         }
     }
@@ -1389,15 +1393,15 @@ public class DatabaseManager {
                         + dbLocation);) {
 
 
-            copy("hp_parkours", connection, dbSqlite);
-            copy("hp_locations", connection, dbSqlite);
-            copy("hp_playertimes", connection, dbSqlite);
-            copy("hp_lastruncompleted", connection, dbSqlite);
-            copy("hp_reachedcheckpoints", connection, dbSqlite);
-            copy("hp_rewardtimestamps", connection, dbSqlite);
-            copy("hp_splittimes", connection, dbSqlite);
-            copy("hp_stats", connection, dbSqlite);
-            copy("hp_holograms", connection, dbSqlite);
+            copy("hp_parkours", dbSqlite, connection);
+            copy("hp_locations", dbSqlite, connection);
+            copy("hp_playertimes", dbSqlite, connection);
+            copy("hp_lastruncompleted", dbSqlite, connection);
+            copy("hp_reachedcheckpoints", dbSqlite, connection);
+            copy("hp_rewardtimestamps", dbSqlite, connection);
+            copy("hp_splittimes", dbSqlite, connection);
+            copy("hp_stats", dbSqlite, connection);
+            copy("hp_holograms", dbSqlite, connection);
             return true;
         } catch (SQLException e) {
             Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
@@ -1408,13 +1412,15 @@ public class DatabaseManager {
     }
 
     public void copy(String table, Connection from, Connection to) throws SQLException {
-        try (PreparedStatement s1 = from.prepareStatement("select * from " + table);
+        try (PreparedStatement s1 = from.prepareStatement("SELECT * FROM " + table);
              ResultSet rs = s1.executeQuery()) {
             ResultSetMetaData meta = rs.getMetaData();
 
             List<String> columns = new ArrayList<>();
-            for (int i = 1; i <= meta.getColumnCount(); i++)
+            for (int i = 1; i <= meta.getColumnCount(); i++) {
                 columns.add(meta.getColumnName(i));
+            }
+
 
             try (PreparedStatement s2 = to.prepareStatement(
                     "INSERT INTO " + table + " ("
@@ -1423,7 +1429,6 @@ public class DatabaseManager {
                             + columns.stream().map(c -> "?").collect(Collectors.joining(", "))
                             + ")"
             )) {
-
                 while (rs.next()) {
                     for (int i = 1; i <= meta.getColumnCount(); i++)
                         s2.setObject(i, rs.getObject(i));

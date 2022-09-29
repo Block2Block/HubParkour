@@ -281,7 +281,9 @@ public class CommandParkour implements CommandExecutor {
                                                 }
 
                                                 hologram.remove();
-                                                hologram.getParkour().removeHologram(hologram);
+                                                if (hologram.getParkour() != null) {
+                                                    hologram.getParkour().removeHologram(hologram);
+                                                }
                                                 CacheManager.removeHologram(hologram);
                                                 new BukkitRunnable(){
                                                     @Override

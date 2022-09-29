@@ -135,11 +135,11 @@ public class HubParkour extends JavaPlugin {
 
         ConfigUtil.init(config, configFile, internal, internalFile);
 
-        String suuid = internal.getString("uuid");
+        String suuid = internal.getString("server-uuid");
 
         if (suuid.equals("")) {
             serverUuid = UUID.randomUUID();
-            internal.set("uuid", serverUuid);
+            internal.set("server-uuid", serverUuid.toString());
         } else {
             serverUuid = UUID.fromString(suuid);
         }
@@ -191,6 +191,19 @@ public class HubParkour extends JavaPlugin {
             } else {
                 internal.set("dbschema.sqlite", CURRENT_SCHEMA);
             }
+            try {
+                internal.save(internalFile);
+            } catch (IOException ignored) {
+            }
+        }
+
+        try {
+            dbManager.load();
+        } catch (Exception e) {
+            getLogger().severe("There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:\n");
+            e.printStackTrace();
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
         }
 
         Bukkit.getPluginManager().registerEvents(new SetupListener(), this);
@@ -230,9 +243,9 @@ public class HubParkour extends JavaPlugin {
 
         for (LeaderboardHologram hologram : CacheManager.getLeaderboards()) {
             if (isHolograms()) {
-                getLogger().info("Generating leaderboard hologram for parkour " + hologram.getParkour().getName() + " (ID: " + hologram.getId() + ") ...");
+                getLogger().info("Generating leaderboard hologram" + ((hologram.getParkour() != null)?" for parkour " + hologram.getParkour().getName():"") + " (ID: " + hologram.getId() + ") ...");
                 hologram.generate();
-                getLogger().info("Leaderboard hologram for parkour " + hologram.getParkour().getName() + " (ID: " + hologram.getId() + ") successfully generated!");
+                getLogger().info("Leaderboard hologram" + ((hologram.getParkour() != null)?" for parkour " + hologram.getParkour().getName():"") + " (ID: " + hologram.getId() + ") successfully generated!");
             }
         }
 

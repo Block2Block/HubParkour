@@ -50,9 +50,9 @@ public class LeaderboardHologram implements ILeaderboardHologram {
             HubParkour.getInstance().getLogger().info("The location of one of your leaderboard holograms for parkour " + parkour.getName() + " no longer exists. Please delete leaderboard hologram " + this.id + ".");
             return;
         }
-        hologram = DHAPI.getHologram("hp:leaderboard." + ((parkour == null)?"global":parkour.getId()) + "." + id);
+        hologram = DHAPI.getHologram("hp_leaderboard_" + ((parkour == null)?"global":parkour.getId()) + "_" + id);
         if (hologram == null) {
-            hologram = DHAPI.createHologram("hp:leaderboard." + ((parkour == null)?"global":parkour.getId()) + "." + id, location);
+            hologram = DHAPI.createHologram("hp_leaderboard_" + ((parkour == null)?"global":parkour.getId()) + "_" + id, location);
         } else {
             DHAPI.moveHologram(hologram, location);
         }

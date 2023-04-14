@@ -54,6 +54,7 @@ Messages:
     Position-Not-Filled: "Position not filled"
     Not-Valid-Parkour: "Not a valid parkour"
     Not-Yet-Completed: "Not yet completed"
+    Not-Yet-Finished: "Not yet finished"
     Not-Yet-Filled: "Position not filled"
     Not-In-Parkour: "Not in parkour"
     Not-Applicable: "N/A"
@@ -461,6 +462,7 @@ Settings:
   #Settings related to items given when the parkour is started. Specify the slot for them to be put in. Use -1 to disable a specific item.
   Parkour-Items:
     Prevent-Item-Pickup: true
+    #If heal to full is enabled and this setting is disabled, any armor that modifies health or hunger will result in the player keeping those hearts permanently.
     Clear-Inventory-On-Parkour-Start: true
     Checkpoint:
       Slot: 4
@@ -514,12 +516,14 @@ Settings:
         #The file name MUST end in .db.
         File-Name: "hp-storage.db"
 
-  #Specifies the type of pressure plates that the plugin uses. Values CANNOT be the same. The plugin will disable itself
-  #if an invalid or duplicate value is detected. Modify with caution.
-  #Valid values: Any type of pressure plate listed in the Spigot API Materials Enum. Google "Spigot API Material" to see a full list.
-  #Obviously if this is being used on a legacy server (anything between 1.8-1.12 I consider to be legacy) not all of the pressure
-  #plates in the newer Spigot API are in the older versions, so you need to plan accordingly. If you are in a legacy version, these values
-  #will register as invalid at first. You must change these values.
+  #Specifies the type of pressure plates that the plugin uses. The plugin will disable itself if an invalid value is detected. Modify with caution.
+  #
+  #The plugin will let you use any valid Spigot Material value, however not all items in that list are blocks. Google "Spigot API Material" to see a full list.
+  #To just have the player walk through the area, set it to AIR. Setting it to air will not replace a block that is in the way, it is your responsibility to make
+  #sure there is no block there.
+  #
+  #WARNING: Do not choose a material that takes up an entire block. That will cause your parkours not to work as players can never enter that co-ordinate.
+  #
   #If you change these values when a parkour is already set up, the plugin will automatically replace the pressure
   #plates upon restarting the server.
   Pressure-Plates:

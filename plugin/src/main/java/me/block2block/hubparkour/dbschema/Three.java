@@ -8,23 +8,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.logging.Level;
 
-public class Two extends DatabaseSchemaUpdate {
+public class Three extends DatabaseSchemaUpdate {
 
-    public Two() {
-        super(2);
+    public Three() {
+        super(3);
     }
 
     @Override
     public void execute() {
-        if (!DatabaseManager.isMysql()) {
-            return;
-        }
         try (Connection connection = HubParkour.getInstance().getDbManager().getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("ALTER TABLE `hp_parkours` DROP `server`;");
-            statement.execute();
-
-            statement = connection.prepareStatement("ALTER TABLE `hp_parkours` ADD `server` VARCHAR(36) NULL DEFAULT NULL" + ((DatabaseManager.isMysql())?" AFTER `reward_cooldown`":"") + ";");
-            statement.execute();
+            if (DatabaseManager.isMysql()) {
+                PreparedStatement statement = connection.prepareStatement("ALTER TABLE `hp_signs` ADD `facing` TEXT NOT NULL AFTER `type`, ADD `wall` BOOLEAN NOT NULL AFTER `facing`;");
+                statement.execute();
+            } else {
+                PreparedStatement statement = connection.prepareStatement("ALTER TABLE `hp_signs` ADD `facing` TEXT NOT NULL;");
+                statement.execute();
+                statement = connection.prepareStatement("ALTER TABLE `hp_signs` ADD `wall` BOOLEAN NOT NULL;");
+                statement.execute();
+            }
         } catch (Exception e) {
             HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             e.printStackTrace();

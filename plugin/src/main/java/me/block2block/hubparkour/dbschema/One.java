@@ -3,7 +3,6 @@ package me.block2block.hubparkour.dbschema;
 import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.db.DatabaseSchemaUpdate;
 import me.block2block.hubparkour.managers.DatabaseManager;
-import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +20,7 @@ public class One extends DatabaseSchemaUpdate {
             PreparedStatement statement = connection.prepareStatement("ALTER TABLE `hp_parkours` ADD `server` VARCHAR(36) NULL DEFAULT NULL" + ((DatabaseManager.isMysql())?" AFTER `checkpoint_reward`":"") + ";");
             statement.execute();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             e.printStackTrace();
         }
 

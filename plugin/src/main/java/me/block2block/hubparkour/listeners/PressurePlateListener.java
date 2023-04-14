@@ -10,7 +10,6 @@ import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
-import org.apache.commons.lang3.Range;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -228,138 +227,136 @@ public class PressurePlateListener implements Listener {
                 }
             }
         }
-        if (CacheManager.getTypes().containsValue(e.getTo().getBlock().getType())) {
-            if (CacheManager.isPoint(e.getTo().getBlock().getLocation())) {
-                PressurePlate pp = CacheManager.getPoint(e.getTo().getBlock().getLocation());
-                Player p = e.getPlayer();
-                if (CacheManager.isSomeoneEdit()) {
-                    if (pp.getParkour().equals(CacheManager.getEditWizard().getParkour())) {
-                        ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Currently-Being-Edited", "This parkour is currently in being modified by an admin. Please wait to attempt this parkour!", true, Collections.emptyMap());
-                        return;
-                    }
+        if (CacheManager.isPoint(e.getTo().getBlock().getLocation())) {
+            PressurePlate pp = CacheManager.getPoint(e.getTo().getBlock().getLocation());
+            Player p = e.getPlayer();
+            if (CacheManager.isSomeoneEdit()) {
+                if (pp.getParkour().equals(CacheManager.getEditWizard().getParkour())) {
+                    ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Currently-Being-Edited", "This parkour is currently in being modified by an admin. Please wait to attempt this parkour!", true, Collections.emptyMap());
+                    return;
                 }
-                switch (pp.getType()) {
-                    case 0:
-                        //StartPoint
-                        if (CacheManager.isParkour(p)) {
-                            if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
-                                //Restart the parkour.
+            }
+            switch (pp.getType()) {
+                case 0:
+                    //StartPoint
+                    if (CacheManager.isParkour(p)) {
+                        if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
+                            //Restart the parkour.
 
-                                CacheManager.getPlayer(p).restart();
-                                ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Restarted", "You have restarted the parkour! Your time has been reset to 0!", true, Collections.emptyMap());
-                                return;
-                            } else {
-                                //Do nothing, is doing a different parkour.
-                                if (ConfigUtil.getBoolean("Settings.Start-When-In-Parkour", false)) {
-                                    CacheManager.getPlayer(p).end(ParkourPlayerFailEvent.FailCause.NEW_PARKOUR);
-
-                                    //Start the new parkour
-                                    Parkour parkour = (Parkour) pp.getParkour();
-                                    HubParkourPlayer player = new HubParkourPlayer(p, parkour);
-                                    ParkourPlayerStartEvent event = new ParkourPlayerStartEvent(parkour, player, player.getStartTime());
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (event.isCancelled()) {
-                                        return;
-                                    }
-                                    parkour.playerStart(player);
-                                    CacheManager.playerStart(player);
-                                    if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Potion-Effects", true)) {
-                                        for (PotionEffect effect : p.getActivePotionEffects()) {
-                                            p.removePotionEffect(effect.getType());
-                                        }
-                                    }
-                                    if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Fly", true)) {
-                                        p.setFlying(false);
-                                        if (Material.getMaterial("ELYTRA") != null) {
-                                            p.setGliding(false);
-                                        }
-                                    }
-                                    player.giveItems();
-
-                                    Map<String, String> bindings = new HashMap<>();
-                                    bindings.put("parkour-name", parkour.getName());
-
-                                    ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Started", "You have started the &a{parkour-name} &rparkour!", true, bindings);
-                                    return;
-                                } else {
-                                    ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Already-In-Parkour", "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave.", true, Collections.emptyMap());
-                                    return;
-                                }
-                            }
+                            CacheManager.getPlayer(p).restart();
+                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Restarted", "You have restarted the parkour! Your time has been reset to 0!", true, Collections.emptyMap());
+                            return;
                         } else {
-                            //Start the parkour
-                            Parkour parkour = (Parkour) pp.getParkour();
-                            HubParkourPlayer player = new HubParkourPlayer(p, parkour);
-                            ParkourPlayerStartEvent event = new ParkourPlayerStartEvent(parkour, player, player.getStartTime());
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (event.isCancelled()) {
-                                return;
-                            }
-                            parkour.playerStart(player);
-                            CacheManager.playerStart(player);
-                            if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Potion-Effects", true)) {
-                                for (PotionEffect effect : p.getActivePotionEffects()) {
-                                    p.removePotionEffect(effect.getType());
-                                }
-                            }
-                            if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Fly", true)) {
-                                p.setFlying(false);
-                                if (Material.getMaterial("ELYTRA") != null) {
-                                    p.setGliding(false);
-                                }
-                            }
-                            player.giveItems();
+                            //Do nothing, is doing a different parkour.
+                            if (ConfigUtil.getBoolean("Settings.Start-When-In-Parkour", false)) {
+                                HubParkourPlayer old = CacheManager.getPlayer(p);
+                                old.end(ParkourPlayerFailEvent.FailCause.NEW_PARKOUR);
 
-                            Map<String, String> bindings = new HashMap<>();
-                            bindings.put("parkour-name", parkour.getName());
-
-                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Started", "You have started the &a{parkour-name} &rparkour!", true, bindings);
-
-
-                        }
-                        break;
-                    case 1:
-                        //EndPoint
-                        if (CacheManager.isParkour(p)) {
-                            if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
-                                //End the parkour.
-                                CacheManager.getPlayer(p).end(null);
-                                return;
-                            } else {
-                                //Do nothing, is doing a different parkour.
-                                ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Already-In-Parkour", "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave.", true, Collections.emptyMap());
-                                return;
-                            }
-                        } else {
-                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.End.Not-Started", "You must start a parkour in order to finish it.", true, Collections.emptyMap());
-                        }
-                        break;
-                    case 2:
-                        return;
-                    case 3:
-                        //Checkpoint
-                        if (CacheManager.isParkour(p)) {
-                            if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
-                                //Checkpoint the parkour.
-                                Checkpoint checkpoint = (Checkpoint) pp;
-                                ParkourPlayerCheckpointEvent event = new ParkourPlayerCheckpointEvent(pp.getParkour(), CacheManager.getPlayer(p), checkpoint);
+                                //Start the new parkour
+                                Parkour parkour = (Parkour) pp.getParkour();
+                                HubParkourPlayer player = new HubParkourPlayer(old, parkour);
+                                ParkourPlayerStartEvent event = new ParkourPlayerStartEvent(parkour, player, player.getStartTime());
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return;
                                 }
+                                parkour.playerStart(player);
+                                CacheManager.playerStart(player);
+                                if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Potion-Effects", true)) {
+                                    for (PotionEffect effect : p.getActivePotionEffects()) {
+                                        p.removePotionEffect(effect.getType());
+                                    }
+                                }
+                                if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Fly", true)) {
+                                    p.setFlying(false);
+                                    if (Material.getMaterial("ELYTRA") != null) {
+                                        p.setGliding(false);
+                                    }
+                                }
 
-                                CacheManager.getPlayer(p).checkpoint(checkpoint);
+                                Map<String, String> bindings = new HashMap<>();
+                                bindings.put("parkour-name", parkour.getName());
+
+                                ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Started", "You have started the &a{parkour-name} &rparkour!", true, bindings);
                                 return;
                             } else {
-                                //Do nothing, is doing a different parkour.
                                 ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Already-In-Parkour", "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave.", true, Collections.emptyMap());
                                 return;
                             }
-                        } else {
-                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Checkpoints.Not-Started", "You must start a parkour in order to reach checkpoints!", true, Collections.emptyMap());
                         }
-                        break;
-                }
+                    } else {
+                        //Start the parkour
+                        Parkour parkour = (Parkour) pp.getParkour();
+                        HubParkourPlayer player = new HubParkourPlayer(p, parkour);
+                        ParkourPlayerStartEvent event = new ParkourPlayerStartEvent(parkour, player, player.getStartTime());
+                        Bukkit.getPluginManager().callEvent(event);
+                        if (event.isCancelled()) {
+                            return;
+                        }
+                        parkour.playerStart(player);
+                        CacheManager.playerStart(player);
+                        if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Potion-Effects", true)) {
+                            for (PotionEffect effect : p.getActivePotionEffects()) {
+                                p.removePotionEffect(effect.getType());
+                            }
+                        }
+                        if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Remove-Fly", true)) {
+                            p.setFlying(false);
+                            if (Material.getMaterial("ELYTRA") != null) {
+                                p.setGliding(false);
+                            }
+                        }
+                        player.startParkour();
+
+                        Map<String, String> bindings = new HashMap<>();
+                        bindings.put("parkour-name", parkour.getName());
+
+                        ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Started", "You have started the &a{parkour-name} &rparkour!", true, bindings);
+
+
+                    }
+                    break;
+                case 1:
+                    //EndPoint
+                    if (CacheManager.isParkour(p)) {
+                        if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
+                            //End the parkour.
+                            CacheManager.getPlayer(p).end(null);
+                            return;
+                        } else {
+                            //Do nothing, is doing a different parkour.
+                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Already-In-Parkour", "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave.", true, Collections.emptyMap());
+                            return;
+                        }
+                    } else {
+                        ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.End.Not-Started", "You must start a parkour in order to finish it.", true, Collections.emptyMap());
+                    }
+                    break;
+                case 2:
+                    return;
+                case 3:
+                    //Checkpoint
+                    if (CacheManager.isParkour(p)) {
+                        if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
+                            //Checkpoint the parkour.
+                            Checkpoint checkpoint = (Checkpoint) pp;
+                            ParkourPlayerCheckpointEvent event = new ParkourPlayerCheckpointEvent(pp.getParkour(), CacheManager.getPlayer(p), checkpoint);
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (event.isCancelled()) {
+                                return;
+                            }
+
+                            CacheManager.getPlayer(p).checkpoint(checkpoint);
+                            return;
+                        } else {
+                            //Do nothing, is doing a different parkour.
+                            ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Already-In-Parkour", "You are already doing a parkour. If you wish to leave the current parkour and start a new one, do /parkour leave.", true, Collections.emptyMap());
+                            return;
+                        }
+                    } else {
+                        ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Checkpoints.Not-Started", "You must start a parkour in order to reach checkpoints!", true, Collections.emptyMap());
+                    }
+                    break;
             }
         }
     }

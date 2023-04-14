@@ -6,6 +6,7 @@ import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
 import me.block2block.hubparkour.dbschema.One;
+import me.block2block.hubparkour.dbschema.Three;
 import me.block2block.hubparkour.dbschema.Two;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
@@ -35,7 +36,7 @@ import java.util.UUID;
 
 public class HubParkour extends JavaPlugin {
 
-    private static final int CURRENT_SCHEMA = 2;
+    private static final int CURRENT_SCHEMA = 3;
     private static final Map<Integer, DatabaseSchemaUpdate> schemaUpdates = new HashMap<>();
 
     private static HubParkour instance;
@@ -53,6 +54,7 @@ public class HubParkour extends JavaPlugin {
     static {
         registerSchema(new One());
         registerSchema(new Two());
+        registerSchema(new Three());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -285,7 +287,6 @@ public class HubParkour extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (CacheManager.isParkour(player)) {
                 HubParkourPlayer pl = CacheManager.getPlayer(player);
-                pl.removeItems();
                 pl.setToPrevState();
             }
         }
@@ -322,11 +323,11 @@ public class HubParkour extends JavaPlugin {
 
         String startMaterial = ConfigUtil.getString("Settings.Pressure-Plates.Start", ((isPre1_13())?"WOOD_PLATE":"OAK_PRESSURE_PLATE")), checkpointMaterial = ConfigUtil.getString("Settings.Pressure-Plates.Checkpoint",  ((isPre1_13())?"GOLD_PLATE":"LIGHT_WEIGHTED_PRESSURE_PLATE")), endMaterial = ConfigUtil.getString("Settings.Pressure-Plates.End", ((isPre1_13())?"IRON_PLATE":"HEAVY_WEIGHTED_PRESSURE_PLATE"));
 
-        Material start = ((startMaterial.toLowerCase().contains("plate"))?Material.matchMaterial(startMaterial):null);
-        Material checkpoint = ((checkpointMaterial.toLowerCase().contains("plate"))?Material.matchMaterial(checkpointMaterial):null);
-        Material end = ((endMaterial.toLowerCase().contains("plate"))?Material.matchMaterial(endMaterial):null);
+        Material start = Material.matchMaterial(startMaterial);
+        Material checkpoint = Material.matchMaterial(checkpointMaterial);
+        Material end = Material.matchMaterial(endMaterial);
 
-        if (start == null || checkpoint == null || end == null) {
+        if (start == null || checkpoint == null || end == null || !start.isBlock() || !checkpoint.isBlock() || !end.isBlock()) {
             getLogger().info("There are invalid values in your config.yml for the pressure plate types. Please correct the error and restart your server. The plugin will now be disabled.");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;

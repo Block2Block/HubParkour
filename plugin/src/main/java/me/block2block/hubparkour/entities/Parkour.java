@@ -168,9 +168,9 @@ public class Parkour implements IParkour {
             if (l.getWorld() == null) {
                 continue;
             }
-            Hologram hologram = DHAPI.getHologram("hp:" + id + "." + p.getType() + ((p instanceof Checkpoint)?"." + ((Checkpoint) p).getCheckpointNo():""));
+            Hologram hologram = DHAPI.getHologram("hp_" + id + "-" + p.getType() + ((p instanceof Checkpoint)?"-" + ((Checkpoint) p).getCheckpointNo():""));
             if (hologram == null) {
-                hologram = DHAPI.createHologram("hp:" + id + "." + p.getType() + ((p instanceof Checkpoint)?"." + ((Checkpoint) p).getCheckpointNo():""), l);
+                hologram = DHAPI.createHologram("hp_" + id + "-" + p.getType() + ((p instanceof Checkpoint)?"-" + ((Checkpoint) p).getCheckpointNo():""), l);
             } else {
                 DHAPI.moveHologram(hologram, l);
             }

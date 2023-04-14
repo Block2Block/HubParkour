@@ -78,14 +78,14 @@ public interface IHubParkourPlayer {
     List<ParkourItem> getParkourItems();
 
     /**
-     * Give a player all of the parkour items.
+     * Give a player all of the parkour items, and update the player state.
      */
-    void giveItems();
+    void startParkour();
 
     /**
-     * Remove all of the parkour items and give them their original inventory.
+     * Resets all player states that were modified when starting the parkour.
      */
-    void removeItems();
+    void setToPrevState();
 
     /**
      * Get the active action bar task.

@@ -85,7 +85,6 @@ public class StartClickableSign extends ClickableSign {
                             p.setGliding(false);
                         }
                     }
-                    player.giveItems();
 
                     Map<String, String> bindings = new HashMap<>();
                     bindings.put("parkour-name", parkour.getName());
@@ -120,7 +119,7 @@ public class StartClickableSign extends ClickableSign {
                     p.setGliding(false);
                 }
             }
-            player.giveItems();
+            player.startParkour();
 
             Map<String, String> bindings = new HashMap<>();
             bindings.put("parkour-name", parkour.getName());

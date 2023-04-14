@@ -4,7 +4,7 @@ import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.IParkour;
 
 /**
- * Called when a user starts a parkour by standing on a start pressure plate.
+ * Called when a user starts a parkour by standing on a start pressure plate. This is called before the items and state variables have been set, so methods like HubParkourPlayer#getPrevHealth() have not yet been initialised.
  */
 public class ParkourPlayerStartEvent extends ParkourPlayerEvent {
 

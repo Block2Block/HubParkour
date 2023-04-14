@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public abstract class ParkourItem {
 
-    protected final IHubParkourPlayer player;
+    protected IHubParkourPlayer player;
     protected ItemStack originalItem;
     protected final int slot;
     protected final ItemStack item;
@@ -58,5 +58,13 @@ public abstract class ParkourItem {
 
     public ItemStack getOriginalItem() {
         return originalItem;
+    }
+
+    /**
+     * Updates the player for this item. Use this method with caution.
+     * @param player The player to set.
+     */
+    public void setPlayer(IHubParkourPlayer player) {
+        this.player = player;
     }
 }

@@ -2,7 +2,6 @@ package me.block2block.hubparkour.entities;
 
 
 import me.block2block.hubparkour.HubParkour;
-import me.block2block.hubparkour.api.HubParkourAPI;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.ILeaderboardHologram;
 import me.block2block.hubparkour.api.ParkourRun;
@@ -44,10 +43,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     private ItemStack[] armorContents;
     private ItemStack[] storageContents;
     private BukkitTask actionBarTask;
-    private final GameMode prevGamemode;
-    private final double prevHealth;
-    private final double prevMaxHealth;
-    private final int prevHunger;
+    private GameMode prevGamemode;
+    private double prevHealth;
+    private double prevMaxHealth;
+    private int prevHunger;
     private final ParkourRun parkourRun;
     private boolean touchedGround;
 
@@ -59,31 +58,6 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         startTime = System.currentTimeMillis();
         touchedGround = true;
         currentSplit = startTime;
-        prevGamemode = player.getGameMode();
-        prevHealth = player.getHealth();
-        if (HubParkour.isPre1_13()) {
-            prevMaxHealth = player.getMaxHealth();
-        } else {
-            prevMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
-        }
-        prevHunger = player.getFoodLevel();
-        if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-            if (prevMaxHealth < 20) {
-                if (HubParkour.isPre1_13()) {
-                    player.setMaxHealth(20);
-                } else {
-                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
-                }
-            }
-            player.setHealth(20);
-        }
-        if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
-            player.setFoodLevel(30);
-        }
-        if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
-            GameMode mode = GameMode.valueOf(ConfigUtil.getString("Settings.Parkour-Gamemode.Gamemode", "ADVENTURE"));
-            player.setGameMode(mode);
-        }
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -104,6 +78,45 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         parkourItems.add(new CheckpointItem(this, ConfigUtil.getInt("Settings.Parkour-Items.Checkpoint.Slot", 4)));
         parkourItems.add(new CancelItem(this, ConfigUtil.getInt("Settings.Parkour-Items.Cancel.Slot", 6)));
         parkourItems.add(new HideItem(this, ConfigUtil.getInt("Settings.Parkour-Items.Hide.Slot", 8)));
+    }
+
+    public HubParkourPlayer(HubParkourPlayer p, Parkour parkour) {
+        this.player = p.player;
+        this.parkour = parkour;
+        this.parkourItems.addAll(p.parkourItems);
+        parkourItems.forEach(item -> item.setPlayer(this));
+        this.splitTimes = new HashMap<>();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                lastRunCompleted = HubParkour.getInstance().getDbManager().wasCompletedLastRun(p.player, parkour);
+                if ((ConfigUtil.getBoolean("Settings.Repeat-Rewards", true) || ConfigUtil.getBoolean("Settings.Exploit-Prevention.Checkpoint-Rewards-Everytime", false)) && lastRunCompleted) {
+                    //The last run was completed and repeat rewards are enabled, delete all previously reached checkpoints so they can reach them again.
+                    previouslyReachedCheckpoints = new ArrayList<>();
+                    HubParkour.getInstance().getDbManager().resetReachedCheckpoints(p.player, parkour);
+                } else {
+                    previouslyReachedCheckpoints = HubParkour.getInstance().getDbManager().getReachedCheckpoints(p.player, parkour);
+                }
+                previous = HubParkour.getInstance().getDbManager().getTime(p.player, parkour);
+                splitTimes = HubParkour.getInstance().getDbManager().getSplitTimes(p.player, parkour);
+                HubParkour.getInstance().getDbManager().resetLastRun(p.player, parkour);
+            }
+        }.runTaskAsynchronously(HubParkour.getInstance());
+
+        this.inventory = p.inventory;
+        this.extraContents = p.extraContents;
+        this.armorContents = p.armorContents;
+        this.storageContents = p.storageContents;
+        this.prevGamemode = p.prevGamemode;
+        this.prevHealth = p.prevHealth;
+        this.prevMaxHealth = p.prevMaxHealth;
+        this.prevHunger = p.prevHunger;
+
+        if (p.actionBarTask != null) {
+            p.actionBarTask.cancel();
+        }
+
         if (ConfigUtil.getBoolean("Settings.Action-Bar.Enabled", true)) {
             actionBarTask = new BukkitRunnable(){
                 @Override
@@ -116,6 +129,11 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                 }
             }.runTaskTimerAsynchronously(HubParkour.getInstance(), 0, ConfigUtil.getInt("Settings.Action-Bar.Update-Interval", 2));
         }
+
+        parkourRun = new ParkourRun(this);
+        startTime = System.currentTimeMillis();
+        touchedGround = true;
+        currentSplit = startTime;
     }
 
     public void checkpoint(Checkpoint checkpoint) {
@@ -265,22 +283,8 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
                     ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Not-Enough-Checkpoints", "You did not reach enough checkpoints, parkour failed!", true, Collections.emptyMap());
                     parkour.playerEnd(this);
-                    if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-                        if (HubParkour.isPre1_13()) {
-                            player.setMaxHealth(prevMaxHealth);
-                        } else {
-                            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
-                        }
-                        player.setHealth(prevHealth);
-                    }
-                    if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
-                        player.setFoodLevel(prevHunger);
-                    }
-                    if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
-                        player.setGameMode(prevGamemode);
-                    }
+                    setToPrevState();
                     CacheManager.playerEnd(this);
-                    removeItems();
                     return;
                 }
             }
@@ -482,22 +486,12 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                 }
             }
         }
-        removeItems();
+
+        if (cause != ParkourPlayerFailEvent.FailCause.NEW_PARKOUR) {
+            setToPrevState();
+        }
+
         parkour.playerEnd(this);
-        if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-            if (HubParkour.isPre1_13()) {
-                player.setMaxHealth(prevMaxHealth);
-            } else {
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
-            }
-            player.setHealth(prevHealth);
-        }
-        if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
-            player.setFoodLevel(prevHunger);
-        }
-        if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
-            player.setGameMode(prevGamemode);
-        }
         CacheManager.playerEnd(this);
 
     }
@@ -533,7 +527,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         return parkourItems;
     }
 
-    public void giveItems() {
+    public void startParkour() {
         inventory = player.getInventory().getContents();
         armorContents = player.getInventory().getArmorContents();
         if (HubParkour.isPost1_8()) {
@@ -546,28 +540,43 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         for (ParkourItem item : parkourItems) {
             item.giveItem();
         }
-    }
 
-    public void removeItems(){
-        for (ParkourItem item : parkourItems) {
-            item.removeItem();
+        prevGamemode = player.getGameMode();
+        prevHealth = player.getHealth();
+        if (HubParkour.isPre1_13()) {
+            prevMaxHealth = player.getMaxHealth();
+        } else {
+            prevMaxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
         }
-        if (ConfigUtil.getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start", true)) {
-            if (inventory != null) {
-                player.getInventory().setContents(inventory);
-            }
-            if (armorContents != null) {
-                player.getInventory().setArmorContents(armorContents);
-            }
-            if (HubParkour.isPost1_8()) {
-                if (extraContents != null) {
-                    player.getInventory().setExtraContents(extraContents);
-                }
-                if (storageContents != null) {
-                    player.getInventory().setStorageContents(storageContents);
+        prevHunger = player.getFoodLevel();
+        if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
+            if (prevMaxHealth < 20) {
+                if (HubParkour.isPre1_13()) {
+                    player.setMaxHealth(20);
+                } else {
+                    player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
                 }
             }
-
+            player.setHealth(20);
+        }
+        if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
+            player.setFoodLevel(30);
+        }
+        if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
+            GameMode mode = GameMode.valueOf(ConfigUtil.getString("Settings.Parkour-Gamemode.Gamemode", "ADVENTURE"));
+            player.setGameMode(mode);
+        }
+        if (ConfigUtil.getBoolean("Settings.Action-Bar.Enabled", true)) {
+            actionBarTask = new BukkitRunnable(){
+                @Override
+                public void run() {
+                    String message = HubParkour.c(false, ConfigUtil.getString("Messages.Parkour.Action-Bar", "&a&lCurrent Time: &r{current-time} - &a&lParkour: &r{parkour-name}&r - &a&lCurrent Checkpoint: &r#{current-checkpoint}").replace("{current-time}", ConfigUtil.formatTime((System.currentTimeMillis() - startTime))).replace("{parkour-name}", parkour.getName()).replace("{current-checkpoint}", lastReached + "").replace("{current-splittime}", "" + ((System.currentTimeMillis() - currentSplit)/1000f)));
+                    if (HubParkour.isPlaceholders()) {
+                        message = PlaceholderAPI.setPlaceholders(player, message);
+                    }
+                    TitleUtil.sendActionBar(player, message, ChatColor.WHITE, false);
+                }
+            }.runTaskTimerAsynchronously(HubParkour.getInstance(), 0, ConfigUtil.getInt("Settings.Action-Bar.Update-Interval", 2));
         }
     }
 
@@ -588,18 +597,39 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     }
 
     public void setToPrevState() {
+        if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
+            if (HubParkour.isPre1_13()) {
+                player.setMaxHealth(prevMaxHealth);
+            } else {
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(prevMaxHealth);
+            }
+            player.setHealth(prevHealth);
+        }
         if (ConfigUtil.getBoolean("Settings.Parkour-Gamemode.Enabled", true)) {
             player.setGameMode(prevGamemode);
         }
-        if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
-            double health = prevHealth;
-            if (health > player.getMaxHealth()) {
-                health = player.getMaxHealth();
-            }
-            player.setHealth(health);
-        }
         if (ConfigUtil.getBoolean("Settings.Hunger.Saturate-To-Full", true)) {
             player.setFoodLevel(prevHunger);
+        }
+        for (ParkourItem item : parkourItems) {
+            item.removeItem();
+        }
+        if (ConfigUtil.getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start", true)) {
+            if (inventory != null) {
+                player.getInventory().setContents(inventory);
+            }
+            if (armorContents != null) {
+                player.getInventory().setArmorContents(armorContents);
+            }
+            if (HubParkour.isPost1_8()) {
+                if (extraContents != null) {
+                    player.getInventory().setExtraContents(extraContents);
+                }
+                if (storageContents != null) {
+                    player.getInventory().setStorageContents(storageContents);
+                }
+            }
+
         }
     }
 

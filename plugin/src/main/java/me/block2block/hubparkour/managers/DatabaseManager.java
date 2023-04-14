@@ -16,11 +16,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -92,10 +96,10 @@ public class DatabaseManager {
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_stats (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `completions` INT NOT NULL, `attempts` INT NOT NULL, `jumps` INT NOT NULL, `checkpoints` INT NOT NULL, `distance` DOUBLE NOT NULL, `total_time` bigint(64) NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_signs (`sign_id` INT NOT NULL AUTO_INCREMENT, `parkour_id` INT,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, `type` INT NOT NULL, PRIMARY KEY (sign_id))");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_signs (`sign_id` INT NOT NULL AUTO_INCREMENT, `parkour_id` INT,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, `type` INT NOT NULL, `facing` TEXT NOT NULL, `wall` BOOLEAN NOT NULL, PRIMARY KEY (sign_id))");
                 set = statement.execute();
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
                 throw e;
@@ -129,10 +133,10 @@ public class DatabaseManager {
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_stats (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `completions` INTEGER NOT NULL, `attempts` INTEGER NOT NULL, `jumps` INTEGER NOT NULL, `checkpoints` INTEGER NOT NULL, `distance` DOUBLE NOT NULL, `total_time` bigint(64) NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_signs (`sign_id` INTEGER PRIMARY KEY AUTOINCREMENT, `parkour_id` INTEGER,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, `type` INTEGER NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_signs (`sign_id` INTEGER PRIMARY KEY AUTOINCREMENT, `parkour_id` INTEGER,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, `type` INTEGER NOT NULL, `facing` TEXT NOT NULL, `wall` BOOLEAN NOT NULL)");
                 set = statement.execute();
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
                 throw e;
@@ -189,7 +193,7 @@ public class DatabaseManager {
 
 
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error loading parkours. Database functionality has been disabled until the server is restarted. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error loading parkours. Database functionality has been disabled until the server is restarted. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
                 return null;
@@ -219,7 +223,7 @@ public class DatabaseManager {
                 }
 
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -268,7 +272,7 @@ public class DatabaseManager {
                 counter++;
             }
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -319,7 +323,7 @@ public class DatabaseManager {
                 }
 
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -340,7 +344,7 @@ public class DatabaseManager {
                     return -1;
                 }
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 e.printStackTrace();
             }
         return -1;
@@ -360,7 +364,7 @@ public class DatabaseManager {
             }
             return checkpoints;
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             e.printStackTrace();
         }
         return new ArrayList<>();
@@ -374,7 +378,7 @@ public class DatabaseManager {
 
             statement.execute();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             e.printStackTrace();
         }
     }
@@ -389,7 +393,7 @@ public class DatabaseManager {
 
             statement.execute();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             e.printStackTrace();
         }
     }
@@ -404,7 +408,7 @@ public class DatabaseManager {
 
             return resultSet.next();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             e.printStackTrace();
         }
         return false;
@@ -418,7 +422,7 @@ public class DatabaseManager {
 
             statement.execute();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             e.printStackTrace();
         }
     }
@@ -431,7 +435,7 @@ public class DatabaseManager {
 
             statement.execute();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             e.printStackTrace();
         }
     }
@@ -450,7 +454,7 @@ public class DatabaseManager {
                     return -1;
                 }
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 e.printStackTrace();
             }
         return -1;
@@ -468,7 +472,7 @@ public class DatabaseManager {
 
                     boolean result = statement.execute();
                 } catch (Exception e) {
-                    Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                    HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                     error = true;
                     e.printStackTrace();
                 }
@@ -483,7 +487,7 @@ public class DatabaseManager {
 
                     boolean result = statement.execute();
                 } catch (Exception e) {
-                    Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                    HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                     error = true;
                     e.printStackTrace();
                 }
@@ -534,7 +538,7 @@ public class DatabaseManager {
                 }
 
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -547,7 +551,7 @@ public class DatabaseManager {
             result.next();
             return result.getInt(1);
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
             return 0;
@@ -563,13 +567,13 @@ public class DatabaseManager {
                 while (result.next()) {
                     World world = Bukkit.getWorld(result.getString(6));
                     if (world == null) {
-                        Bukkit.getLogger().info("A world that a leaderboard hologram was in does not exist.");
+                        HubParkour.getInstance().getLogger().info("A world that a leaderboard hologram was in does not exist.");
                         continue;
                     }
 
                     Parkour parkour = CacheManager.getParkour(result.getInt(2));
                     if (parkour == null && result.getInt(2) != 0) {
-                        Bukkit.getLogger().info("A parkour that a leaderboard hologram was for does not exist.");
+                        HubParkour.getInstance().getLogger().info("A parkour that a leaderboard hologram was for does not exist.");
                         continue;
                     }
                     LeaderboardHologram hologram = new LeaderboardHologram(new Location(world, result.getInt(3), result.getInt(4), result.getInt(5)), parkour, result.getInt(1));
@@ -579,7 +583,7 @@ public class DatabaseManager {
                     }
                 }
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -594,44 +598,63 @@ public class DatabaseManager {
             while (result.next()) {
                 World world = Bukkit.getWorld(result.getString(6));
                 if (world == null) {
-                    Bukkit.getLogger().info("A world that a sign was in does not exist.");
+                    HubParkour.getInstance().getLogger().info("A world that a sign was in does not exist.");
                     continue;
                 }
 
                 Parkour parkour = CacheManager.getParkour(result.getInt(2));
                 if (parkour == null) {
-                    Bukkit.getLogger().info("A parkour that a sign was for does not exist.");
+                    HubParkour.getInstance().getLogger().info("A parkour that a sign was for does not exist.");
                     continue;
                 }
                 Location location = new Location(world, result.getInt(3), result.getInt(4), result.getInt(5));
-                if (location.getBlock().getType() != Material.SIGN && location.getBlock().getType() != Material.WALL_SIGN) {
-                    Bukkit.getLogger().info("A registered sign has been removed from the world. Placing a sign back. It is recommended you remove then replace the sign.");
-                    location.getBlock().setType(Material.WALL_SIGN);
-                    continue;
+                if (location.getBlock().getType() != Material.SIGN && location.getBlock().getType() != Material.WALL_SIGN && HubParkour.isPre1_13() && location.getBlock().getType() != Material.matchMaterial("SIGN_POST")) {
+                    HubParkour.getInstance().getLogger().info("A registered sign has been removed from the world. Placing a sign back. It is recommended you remove then replace the sign.");
+                    location.getBlock().setType(((result.getBoolean(9)?Material.WALL_SIGN: ((HubParkour.isPre1_13())?Material.matchMaterial("SIGN_POST"):Material.SIGN))));
+                    org.bukkit.material.Sign sign = (org.bukkit.material.Sign) location.getBlock().getState().getData();
+                    String face = result.getString(8);
+                    if (face == null || face.equals("")) {
+                        face = "NORTH";
+                    }
+                    sign.setFacingDirection(BlockFace.valueOf(face));
+
+                    if (HubParkour.isPre1_13()) {
+                        Method method = Block.class.getMethod("setData", byte.class, boolean.class);
+                        method.invoke(location.getBlock(), sign.getData(), true);
+                    } else {
+                        location.getBlock().getState().setData(sign);
+                    }
+                    location.getBlock().getState().update(true);
+
+                } else {
+                    updateFacingWall(result.getInt(1), ((org.bukkit.material.Sign) location.getBlock().getState().getData()).getFacing(), location.getBlock().getType() == Material.WALL_SIGN);
                 }
                 switch (result.getInt(7)) {
                     case 0: {
                         TeleportClickableSign sign = new TeleportClickableSign(parkour, (Sign) location.getBlock().getState());
-                        CacheManager.getSigns().put(sign.getSignState().getLocation(), sign);
+                        sign.setId(result.getInt(1));
+                        CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
                         sign.refresh();
                         break;
                     }
                     case 1: {
                         StatsClickableSign sign = new StatsClickableSign(parkour, (Sign) location.getBlock().getState());
-                        CacheManager.getSigns().put(sign.getSignState().getLocation(), sign);
+                        sign.setId(result.getInt(1));
+                        CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
                         sign.refresh();
                         break;
                     }
                     case 2: {
                         StartClickableSign sign = new StartClickableSign(parkour, (Sign) location.getBlock().getState());
-                        CacheManager.getSigns().put(sign.getSignState().getLocation(), sign);
+                        sign.setId(result.getInt(1));
+                        CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
                         sign.refresh();
                         break;
                     }
                 }
             }
-        } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+        } catch (SQLException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -662,7 +685,7 @@ public class DatabaseManager {
                 results.next();
                 return results.getInt(1);
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
                 return -1;
@@ -676,7 +699,7 @@ public class DatabaseManager {
 
                 boolean success = statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -712,7 +735,7 @@ public class DatabaseManager {
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -730,7 +753,7 @@ public class DatabaseManager {
                 statement.setInt(2, parkourId);
                 statement.execute();
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -745,7 +768,7 @@ public class DatabaseManager {
                 statement.setInt(1, parkourId);
                 statement.execute();
             } catch (Exception e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -760,7 +783,7 @@ public class DatabaseManager {
             statement.setString(1, name);
             statement.execute();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -773,7 +796,7 @@ public class DatabaseManager {
             statement = connection.prepareStatement("DELETE FROM hp_splittimes");
             statement.execute();
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -786,7 +809,7 @@ public class DatabaseManager {
                 statement.setInt(2, id);
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -799,7 +822,7 @@ public class DatabaseManager {
             statement.setInt(2, id);
             statement.execute();
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -816,7 +839,7 @@ public class DatabaseManager {
                 statement.setInt(2, id);
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -833,7 +856,7 @@ public class DatabaseManager {
                 statement.setInt(2, id);
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -851,7 +874,7 @@ public class DatabaseManager {
                 statement.setInt(7, id);
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -869,7 +892,7 @@ public class DatabaseManager {
                 statement.setInt(7, id);
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -887,7 +910,7 @@ public class DatabaseManager {
                 statement.setInt(7, id);
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -906,7 +929,7 @@ public class DatabaseManager {
                 statement.setString(8, point.getLocation().getWorld().getName());
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -925,7 +948,7 @@ public class DatabaseManager {
                 statement.setString(8, checkpoint.getLocation().getWorld().getName());
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -938,7 +961,7 @@ public class DatabaseManager {
                 statement.setInt(2, checkpoint.getCheckpointNo());
                 statement.execute();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
                 error = true;
                 e.printStackTrace();
             }
@@ -961,7 +984,7 @@ public class DatabaseManager {
                 statement.execute();
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -979,7 +1002,7 @@ public class DatabaseManager {
                 splitTimes.put(set.getInt(3), set.getLong(4));
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1006,7 +1029,7 @@ public class DatabaseManager {
 
             statement.execute();
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1018,7 +1041,7 @@ public class DatabaseManager {
             statement.setInt(1, parkour);
             statement.execute();
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1035,7 +1058,7 @@ public class DatabaseManager {
                 return -1;
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1053,7 +1076,7 @@ public class DatabaseManager {
                 return null;
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1072,7 +1095,7 @@ public class DatabaseManager {
                 return -1;
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1091,7 +1114,7 @@ public class DatabaseManager {
                 return null;
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1125,7 +1148,7 @@ public class DatabaseManager {
                 statement.execute();
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1157,7 +1180,7 @@ public class DatabaseManager {
                 statement.execute();
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1185,7 +1208,7 @@ public class DatabaseManager {
             }
             return new Statistics(player.getName(), jumps, completions, attempts, checkpointsHit, totalDistanceTravelled, totalTime);
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
             return null;
@@ -1213,7 +1236,7 @@ public class DatabaseManager {
             }
             return new Statistics(player.getName(), jumps, completions, attempts, checkpointsHit, totalDistanceTravelled, totalTime);
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
             return null;
@@ -1251,14 +1274,14 @@ public class DatabaseManager {
             if (!(file.exists())) {
                 try {
                     file.createNewFile();
-                    Bukkit.getLogger().info("Database file " + dbLocation + " successfully created!");
+                    HubParkour.getInstance().getLogger().info("Database file " + dbLocation + " successfully created!");
                 } catch (IOException e) {
-                    Bukkit.getLogger().info("Unable to create database. Stack Trace:");
+                    HubParkour.getInstance().getLogger().info("Unable to create database. Stack Trace:");
                     e.printStackTrace();
                 }
             }
         } catch (Exception e) {
-            Bukkit.getLogger().info("Unable to initialise SQLite connection. Stack Trace:");
+            HubParkour.getInstance().getLogger().info("Unable to initialise SQLite connection. Stack Trace:");
             e.printStackTrace();
         }
     }
@@ -1286,7 +1309,7 @@ public class DatabaseManager {
                 statement.execute();
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1305,7 +1328,7 @@ public class DatabaseManager {
                 return -1;
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
             return -1;
@@ -1314,13 +1337,15 @@ public class DatabaseManager {
 
     public void addSign(ClickableSign sign) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_signs(parkour_id, x, y, z, world, type) VALUES (?, ?, ?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_signs(parkour_id, x, y, z, world, type, facing, wall) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setInt(1, sign.getParkour().getId());
             statement.setInt(2, sign.getSignState().getLocation().getBlockX());
             statement.setInt(3, sign.getSignState().getLocation().getBlockY());
             statement.setInt(4, sign.getSignState().getLocation().getBlockZ());
             statement.setString(5, sign.getSignState().getLocation().getWorld().getName());
             statement.setInt(6, sign.getType());
+            statement.setString(7, ((org.bukkit.material.Sign)sign.getSignState().getData()).getFacing().name());
+            statement.setBoolean(8, sign.getSignState().getBlock().getType() == Material.WALL_SIGN);
 
             boolean success = statement.execute();
 
@@ -1336,7 +1361,22 @@ public class DatabaseManager {
             results.next();
             sign.setId(results.getInt(1));
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            error = true;
+            e.printStackTrace();
+        }
+    }
+
+    public void updateFacingWall(int sign, BlockFace face, boolean wall) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE hp_signs set facing = ?, wall = ? WHERE sign_id = ?");
+            statement.setString(1, face.name());
+            statement.setBoolean(2, wall);
+            statement.setInt(3, sign);
+
+            statement.execute();
+        } catch (SQLException e) {
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1348,7 +1388,7 @@ public class DatabaseManager {
             statement.setInt(1, sign.getId());
             statement.execute();
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
         }
@@ -1379,7 +1419,7 @@ public class DatabaseManager {
             set.next();
             return set.getInt(1) > 0;
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
             return false;
@@ -1411,7 +1451,7 @@ public class DatabaseManager {
             copy("hp_holograms", dbSqlite, connection);
             return true;
         } catch (SQLException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
             error = true;
             e.printStackTrace();
             return false;

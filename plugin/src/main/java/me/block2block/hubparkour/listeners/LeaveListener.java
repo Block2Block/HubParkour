@@ -14,7 +14,6 @@ public class LeaveListener implements Listener {
     public void onLeave(PlayerQuitEvent e) {
         if (CacheManager.isParkour(e.getPlayer())) {
             HubParkourPlayer player = CacheManager.getPlayer(e.getPlayer());
-            player.removeItems();
             player.getParkour().playerEnd(player);
             player.setToPrevState();
             CacheManager.playerEnd(player);

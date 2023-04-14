@@ -204,6 +204,7 @@ public class CommandParkour implements CommandExecutor {
                                     Bukkit.getPluginManager().callEvent(deleteEvent);
                                     for (IHubParkourPlayer player : parkour.getPlayers()) {
                                         ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Delete.Player-Kicked-From-Parkour", "The parkour you were doing was deleted. You have left the parkour.", true, Collections.emptyMap());
+                                        player.end(ParkourPlayerFailEvent.FailCause.LEAVE);
                                         CacheManager.playerEnd((HubParkourPlayer) player);
                                     }
 

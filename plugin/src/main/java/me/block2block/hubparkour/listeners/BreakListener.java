@@ -3,6 +3,7 @@ package me.block2block.hubparkour.listeners;
 import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
+import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -16,7 +17,7 @@ public class BreakListener implements Listener {
     @SuppressWarnings("unused")
     @EventHandler
     public void onBreak(BlockBreakEvent e) {
-        if (CacheManager.isPoint(e.getBlock().getLocation())) {
+        if (CacheManager.isPoint(e.getBlock().getLocation()) && CacheManager.getPoint(e.getBlock().getLocation()).getMaterial() != Material.AIR) {
             e.setCancelled(true);
             ConfigUtil.sendMessage(e.getPlayer(), "Messages.Break-Disallowed", "You are not allowed to break HubParkour Pressure Plates. In order to remove HubParkour Pressure Plates, please delete the parkour with /parkour delete [id].", true, Collections.emptyMap());
             return;

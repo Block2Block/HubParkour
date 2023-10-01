@@ -200,7 +200,6 @@ public class ConfigUtil {
         }
 
         if (format.contains("mm")) {
-
             minutes = ms / 60000;
             ms -= (minutes * 60000);
         }
@@ -210,7 +209,10 @@ public class ConfigUtil {
             ms -= (seconds * 1000);
         }
 
-        return format.replace("hh", hours + "").replace("mm", minutes + "").replace("ss", seconds + "").replace("MMM", ((ms < 100)?((ms < 10)?"00":"0"):"") + ms);
+        return format.replace("hh", String.format("%02d", hours))
+                .replace("mm", String.format("%02d", minutes))
+                .replace("ss", String.format("%02d", seconds))
+                .replace("MMM", String.format("%03d", ms));
     }
 
     public static void reload() {

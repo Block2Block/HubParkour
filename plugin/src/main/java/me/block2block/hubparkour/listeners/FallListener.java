@@ -47,11 +47,10 @@ public class FallListener implements Listener {
                             return;
                         }
                     }
-                } else {
-                    if (ConfigUtil.getBoolean("Settings.Health.Disable-Damage", true)) {
-                        e.setCancelled(true);
-                    }
-                    return;
+                }
+
+                if (ConfigUtil.getBoolean("Settings.Health.Disable-Damage", true)) {
+                    e.setCancelled(true);
                 }
 
                 e.setCancelled(true);

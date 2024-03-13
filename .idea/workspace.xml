@@ -16,7 +16,14 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation. &#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages. &#10; - Fixed a bug when admins delete a parkour, players were not given their items back." />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.7.5: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation.&#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages.&#10; - Fixed a bug when admins delete a parkour, players were not given their items back.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/EditWizard.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/EditWizard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -95,7 +102,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="8577f98ea7e3b45e2a9c539a48314f0f27db7bda" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -123,9 +130,14 @@
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="vmOptionsForImporter" value="-Xmx768m" />
+        <option name="workspaceImportForciblyTurnedOn" value="true" />
       </MavenImportingSettings>
     </option>
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="1TI7TQ5gQYXoPkbFk5MlUB2PiMY" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="false" id="Update" />
@@ -137,8 +149,12 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Maven.hubparkour [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;E:/Programming Projects/Java/HubParkour&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -192,8 +208,16 @@
       <list>
         <item itemvalue="JavaScript Debug.index.html" />
         <item itemvalue="JavaScript Debug.index.html" />
+        <item itemvalue="JavaScript Debug.index.html" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-1.8.0_392-corretto-1.8.0_392-249ae16d76d6-ec8bc16d" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
@@ -578,14 +602,24 @@
       <workItem from="1681490427387" duration="607000" />
       <workItem from="1681491471599" duration="2209000" />
       <workItem from="1681493712360" duration="338000" />
-      <workItem from="1681494300600" duration="681000" />
-    </task>
-    <task id="LOCAL-00025" summary="Added readme.md">
-      <created>1588428718148</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1588428718148</updated>
+      <workItem from="1681494300600" duration="1217000" />
+      <workItem from="1681500336059" duration="604000" />
+      <workItem from="1681736426707" duration="754000" />
+      <workItem from="1684939581440" duration="24000" />
+      <workItem from="1684939612408" duration="19000" />
+      <workItem from="1684939657247" duration="7000" />
+      <workItem from="1684939689595" duration="17000" />
+      <workItem from="1685471572714" duration="54000" />
+      <workItem from="1686060013384" duration="142000" />
+      <workItem from="1686515429043" duration="777000" />
+      <workItem from="1689348253883" duration="156000" />
+      <workItem from="1690387860538" duration="97000" />
+      <workItem from="1703429068427" duration="3503000" />
+      <workItem from="1703440565095" duration="270000" />
+      <workItem from="1706454961425" duration="1098000" />
+      <workItem from="1706917966950" duration="4000" />
+      <workItem from="1706919549822" duration="21000" />
+      <workItem from="1710272471082" duration="2599000" />
     </task>
     <task id="LOCAL-00026" summary="Updating readme.md">
       <created>1588429523231</created>
@@ -923,7 +957,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681494979974</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation.&#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages.&#10; - Fixed a bug when admins delete a parkour, players were not given their items back.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
+      <created>1681495150549</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1681495150549</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -968,7 +1009,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.5.3-FIX: Bug Fix&#10;- Removed debug messages" />
     <MESSAGE value="v2.5.4: Bug Fix&#10;- Fixed a bug where leaderboard holograms would generate an error when refreshed after a user has completed the parkour" />
     <MESSAGE value="v2.5.5: More bug fixes&#10;- Fixed a bug where starting a new parkour while already in one would not give you the parkour items.&#10;- Fixed a bug where when the milliseconds was less than 100/10, 0's would be missing from the times resulting in times appearing wrong.&#10;- Fixed a bug where when including the plugin in a command, HubParkour commands were not whitelisted from command blocking.&#10;- Fixed some default config messages having &quot;reached&quot; twice." />
     <MESSAGE value="v2.5.6: Placeholder and health bugfixes.&#10;- Fixed a bug with the besttime and recordholder placeholders showing last instead of first place.&#10;- Fixed a bug with the plugin when setting health after finishing a parkour when the player had more than normal health when starting the parkour." />
@@ -993,6 +1033,7 @@
     <MESSAGE value="v2.7.2: Bugfixes&#10; - Fixed a bug where when updating the database schema from older versions, the internal YML file would not update correctly resulting in errors when attempting to update again. You will see 1 more error when loading the plugin while the plugin updates the internal values, once it has been updated it should no longer error out.&#10; - Fixed a bug where signs would not always be loaded correctly and prevent plugin loading.&#10; - If a sign has been removed from the world, the plugin will automatically place it back. It is recommended to delete the replaced sign and place a new one as it will default to a wall sign facing north.&#10; - Fixed a wrong message where it said Holographic Displays was still required.&#10; - Fixed an issue where sometimes holograms would not load due to a missing soft dependency." />
     <MESSAGE value="v2.7.3: Schema Bugfix&#10; - Fixed a bug where the MySQL table columns were the wrong way round. The database will automatically migrate to the correct structure." />
     <MESSAGE value="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation. &#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages. &#10; - Fixed a bug when admins delete a parkour, players were not given their items back." />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation. &#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages. &#10; - Fixed a bug when admins delete a parkour, players were not given their items back." />
+    <MESSAGE value="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation.&#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages.&#10; - Fixed a bug when admins delete a parkour, players were not given their items back.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation.&#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages.&#10; - Fixed a bug when admins delete a parkour, players were not given their items back.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
   </component>
 </project>

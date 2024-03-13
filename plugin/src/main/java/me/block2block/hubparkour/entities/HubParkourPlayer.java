@@ -227,6 +227,9 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     }
 
     public void end(ParkourPlayerFailEvent.FailCause cause) {
+        if (cause != ParkourPlayerFailEvent.FailCause.NEW_PARKOUR) {
+            setToPrevState();
+        }
         if (cause != null) {
             ParkourPlayerFailEvent failEvent = new ParkourPlayerFailEvent(this.parkour, this, cause);
             Bukkit.getPluginManager().callEvent(failEvent);
@@ -485,10 +488,6 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     ConfigUtil.sendMessage(player, "Messages.Parkour.End.Failed.Too-Quick", "You completed the parkour too quickly, parkour failed!", true, Collections.emptyMap());
                 }
             }
-        }
-
-        if (cause != ParkourPlayerFailEvent.FailCause.NEW_PARKOUR) {
-            setToPrevState();
         }
 
         parkour.playerEnd(this);

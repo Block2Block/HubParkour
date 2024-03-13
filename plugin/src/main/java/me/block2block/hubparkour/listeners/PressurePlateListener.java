@@ -4,6 +4,7 @@ import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerCheckpointEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerStartEvent;
+import me.block2block.hubparkour.api.events.player.ParkourPlayerTeleportEvent;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
@@ -94,28 +95,42 @@ public class PressurePlateListener implements Listener {
         }
         if (CacheManager.isParkour(e.getPlayer())) {
             if (e.getTo().getBlock().isLiquid()) {
+                boolean tpwater = ConfigUtil.getBoolean("Settings.Teleport.On-Water", true);
+                boolean tplava = ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true);
+                ParkourPlayerTeleportEvent.TeleportReason reason =
+                        ParkourPlayerTeleportEvent.TeleportReason.Unknow;
                 if (e.getTo().getBlock().getType() == Material.WATER) {
-                    if (!ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
+                    reason = ParkourPlayerTeleportEvent.TeleportReason.Water;
+                    if (!tpwater) {
                         return;
                     }
                 } else if (e.getTo().getBlock().getType() == Material.LAVA) {
-                    if (!ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true)) {
+                    reason = ParkourPlayerTeleportEvent.TeleportReason.Lava;
+                    if (!tplava) {
                         return;
                     }
                 } else if (HubParkour.isPre1_13()) {
                     if (e.getTo().getBlock().getType() == Material.getMaterial("STATIONARY_WATER")) {
-                        if (!ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
+                        reason = ParkourPlayerTeleportEvent.TeleportReason.Water;
+                        if (!tpwater) {
                             return;
                         }
                     } else {
-                        if (!ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true)) {
+                        reason = ParkourPlayerTeleportEvent.TeleportReason.Lava;
+                        if (!tplava) {
                             return;
                         }
                     }
                 }
-                if (ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
-                    HubParkourPlayer player = CacheManager.getPlayer(e.getPlayer());
+                if (tpwater || tplava) {
+                    Player p = e.getPlayer();
+                    ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint(), reason);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) {
+                        return;
+                    }
 
+                    HubParkourPlayer player = CacheManager.getPlayer(p);
                     Location l = player.getParkour().getRestartPoint().getLocation().clone();
                     if (player.getLastReached() != 0) {
                         l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();

@@ -47,10 +47,11 @@ public class FallListener implements Listener {
                             return;
                         }
                     }
-                }
-
-                if (ConfigUtil.getBoolean("Settings.Health.Disable-Damage", true)) {
-                    e.setCancelled(true);
+                } else {
+                    if (ConfigUtil.getBoolean("Settings.Health.Disable-Damage", true)) {
+                        e.setCancelled(true);
+                    }
+                    return;
                 }
 
                 e.setCancelled(true);
@@ -59,7 +60,7 @@ public class FallListener implements Listener {
                 PressurePlate point = (player.getLastReached() != 0) ? player.getParkour().getCheckpoint(player.getLastReached())
                         : player.getParkour().getRestartPoint();
                 ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(player.getParkour(),
-                        player, point, ParkourPlayerTeleportEvent.TeleportType.Fall);
+                        player, point, ParkourPlayerTeleportEvent.TeleportReason.Fall);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
                     return;

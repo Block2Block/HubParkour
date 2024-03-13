@@ -51,7 +51,7 @@ public class ItemClickListener implements Listener {
                                 if (FallListener.getHasTeleported().contains(p)) {
                                     return;
                                 }
-                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportType.ItemClickReset);
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.ItemClickReset);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return;
@@ -89,7 +89,7 @@ public class ItemClickListener implements Listener {
                                 if (FallListener.getHasTeleported().contains(p)) {
                                     return;
                                 }
-                                ParkourPlayerTeleportEvent event2 = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportType.ItemClickCheckPoint);
+                                ParkourPlayerTeleportEvent event2 = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.ItemClickCheckPoint);
                                 Bukkit.getPluginManager().callEvent(event2);
                                 if (event2.isCancelled()) {
                                     return;

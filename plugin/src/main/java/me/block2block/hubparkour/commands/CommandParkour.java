@@ -43,7 +43,7 @@ public class CommandParkour implements CommandExecutor {
                     case "reset":
                         if (p.hasPermission("hubparkour.command.reset")) {
                             if (CacheManager.isParkour(p)) {
-                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportType.CommandReset);
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.CommandReset);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return true;
@@ -66,7 +66,7 @@ public class CommandParkour implements CommandExecutor {
                         if (p.hasPermission("hubparkour.command.checkpoint")) {
                             if (CacheManager.isParkour(p)) {
                                 HubParkourPlayer player = CacheManager.getPlayer(p);
-                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportType.CommandCheckPoint);
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.CommandCheckPoint);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return true;

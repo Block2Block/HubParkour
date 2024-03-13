@@ -11,14 +11,14 @@ import me.block2block.hubparkour.api.plates.PressurePlate;
 public class ParkourPlayerTeleportEvent extends ParkourPlayerEvent {
 
     private final PressurePlate plate;
-    private final TeleportType teleportType;
+    private final TeleportReason teleportReason;
 
     @SuppressWarnings("unused")
     public ParkourPlayerTeleportEvent(IParkour parkour, IHubParkourPlayer player,
-                                      PressurePlate pressurePlate, TeleportType teleportType) {
+                                      PressurePlate pressurePlate, TeleportReason teleportReason) {
         super(parkour, player);
         this.plate = pressurePlate;
-        this.teleportType = teleportType;
+        this.teleportReason = teleportReason;
     }
 
     /**
@@ -33,13 +33,22 @@ public class ParkourPlayerTeleportEvent extends ParkourPlayerEvent {
 
     /**
      * Get reason of player teleport
-     * @return
+     *
+     * @return the reason of teleport
      */
-    public TeleportType getTeleportType() {
-        return teleportType;
+    @SuppressWarnings("unused")
+    public TeleportReason getTeleportReason() {
+        return teleportReason;
     }
 
-    public enum TeleportType {
+    /**
+     * The reason of teleport
+     */
+    public enum TeleportReason {
+        /**
+         * Unknow reason
+         */
+        Unknow,
         /**
          * Use command /parkour reset
          */
@@ -59,6 +68,14 @@ public class ParkourPlayerTeleportEvent extends ParkourPlayerEvent {
         /**
          * Player dropped from platform
          */
-        Fall
+        Fall,
+        /**
+         * Player fall in water
+         */
+        Water,
+        /**
+         * Player fall in lava
+         */
+        Lava
     }
 }

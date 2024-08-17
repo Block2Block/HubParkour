@@ -66,37 +66,52 @@ public class HubParkour extends JavaPlugin {
 
         new Metrics(this, 14109);
 
-        switch (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]) {
-            case "v1_12_R1":
-            case "v1_11_R1":
-            case "v1_10_R1":
-                post1_9 = true;
-            case "v1_9_R1":
-            case "v1_9_R2":
-                //Elytras are present in this version, register Elytra listener.
-                Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
-                getLogger().info("Legacy server version detected (1.8-1.12).");
-                pre1_13 = true;
-                post1_8 = true;
-                break;
-            case "v1_8_R1":
-            case "v1_8_R2":
-            case "v1_8_R3":
-                getLogger().info("Legacy server version detected (1.8-1.12).");
-                pre1_13 = true;
-                post1_8 = false;
-                break;
-            default:
-                pre1_13 = false;
-                post1_8 = true;
-                post1_9 = true;
-                getLogger().info("1.13+ server version detected.");
-                //Elytras are present in this version, register Elytra listener.
-                Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
-                Bukkit.getPluginManager().registerEvents(new PotionListener(), this);
-                break;
-        }
+        final String packageName = Bukkit.getServer().getClass().getPackage().getName();
+        final String[] versionParts = packageName.split("\\.");
 
+        if(versionParts.length > 3) {
+            switch (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]) {
+                case "v1_12_R1":
+                case "v1_11_R1":
+                case "v1_10_R1":
+                    post1_9 = true;
+                case "v1_9_R1":
+                case "v1_9_R2":
+                    //Elytras are present in this version, register Elytra listener.
+                    Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
+                    getLogger().info("Legacy server version detected (1.8-1.12).");
+                    pre1_13 = true;
+                    post1_8 = true;
+                    break;
+                case "v1_8_R1":
+                case "v1_8_R2":
+                case "v1_8_R3":
+                    getLogger().info("Legacy server version detected (1.8-1.12).");
+                    pre1_13 = true;
+                    post1_8 = false;
+                    break;
+                default:
+                    pre1_13 = false;
+                    post1_8 = true;
+                    post1_9 = true;
+                    getLogger().info("1.13+ server version detected.");
+                    //Elytras are present in this version, register Elytra listener.
+                    Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
+                    Bukkit.getPluginManager().registerEvents(new PotionListener(), this);
+                    break;
+            }
+        } else {
+
+            // this happens due to the remapping of the package version in paper.
+            // it only happens for version >= 1.20.6
+
+            pre1_13 = false;
+            post1_8 = true;
+            post1_9 = true;
+            getLogger().info("1.13+ server version detected.");
+            Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
+            Bukkit.getPluginManager().registerEvents(new PotionListener(), this);
+        }
 
         //Generating/Loading Config File
         if (!getDataFolder().exists()) getDataFolder().mkdir();

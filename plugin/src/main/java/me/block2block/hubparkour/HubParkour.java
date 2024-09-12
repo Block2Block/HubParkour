@@ -70,7 +70,7 @@ public class HubParkour extends JavaPlugin {
         final String[] versionParts = packageName.split("\\.");
 
         if(versionParts.length > 3) {
-            switch (Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]) {
+            switch (versionParts[3]) {
                 case "v1_12_R1":
                 case "v1_11_R1":
                 case "v1_10_R1":

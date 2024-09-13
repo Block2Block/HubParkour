@@ -17,11 +17,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.7.5: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation.&#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages.&#10; - Fixed a bug when admins delete a parkour, players were not given their items back.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/HubParkour.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/EditWizard.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/EditWizard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -130,7 +128,6 @@
     <option name="importingSettings">
       <MavenImportingSettings>
         <option name="vmOptionsForImporter" value="-Xmx768m" />
-        <option name="workspaceImportForciblyTurnedOn" value="true" />
       </MavenImportingSettings>
     </option>
   </component>
@@ -187,7 +184,7 @@
       <command value="mvn clean package" />
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Maven.hubparkour [clean,package]">
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/HubParkour/javadoc/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
@@ -204,6 +201,41 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="hubparkour [clean,package]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="clean" />
+                <option value="package" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="JavaScript Debug.index.html" />
+      <item itemvalue="Maven.hubparkour [clean,package]" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="JavaScript Debug.index.html" />

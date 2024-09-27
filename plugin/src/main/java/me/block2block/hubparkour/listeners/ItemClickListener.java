@@ -19,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -41,7 +42,13 @@ public class ItemClickListener implements Listener {
             }
             if (e.getItem() != null) {
                 for (int type : CacheManager.getItems().keySet()) {
-                    if (CacheManager.getItems().get(type).equals(e.getItem())) {
+                    ItemStack itemToFind = CacheManager.getItems().get(type);
+                    boolean found = e.getItem().getType() == itemToFind.getType() &&
+                            e.getItem().getItemMeta().getDisplayName().equals(itemToFind.getItemMeta().getDisplayName()) &&
+                            new HashSet<>(e.getItem().getItemMeta().getLore()).containsAll(itemToFind.getItemMeta().getLore()) &&
+                            e.getItem().getAmount() == itemToFind.getAmount() &&
+                            e.getItem().getDurability() == itemToFind.getDurability();
+                    if (found) {
                         e.setCancelled(true);
                         Player p = e.getPlayer();
                         HubParkourPlayer player = CacheManager.getPlayer(p);

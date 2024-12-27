@@ -48,34 +48,34 @@ public class ParkourPlayerTeleportEvent extends ParkourPlayerEvent {
         /**
          * Unknow reason
          */
-        Unknow,
+        UNKNOW,
         /**
          * Use command /parkour reset
          */
-        CommandReset,
+        COMMAND_RESET,
         /**
          * Use command /parkour checkpoint
          */
-        CommandCheckPoint,
+        COMMAND_CHECK_POINT,
         /**
          * Click gui item reset
          */
-        ItemClickReset,
+        ITEM_CLICK_RESET,
         /**
          * Click gui item checkpoint
          */
-        ItemClickCheckPoint,
+        ITEM_CLICK_CHECK_POINT,
         /**
          * Player dropped from platform
          */
-        Fall,
+        FALL,
         /**
          * Player fall in water
          */
-        Water,
+        WATER,
         /**
          * Player fall in lava
          */
-        Lava
+        LAVA
     }
 }

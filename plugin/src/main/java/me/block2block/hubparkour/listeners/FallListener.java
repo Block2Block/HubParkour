@@ -4,6 +4,7 @@ import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerTeleportEvent;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
+import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
 import org.bukkit.Bukkit;
@@ -57,10 +58,11 @@ public class FallListener implements Listener {
                 e.setCancelled(true);
                 p.setFallDistance(0);
                 HubParkourPlayer player = CacheManager.getPlayer(p);
-                PressurePlate point = (player.getLastReached() != 0) ? player.getParkour().getCheckpoint(player.getLastReached())
-                        : player.getParkour().getRestartPoint();
-                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(player.getParkour(),
-                        player, point, ParkourPlayerTeleportEvent.TeleportReason.Fall);
+                Parkour parkour = player.getParkour();
+                PressurePlate point = (player.getLastReached() != 0) ? parkour.getCheckpoint(player.getLastReached())
+                        : parkour.getRestartPoint();
+                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(parkour,
+                        player, point, ParkourPlayerTeleportEvent.TeleportReason.FALL);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
                     return;

@@ -9,6 +9,7 @@ import me.block2block.hubparkour.api.items.HideItem;
 import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.api.items.ShowItem;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
+import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
 import org.bukkit.Bukkit;
@@ -45,13 +46,14 @@ public class ItemClickListener implements Listener {
                         e.setCancelled(true);
                         Player p = e.getPlayer();
                         HubParkourPlayer player = CacheManager.getPlayer(p);
+                        Parkour parkour = player.getParkour();
                         switch (type) {
                             case 0:
                                 //Reset.
                                 if (FallListener.getHasTeleported().contains(p)) {
                                     return;
                                 }
-                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.ItemClickReset);
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(parkour, player, parkour.getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.ITEM_CLICK_RESET);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return;
@@ -59,7 +61,7 @@ public class ItemClickListener implements Listener {
                                 if ((confirmationRequied.containsKey(p) && confirmationRequied.get(p) == 0) || !ConfigUtil.getBoolean("Settings.Parkour-Items.Reset.Confirmation", true)) {
                                     confirmationRequied.remove(p);
                                     p.setFallDistance(0);
-                                    Location l = CacheManager.getPlayer(p).getParkour().getRestartPoint().getLocation().clone();
+                                    Location l = parkour.getRestartPoint().getLocation().clone();
                                     l.setX(l.getX() + 0.5);
                                     l.setY(l.getY() + 0.5);
                                     l.setZ(l.getZ() + 0.5);
@@ -89,7 +91,7 @@ public class ItemClickListener implements Listener {
                                 if (FallListener.getHasTeleported().contains(p)) {
                                     return;
                                 }
-                                ParkourPlayerTeleportEvent event2 = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.ItemClickCheckPoint);
+                                ParkourPlayerTeleportEvent event2 = new ParkourPlayerTeleportEvent(parkour, player, (player.getLastReached() != 0)?parkour.getCheckpoint(player.getLastReached()):parkour.getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.ITEM_CLICK_CHECK_POINT);
                                 Bukkit.getPluginManager().callEvent(event2);
                                 if (event2.isCancelled()) {
                                     return;
@@ -129,7 +131,7 @@ public class ItemClickListener implements Listener {
                                 return;
                             case 2:
                                 //Cancel.
-                                ParkourPlayerLeaveEvent leaveEvent = new ParkourPlayerLeaveEvent(player.getParkour(), player);
+                                ParkourPlayerLeaveEvent leaveEvent = new ParkourPlayerLeaveEvent(parkour, player);
                                 Bukkit.getPluginManager().callEvent(leaveEvent);
                                 if (leaveEvent.isCancelled()) {
                                     return;
@@ -183,7 +185,7 @@ public class ItemClickListener implements Listener {
                                 break;
                             }
                             case 4: {
-                                ParkourPlayerTogglePlayersEvent toggleEvent = new ParkourPlayerTogglePlayersEvent(player.getParkour(), player, true);
+                                ParkourPlayerTogglePlayersEvent toggleEvent = new ParkourPlayerTogglePlayersEvent(parkour, player, true);
                                 Bukkit.getPluginManager().callEvent(toggleEvent);
                                 if (toggleEvent.isCancelled()) {
                                     return;

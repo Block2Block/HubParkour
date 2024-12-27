@@ -43,12 +43,14 @@ public class CommandParkour implements CommandExecutor {
                     case "reset":
                         if (p.hasPermission("hubparkour.command.reset")) {
                             if (CacheManager.isParkour(p)) {
-                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(CacheManager.getPlayer(p).getParkour(), CacheManager.getPlayer(p), CacheManager.getPlayer(p).getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.CommandReset);
+                                HubParkourPlayer player = CacheManager.getPlayer(p);
+                                Parkour parkour = player.getParkour();
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(parkour, player, parkour.getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.COMMAND_RESET);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return true;
                                 }
-                                Location l = CacheManager.getPlayer(p).getParkour().getRestartPoint().getLocation().clone();
+                                Location l = parkour.getRestartPoint().getLocation().clone();
                                 l.setX(l.getX() + 0.5);
                                 l.setY(l.getY() + 0.5);
                                 l.setZ(l.getZ() + 0.5);
@@ -66,14 +68,15 @@ public class CommandParkour implements CommandExecutor {
                         if (p.hasPermission("hubparkour.command.checkpoint")) {
                             if (CacheManager.isParkour(p)) {
                                 HubParkourPlayer player = CacheManager.getPlayer(p);
-                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(player.getParkour(), player, (player.getLastReached() != 0)?player.getParkour().getCheckpoint(player.getLastReached()):player.getParkour().getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.CommandCheckPoint);
+                                Parkour parkour = player.getParkour();
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(parkour, player, (player.getLastReached() != 0)?parkour.getCheckpoint(player.getLastReached()):parkour.getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.COMMAND_CHECK_POINT);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return true;
                                 }
-                                Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                                Location l = parkour.getRestartPoint().getLocation().clone();
                                 if (player.getLastReached() != 0) {
-                                    l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                                    l = parkour.getCheckpoint(player.getLastReached()).getLocation().clone();
                                 }
                                 l.setX(l.getX() + 0.5);
                                 l.setY(l.getY() + 0.5);

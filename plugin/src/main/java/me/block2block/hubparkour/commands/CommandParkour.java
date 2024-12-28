@@ -69,7 +69,7 @@ public class CommandParkour implements CommandExecutor {
                             if (CacheManager.isParkour(p)) {
                                 HubParkourPlayer player = CacheManager.getPlayer(p);
                                 Parkour parkour = player.getParkour();
-                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(parkour, player, (player.getLastReached() != 0)?parkour.getCheckpoint(player.getLastReached()):parkour.getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.COMMAND_CHECK_POINT);
+                                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(parkour, player, (player.getLastReached() != 0)?parkour.getCheckpoint(player.getLastReached()):parkour.getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.COMMAND_CHECKPOINT);
                                 Bukkit.getPluginManager().callEvent(event);
                                 if (event.isCancelled()) {
                                     return true;

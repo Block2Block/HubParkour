@@ -91,7 +91,7 @@ public class ItemClickListener implements Listener {
                                 if (FallListener.getHasTeleported().contains(p)) {
                                     return;
                                 }
-                                ParkourPlayerTeleportEvent event2 = new ParkourPlayerTeleportEvent(parkour, player, (player.getLastReached() != 0)?parkour.getCheckpoint(player.getLastReached()):parkour.getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.ITEM_CLICK_CHECK_POINT);
+                                ParkourPlayerTeleportEvent event2 = new ParkourPlayerTeleportEvent(parkour, player, (player.getLastReached() != 0)?parkour.getCheckpoint(player.getLastReached()):parkour.getRestartPoint(), ParkourPlayerTeleportEvent.TeleportReason.ITEM_CLICK_CHECKPOINT);
                                 Bukkit.getPluginManager().callEvent(event2);
                                 if (event2.isCancelled()) {
                                     return;

@@ -98,7 +98,7 @@ public class PressurePlateListener implements Listener {
                 boolean tpwater = ConfigUtil.getBoolean("Settings.Teleport.On-Water", true);
                 boolean tplava = ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true);
                 ParkourPlayerTeleportEvent.TeleportReason reason =
-                        ParkourPlayerTeleportEvent.TeleportReason.UNKNOW;
+                        ParkourPlayerTeleportEvent.TeleportReason.UNKNOWN;
                 if (e.getTo().getBlock().getType() == Material.WATER) {
                     reason = ParkourPlayerTeleportEvent.TeleportReason.WATER;
                     if (!tpwater) {

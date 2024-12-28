@@ -48,7 +48,7 @@ public class ParkourPlayerTeleportEvent extends ParkourPlayerEvent {
         /**
          * Unknow reason
          */
-        UNKNOW,
+        UNKNOWN,
         /**
          * Use command /parkour reset
          */
@@ -56,7 +56,7 @@ public class ParkourPlayerTeleportEvent extends ParkourPlayerEvent {
         /**
          * Use command /parkour checkpoint
          */
-        COMMAND_CHECK_POINT,
+        COMMAND_CHECKPOINT,
         /**
          * Click gui item reset
          */
@@ -64,7 +64,7 @@ public class ParkourPlayerTeleportEvent extends ParkourPlayerEvent {
         /**
          * Click gui item checkpoint
          */
-        ITEM_CLICK_CHECK_POINT,
+        ITEM_CLICK_CHECKPOINT,
         /**
          * Player dropped from platform
          */

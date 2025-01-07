@@ -172,7 +172,7 @@ public class HubParkour extends JavaPlugin {
         holograms = Bukkit.getPluginManager().isPluginEnabled("DecentHolograms");
 
         if (holograms) {
-            getLogger().info("DecentHolograms has been detected detected.");
+            getLogger().info("DecentHolograms has been detected.");
         }
 
         dbManager = new DatabaseManager();

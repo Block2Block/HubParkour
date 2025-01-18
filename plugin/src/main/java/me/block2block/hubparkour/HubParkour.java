@@ -243,15 +243,13 @@ public class HubParkour extends JavaPlugin {
 
         for (Parkour parkour : CacheManager.getParkours()) {
             for (PressurePlate pp : parkour.getAllPoints()) {
-                if (pp != null) {
-                    pp.placeMaterial();
+                pp.placeMaterial();
 
-                    if (pp.getType() != 4) {
-                        if (pp.getType() != 2) {
-                            CacheManager.addPoint(pp);
-                        } else {
-                            CacheManager.addRestartPoint(pp);
-                        }
+                if (pp.getType() != 4) {
+                    if (pp.getType() != 2) {
+                        CacheManager.addPoint(pp);
+                    } else {
+                        CacheManager.addRestartPoint(pp);
                     }
                 }
             }

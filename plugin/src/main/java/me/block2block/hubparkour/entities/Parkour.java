@@ -71,8 +71,10 @@ public class Parkour implements IParkour {
         this.start.setParkour(this);
         this.endPoint = parkour.getEndPoint();
         this.endPoint.setParkour(this);
-        this.exitPoint = parkour.getExitPoint();
-        this.exitPoint.setParkour(this);
+        if (exitPoint != null) {
+            this.exitPoint = parkour.getExitPoint();
+            this.exitPoint.setParkour(this);
+        }
         this.checkpoints = parkour.getCheckpoints();
         for (Checkpoint checkpoint : checkpoints) {
             checkpoint.setParkour(this);
@@ -132,7 +134,9 @@ public class Parkour implements IParkour {
         List<PressurePlate> pressurePlates = new ArrayList<>(checkpoints);
         pressurePlates.add(endPoint);
         pressurePlates.add(start);
-        pressurePlates.add(exitPoint);
+        if (exitPoint != null) {
+            pressurePlates.add(exitPoint);
+        }
         pressurePlates.add(restartPoint);
         pressurePlates.addAll(borderPoints);
         return pressurePlates;

@@ -353,6 +353,7 @@ public class HubParkour extends JavaPlugin {
         CacheManager.setType(2, Material.AIR);
         CacheManager.setType(3, checkpoint);
         CacheManager.setType(4, Material.AIR);
+        CacheManager.setType(5, Material.AIR);
         return true;
     }
 

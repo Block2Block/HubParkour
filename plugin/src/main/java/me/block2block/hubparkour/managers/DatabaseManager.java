@@ -507,6 +507,7 @@ public class DatabaseManager {
 
                     StartPoint start = null;
                     EndPoint end = null;
+                    ExitPoint exit = null;
                     List<Checkpoint> checkpoints = new ArrayList<>();
                     List<BorderPoint> borderPoints = new ArrayList<>();
                     RestartPoint restart = null;
@@ -531,6 +532,8 @@ public class DatabaseManager {
                             case 4:
                                 borderPoints.add(new BorderPoint(new Location(Bukkit.getWorld(parkourPoints.getString(9)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5), parkourPoints.getFloat(7), parkourPoints.getFloat(6))));
                                 break;
+                            case 5:
+                                exit = new ExitPoint(new Location(Bukkit.getWorld(parkourPoints.getString(9)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5), parkourPoints.getFloat(7), parkourPoints.getFloat(6)));
                         }
                     }
 
@@ -896,6 +899,36 @@ public class DatabaseManager {
                 error = true;
                 e.printStackTrace();
             }
+    }
+
+    public void setExitPoint(int id, ExitPoint point) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 5");
+            statement.setInt(1, point.getLocation().getBlockX());
+            statement.setInt(2, point.getLocation().getBlockY());
+            statement.setInt(3, point.getLocation().getBlockZ());
+            statement.setFloat(4, point.getLocation().getPitch());
+            statement.setFloat(5, point.getLocation().getYaw());
+            statement.setString(6, point.getLocation().getWorld().getName());
+            statement.setInt(7, id);
+            statement.execute();
+        } catch (SQLException e) {
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            error = true;
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteExitPoint(int id) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_locations WHERE parkour_id = ? AND type = 5");
+            statement.setInt(1, id);
+            statement.execute();
+        } catch (SQLException e) {
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            error = true;
+            e.printStackTrace();
+        }
     }
 
     public void setRestartPoint(int id, RestartPoint point) {

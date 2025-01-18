@@ -49,6 +49,8 @@ public abstract class PressurePlate {
      * 1 - End Point
      * 2 - Restart Point
      * 3 - Checkpoint
+     * 4 - Border Point
+     * 5 - Exit Point
      * @return the pressure plate type
      */
     public abstract int getType();

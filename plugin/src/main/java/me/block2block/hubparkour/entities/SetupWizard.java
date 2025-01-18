@@ -21,6 +21,7 @@ public class SetupWizard {
     private final Player player;
     private StartPoint startPoint;
     private EndPoint endPoint;
+    private ExitPoint exitPoint;
     private RestartPoint restartPoint;
     private final List<Checkpoint> checkpoints = new ArrayList<>();
     private String endCommand, name, checkpointCommand;
@@ -39,7 +40,14 @@ public class SetupWizard {
 
     public boolean onChat(String message) {
         switch (currentStage) {
-            case 6:
+            case 2:
+                if (message.equalsIgnoreCase("none")) {
+                    currentStage++;
+                    ConfigUtil.sendMessageOrDefault(player, "Message.Commands.Admin.Exit-Skip.Please-Set-Respawn-Location", "Exit location skipped. Next, you need to set your respawn point. Click the stick while standing in your respawn point.", true, Collections.emptyMap());
+                }
+
+                return true;
+            case 7:
                 if (!message.equalsIgnoreCase("cancel")) {
                     if (CacheManager.getParkour(message) == null) {
                         name = message;
@@ -53,7 +61,7 @@ public class SetupWizard {
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Setup-Cancelled", "Parkour setup was cancelled. Any points that were setup have been deleted.", true, Collections.emptyMap());
                 }
                 return true;
-            case 7:
+            case 8:
                 if (!message.equalsIgnoreCase("cancel")) {
                     String command = message;
                     if (message.equalsIgnoreCase("none")) {
@@ -68,7 +76,7 @@ public class SetupWizard {
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Setup-Cancelled", "Parkour setup was cancelled. Any points that were setup have been deleted.", true, Collections.emptyMap());
                 }
                 return true;
-            case 8:
+            case 9:
                 if (!message.equalsIgnoreCase("cancel")) {
                     String command = message;
                     if (message.equalsIgnoreCase("none")) {
@@ -82,7 +90,7 @@ public class SetupWizard {
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Setup-Cancelled", "Parkour setup was cancelled. Any points that were setup have been deleted.", true, Collections.emptyMap());
                 }
                 return true;
-            case 9: {
+            case 10: {
                 if (!message.equalsIgnoreCase("cancel")) {
                     String cooldown = message;
                     if (message.equalsIgnoreCase("none")) {
@@ -103,7 +111,7 @@ public class SetupWizard {
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Setup-Cancelled", "Parkour setup was cancelled. Any points that were setup have been deleted.", true, Collections.emptyMap());
                 }
             }
-            case 10:
+            case 11:
                 if (!message.equalsIgnoreCase("cancel")) {
                     boolean global = false;
                     if (message.equalsIgnoreCase("y")) {
@@ -113,7 +121,13 @@ public class SetupWizard {
                         return true;
                     }
 
-                    final Parkour parkour = new Parkour(-1, ((global?null:HubParkour.getServerUuid())), name, startPoint, endPoint, checkpoints, restartPoint, borderPoints, checkpointCommand, endCommand, cooldown);
+                    final Parkour parkour;
+                    if (exitPoint != null) {
+                        parkour = new Parkour(-1, ((global?null:HubParkour.getServerUuid())), name, startPoint, endPoint, exitPoint, checkpoints, restartPoint, borderPoints, checkpointCommand, endCommand, cooldown);
+                    } else {
+                        parkour = new Parkour(-1, ((global?null:HubParkour.getServerUuid())), name, startPoint, endPoint, checkpoints, restartPoint, borderPoints, checkpointCommand, endCommand, cooldown);
+                    }
+
                     ParkourSetupEvent setupEvent = new ParkourSetupEvent(parkour, player);
                     Bukkit.getPluginManager().callEvent(setupEvent);
                     new BukkitRunnable() {
@@ -184,14 +198,18 @@ public class SetupWizard {
                 }
                 endPoint = new EndPoint(location);
                 currentStage++;
-                ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Respawn", "End point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point.", true, Collections.emptyMap());
+                ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Exit", "End point set! Next, you need to set your exit point. Click the stick while standing in your exit point. You can say 'none' for no exit location.", true, Collections.emptyMap());
                 break;
             case 2:
+                exitPoint = new ExitPoint(location);
+                currentStage++;
+                ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Respawn", "Exit point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point.", true, Collections.emptyMap());
+            case 3:
                 restartPoint = new RestartPoint(location);
                 currentStage++;
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Checkpoints", "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done'.", true, Collections.emptyMap());
                 break;
-            case 3:
+            case 4:
                 for (PressurePlate p : checkpoints) {
                     if (p.getLocation().equals(location) && p.getType() != 2) {
                         ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-Placement", "The place you are trying to setup that point is currently set for a different type of point. If this is a mistake, please type 'cancel' and re-setup your parkour.", true, Collections.emptyMap());
@@ -210,13 +228,13 @@ public class SetupWizard {
                 checkpoints.add(new Checkpoint(location, checkpoints.size() + 1));
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Checkpoint-Added", "Checkpoint successfully added.", true, Collections.emptyMap());
                 break;
-            case 4: {
+            case 5: {
                 borderPoints.add(new BorderPoint(location));
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Second-Border", "Great, now set your second border point! If you do not wish to use border points, then enter 'done' or execute /parkour done.", true, Collections.emptyMap());
                 currentStage++;
                 break;
             }
-            case 5: {
+            case 6: {
                 Location other = borderPoints.get(0).getLocation();
 
                 double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;

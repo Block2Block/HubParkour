@@ -16,11 +16,8 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.7.5: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation.&#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages.&#10; - Fixed a bug when admins delete a parkour, players were not given their items back.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
-      <change afterPath="$PROJECT_DIR$/.idea/HubParkour.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Update file paths in CONTRIBUTING.md for accuracy&#10;&#10;Corrected internal links to SECURITY.md and CODE_OF_CONDUCT.md by including the .github directory for proper navigation. This ensures contributors are directed to the correct resources.">
+      <change beforePath="$PROJECT_DIR$/.github/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,12 +97,48 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="8577f98ea7e3b45e2a9c539a48314f0f27db7bda" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms6IKpnk&quot;,
+        &quot;number&quot;: 42
+      },
+      &quot;lastSeen&quot;: 1737220847118
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms6IPaCY&quot;,
+        &quot;number&quot;: 44
+      },
+      &quot;lastSeen&quot;: 1737231529595
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms5jChUa&quot;,
+        &quot;number&quot;: 36
+      },
+      &quot;lastSeen&quot;: 1737232128345
+    }
+  ]
+}</component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
       <filtered-out-file-type name="LOCAL_BRANCH" />
@@ -121,6 +154,7 @@
       </list>
     </option>
   </component>
+  <component name="GithubPullRequestsUISettings">{}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -148,9 +182,10 @@
   &quot;keyToString&quot;: {
     &quot;Maven.hubparkour [clean,package].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;community&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;E:/Programming Projects/Java/HubParkour&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -158,14 +193,22 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="Push.Settings">
+    <force-push-targets>
+      <force-push-target remote-path="origin" branch="community" />
+    </force-push-targets>
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Java Projects\HubParkour\src\main\resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Programming Projects\Java\HubParkour" />
+      <recent name="E:\Programming Projects\Java\HubParkour\.github" />
       <recent name="E:\Programming Projects\Java\HubParkour\plugin\src\main\resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -247,7 +290,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-1.8.0_392-corretto-1.8.0_392-249ae16d76d6-ec8bc16d" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.117" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.117" />
       </set>
     </attachedChunks>
   </component>
@@ -996,7 +1040,7 @@
       <option name="project" value="LOCAL" />
       <updated>1681495150549</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1041,10 +1085,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.5.4: Bug Fix&#10;- Fixed a bug where leaderboard holograms would generate an error when refreshed after a user has completed the parkour" />
-    <MESSAGE value="v2.5.5: More bug fixes&#10;- Fixed a bug where starting a new parkour while already in one would not give you the parkour items.&#10;- Fixed a bug where when the milliseconds was less than 100/10, 0's would be missing from the times resulting in times appearing wrong.&#10;- Fixed a bug where when including the plugin in a command, HubParkour commands were not whitelisted from command blocking.&#10;- Fixed some default config messages having &quot;reached&quot; twice." />
-    <MESSAGE value="v2.5.6: Placeholder and health bugfixes.&#10;- Fixed a bug with the besttime and recordholder placeholders showing last instead of first place.&#10;- Fixed a bug with the plugin when setting health after finishing a parkour when the player had more than normal health when starting the parkour." />
-    <MESSAGE value="v2.6: Parkour signs, borders, hide players and more!&#10;- 1.18 version support.&#10;- Version support should now be automatic, unless changes are needed due to API changes.&#10;- New parkour statistics feature.&#10;- New positional placeholders for PlaceholderAPI&#10;- 2 new admin commands to reset all of the times of a specific player on all parkours, or for all players on all parkours.&#10;- New ability to hide/show players while in a parkour.&#10;- New parkour borders, which teleports the user back when they fall outside of it.&#10;- New HubParkour signs for teleporting to, starting and getting stats for specific parkours.&#10;- New rewards cooldown feature to set a cooldown for rewards.&#10;- The developer API has be rejigged so that only the API is exposed to the developer unless the JAR is added directly as a library in your IDE to aid development.&#10;- The organisation of the source code has been moved around, so as to aid the deployment of the API.&#10;- Fixed a bug where commands were case sensitive.&#10;- Fixed a bug where the wrong permission nodes were being used for /parkour input, /parkour done and /parkour cancel.&#10;- Fixed a bug when editing a parkour name.&#10;- Fixed a bug with SSL requirements with MySQL would cause the plugin not to load.&#10;- Fixed a bug where a user would receive double rewards if they completed the parkour for the first time." />
     <MESSAGE value="v2.6.1: Bug fixes&#10;- Fixed a bug where commands would not get executed properly for rewards.&#10;- Fixed a bug where waterlogged blocks would not count as water when Teleport-On-Water is enabled." />
     <MESSAGE value="v2.6.2: SQL Bugfix&#10;- Fixed a bug with SQL where timestamps for reward cooldowns wouldn't get pushed into the Database properly." />
     <MESSAGE value="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed." />
@@ -1066,6 +1106,10 @@
     <MESSAGE value="v2.7.3: Schema Bugfix&#10; - Fixed a bug where the MySQL table columns were the wrong way round. The database will automatically migrate to the correct structure." />
     <MESSAGE value="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation. &#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages. &#10; - Fixed a bug when admins delete a parkour, players were not given their items back." />
     <MESSAGE value="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation.&#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages.&#10; - Fixed a bug when admins delete a parkour, players were not given their items back.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.7.4: Bugfixes&#10; - Fixed a bug with DecentHologram integration where holograms would not generate due to a naming issue.&#10; - Fixed a bug where signs would not delete from the database correctly.&#10; - Signs that are removed from the world but not deleted from the database will now regenerate in the correct orientation.&#10; - Pressure plates can now be of any block type, including air.&#10; - Optimised how players who join a new parkour when alraedy in one are handled.&#10; - Fixed a bug where armor that add health to the user causes the player to keep that health permanently when they come out of the parkour.&#10; - Fixed some logging messages so that they all use the [HubParkour] prefix.&#10; - Fixed a bug with the PlaceholderAPI extension where some messages were not using configured messages.&#10; - Fixed a bug when admins delete a parkour, players were not given their items back.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <MESSAGE value="v2.7.5: Bugfixes&#10; - Fixed a bug with the Edit Wizard that would not allow editing the parkour properly when no border points were set-up.&#10; - Fixed a bug with rewards when giving items being overwritten by the giving back of items when a player reaches the end of a parkour.&#10; - The formatting of time is now consistent when there is only 1 digit for a particular timescale (Courtesy of Tuchan)" />
+    <MESSAGE value="Add contribution guidelines and security policy  &#10;&#10;Moved `LICENSE` and `CODE_OF_CONDUCT.md` to `.github` directory and introduced new `CONTRIBUTING.md` and `SECURITY.md`. Updated project settings to reflect these changes." />
+    <MESSAGE value="Update file paths in CONTRIBUTING.md for accuracy&#10;&#10;Corrected internal links to SECURITY.md and CODE_OF_CONDUCT.md by including the .github directory for proper navigation. This ensures contributors are directed to the correct resources." />
+    <MESSAGE value="Introduced bug report, feature request templates, code of conduct, contributing, security guidelines, and relocated the license&#10;&#10;This commit introduces a structured template for bug reports and feature requests to facilitate effective communication of issues or suggestions by the community. It also provides a code of conduct that outlines expected behavioural norms for community participation. Alongside this, a guide on how to effectively contribute to the project has been added.&#10;&#10;This commit also enhances project's security by providing clear guidelines on how to report vulnerabilities. Furthermore, the project's license file has been moved to the .github directory. This aligns with standard open source project conventions, providing a clear and accessible place for legal documents." />
+    <option name="LAST_COMMIT_MESSAGE" value="Introduced bug report, feature request templates, code of conduct, contributing, security guidelines, and relocated the license&#10;&#10;This commit introduces a structured template for bug reports and feature requests to facilitate effective communication of issues or suggestions by the community. It also provides a code of conduct that outlines expected behavioural norms for community participation. Alongside this, a guide on how to effectively contribute to the project has been added.&#10;&#10;This commit also enhances project's security by providing clear guidelines on how to report vulnerabilities. Furthermore, the project's license file has been moved to the .github directory. This aligns with standard open source project conventions, providing a clear and accessible place for legal documents." />
   </component>
 </project>

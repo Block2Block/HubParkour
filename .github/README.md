@@ -64,4 +64,14 @@ public class StartListener implements Listener {
 }
 ``` 
 
+## Contributions and Code of Conduct
+
+We welcome contributions to HubParkour. If you would like to make a contribution, check out our Contribution Guidelines [here](CONTRIBUTING.md).
+
+We expect all contributors to follow our Code of Conduct, whether that is creating an issue, a PR or any other contribution. You can find our Code of Conduct [here](CODE_OF_CONDUCT.md)
+
+## License
+
+This software is distributed with the Apache 2.0 license. For details about this, please view our full license [here](LICENSE).
+
 

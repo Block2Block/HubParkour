@@ -166,7 +166,7 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             if (CacheManager.getPlayer(player) == null) {
                 return "N/A";
             }
-            return ((CacheManager.getPlayer(player).getPrevious() == -1)?ConfigUtil.getString("Messages.PlaceholderAPI.Not-Yet-Finished", "Not yet finished"):((CacheManager.getPlayer(player).getPrevious() == -2)?"Loading...":ConfigUtil.FormatTime(CacheManager.getPlayer(player).getPrevious()))) + "";
+            return ((CacheManager.getPlayer(player).getPrevious() == -1)?ConfigUtil.getString("Messages.PlaceholderAPI.Not-Yet-Finished", "Not yet finished"):((CacheManager.getPlayer(player).getPrevious() == -2)?"Loading...":ConfigUtil.formatTime(CacheManager.getPlayer(player).getPrevious()))) + "";
         }
 
         if (identifier.equals("currenttime")){

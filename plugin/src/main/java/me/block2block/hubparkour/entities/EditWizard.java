@@ -89,6 +89,11 @@ public class EditWizard {
                         ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Please-Set-Reward-Cooldown", "Please specify a new cooldown for you rewards (only applicable when you have repeat-rewards enabled). If you do not wish to have one, please type 'none'.", true, Collections.emptyMap());
                         return true;
                     case 10:
+                        // Exit Location
+                        currentModification = 14;
+                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Please-Set-Exit-Location", "Please use the setup stick and select the new Exit Location. This will take the location of where you are standing, and does take into account where you are looking.", true, Collections.emptyMap());
+                        return true;
+                    case 11:
                         //Exit
                         ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Exited-Edit-Mode", "You have left edit mode.", true, Collections.emptyMap());
                         CacheManager.leaveEditMode();
@@ -229,6 +234,22 @@ public class EditWizard {
                 returnToMainMenu();
                 return true;
             }
+            case 14:
+                if (message.equalsIgnoreCase("cancel")) {
+                    returnToMainMenu();
+                    return true;
+                }
+                if (message.equalsIgnoreCase("none")) {
+                    if (parkour.getExitPoint() == null) {
+                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Exit-Point-Already-Nothing", "Exit point is already set to nothing.", true, Collections.emptyMap());
+                        returnToMainMenu();
+                        return true;
+                    }
+                    parkour.deleteExitPoint();
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Exit-Point-Updated-None", "Exit point successfully wiped.", true, Collections.emptyMap());
+                    returnToMainMenu();
+                    return true;
+                }
         }
         return false;
     }
@@ -329,6 +350,16 @@ public class EditWizard {
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Border-Updated", "Border successfully updated!", true, Collections.emptyMap());
                 returnToMainMenu();
                 break;
+            case 14: {
+                ExitPoint exitPoint = new ExitPoint(location);
+
+                if (borderCheck(location)) return;
+                parkour.setExitPoint(exitPoint, parkour.getExitPoint() != null);
+                ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Exit-Point-Set", "Your new exit point has been set!", true, Collections.emptyMap());
+                returnToMainMenu();
+                break;
+            }
+
         }
     }
 
@@ -387,7 +418,8 @@ public class EditWizard {
         defaultList.add("&a7&r - Checkpoints");
         defaultList.add("&a8&r - Border Points");
         defaultList.add("&a9&r - Reward Cooldown");
-        defaultList.add("&a10&r - Exit Edit Mode");
+        defaultList.add("&a10&r - Exit Point");
+        defaultList.add("&a11&r - Exit Edit Mode");
 
         for (String s : ConfigUtil.getStringList("Messages.Commands.Admin.Edit.Choose-Edit", defaultList)) {
             sb.append(s.replace("{parkour-name}", parkour.getName())).append("\n");

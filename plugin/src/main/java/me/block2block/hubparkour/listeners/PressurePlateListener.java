@@ -357,6 +357,8 @@ public class PressurePlateListener implements Listener {
                         ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Checkpoints.Not-Started", "You must start a parkour in order to reach checkpoints!", true, Collections.emptyMap());
                     }
                     break;
+                case 5:
+                    return;
             }
         }
     }

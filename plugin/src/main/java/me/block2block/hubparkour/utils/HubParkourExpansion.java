@@ -4,6 +4,7 @@ import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 
@@ -147,6 +148,13 @@ public class HubParkourExpansion extends PlaceholderExpansion {
             return CacheManager.getPlayer(player).getParkour().getName() + "";
         }
 
+        if(identifier.equals("currentparkourid")){
+            if (CacheManager.getPlayer(player) == null) {
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-In-Parkour", "Not in parkour");
+            }
+            return CacheManager.getPlayer(player).getParkour().getId() + "";
+        }
+
         if(identifier.equals("lastreachedcheckpoint")){
             if (CacheManager.getPlayer(player) == null) {
                 return "N/A";
@@ -210,6 +218,70 @@ public class HubParkourExpansion extends PlaceholderExpansion {
                 return highest.getCheckpointNo() + "";
             }
         }
+
+        /*
+            Current-Parkour Helper
+         */
+        if (identifier.equals("current_besttime")) {
+            if (CacheManager.getPlayer(player) == null) {
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-In-Parkour", "Not in parkour");
+            }
+            Parkour parkour = CacheManager.getPlayer(player).getParkour();
+
+            return PlaceholderAPI.setPlaceholders(player, "%hubparkour_besttime_" + parkour.getId() + "%");
+        }
+
+        if (identifier.matches("current_highestreachedcheckpoint")) {
+            if (CacheManager.getPlayer(player) == null) {
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-In-Parkour", "Not in parkour");
+            }
+            Parkour parkour = CacheManager.getPlayer(player).getParkour();
+
+            return PlaceholderAPI.setPlaceholders(player, "%hubparkour_highestreachedcheckpoint_" + parkour.getId() + "%");
+        }
+
+        if (identifier.matches("current_checkpointcount")) {
+            if (CacheManager.getPlayer(player) == null) {
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-In-Parkour", "Not in parkour");
+            }
+            Parkour parkour = CacheManager.getPlayer(player).getParkour();
+
+            return PlaceholderAPI.setPlaceholders(player, "%hubparkour_checkpointcount_" + parkour.getId() + "%");
+        }
+
+        if (identifier.matches("current_activeplayers")) {
+            if (CacheManager.getPlayer(player) == null) {
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-In-Parkour", "Not in parkour");
+            }
+            Parkour parkour = CacheManager.getPlayer(player).getParkour();
+
+            return PlaceholderAPI.setPlaceholders(player, "%hubparkour_activeplayers_" + parkour.getId() + "%");
+        }
+
+        if (identifier.matches(("^current_positiontime_[0-9]{1,10}"))) {
+            if (CacheManager.getPlayer(player) == null) {
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-In-Parkour", "Not in parkour");
+            }
+            Parkour parkour = CacheManager.getPlayer(player).getParkour();
+
+            String[] args = identifier.split("_");
+            int position = Integer.parseInt(args[2]);
+
+            return PlaceholderAPI.setPlaceholders(player, "%hubparkour_positiontime_" + parkour.getId() + "_" + position + "%");
+        }
+
+        if (identifier.matches(("^current_positionname_[0-9]{1,10}"))) {
+            if (CacheManager.getPlayer(player) == null) {
+                return ConfigUtil.getString("Messages.PlaceholderAPI.Not-In-Parkour", "Not in parkour");
+            }
+            Parkour parkour = CacheManager.getPlayer(player).getParkour();
+
+            String[] args = identifier.split("_");
+            int position = Integer.parseInt(args[2]);
+
+            return PlaceholderAPI.setPlaceholders(player, "%hubparkour_positionname_" + parkour.getId() + "_" + position + "%");
+        }
+
 
         // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%)
         // was provided

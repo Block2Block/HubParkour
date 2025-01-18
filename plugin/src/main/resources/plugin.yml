@@ -8,7 +8,7 @@ database: true
 prefix: HubParkour
 load: POSTWORLD
 api-version: "1.13"
-softdepend: ['DecentHolograms', 'PlaceholderAPI', 'Multiverse-Core']
+softdepend: ['DecentHolograms', 'PlaceholderAPI', 'Multiverse-Core', "My_Worlds"]
 commands:
   parkour:
     aliases: [pk]

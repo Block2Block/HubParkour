@@ -1,9 +1,13 @@
 package me.block2block.hubparkour.listeners;
 
 import me.block2block.hubparkour.HubParkour;
+import me.block2block.hubparkour.api.events.player.ParkourPlayerTeleportEvent;
+import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
+import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,11 +58,17 @@ public class FallListener implements Listener {
                 e.setCancelled(true);
                 p.setFallDistance(0);
                 HubParkourPlayer player = CacheManager.getPlayer(p);
-
-                Location l = player.getParkour().getRestartPoint().getLocation().clone();
-                if (player.getLastReached() != 0) {
-                    l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                Parkour parkour = player.getParkour();
+                PressurePlate point = (player.getLastReached() != 0) ? parkour.getCheckpoint(player.getLastReached())
+                        : parkour.getRestartPoint();
+                ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(parkour,
+                        player, point, ParkourPlayerTeleportEvent.TeleportReason.FALL);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled()) {
+                    return;
                 }
+
+                Location l = point.getLocation();
                 l.setX(l.getX() + 0.5);
                 l.setY(l.getY() + 0.5);
                 l.setZ(l.getZ() + 0.5);
@@ -67,7 +77,7 @@ public class FallListener implements Listener {
                 ConfigUtil.sendMessage(p, "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                 if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     hasTeleported.add(p);
-                    new BukkitRunnable(){
+                    new BukkitRunnable() {
                         @Override
                         public void run() {
                             hasTeleported.remove(p);

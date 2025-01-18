@@ -4,6 +4,7 @@ import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerCheckpointEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerStartEvent;
+import me.block2block.hubparkour.api.events.player.ParkourPlayerTeleportEvent;
 import me.block2block.hubparkour.api.plates.Checkpoint;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
@@ -94,31 +95,45 @@ public class PressurePlateListener implements Listener {
         }
         if (CacheManager.isParkour(e.getPlayer())) {
             if (e.getTo().getBlock().isLiquid()) {
+                boolean tpwater = ConfigUtil.getBoolean("Settings.Teleport.On-Water", true);
+                boolean tplava = ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true);
+                ParkourPlayerTeleportEvent.TeleportReason reason =
+                        ParkourPlayerTeleportEvent.TeleportReason.UNKNOWN;
                 if (e.getTo().getBlock().getType() == Material.WATER) {
-                    if (!ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
+                    reason = ParkourPlayerTeleportEvent.TeleportReason.WATER;
+                    if (!tpwater) {
                         return;
                     }
                 } else if (e.getTo().getBlock().getType() == Material.LAVA) {
-                    if (!ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true)) {
+                    reason = ParkourPlayerTeleportEvent.TeleportReason.LAVA;
+                    if (!tplava) {
                         return;
                     }
                 } else if (HubParkour.isPre1_13()) {
                     if (e.getTo().getBlock().getType() == Material.getMaterial("STATIONARY_WATER")) {
-                        if (!ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
+                        reason = ParkourPlayerTeleportEvent.TeleportReason.WATER;
+                        if (!tpwater) {
                             return;
                         }
                     } else {
-                        if (!ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true)) {
+                        reason = ParkourPlayerTeleportEvent.TeleportReason.LAVA;
+                        if (!tplava) {
                             return;
                         }
                     }
                 }
-                if (ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
+                if (tpwater || tplava) {
                     HubParkourPlayer player = CacheManager.getPlayer(e.getPlayer());
+                    Parkour parkour = player.getParkour();
+                    ParkourPlayerTeleportEvent event = new ParkourPlayerTeleportEvent(parkour, player, parkour.getRestartPoint(), reason);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) {
+                        return;
+                    }
 
-                    Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                    Location l = parkour.getRestartPoint().getLocation().clone();
                     if (player.getLastReached() != 0) {
-                        l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                        l = parkour.getCheckpoint(player.getLastReached()).getLocation().clone();
                     }
                     l.setX(l.getX() + 0.5);
                     l.setY(l.getY() + 0.5);
@@ -134,10 +149,10 @@ public class PressurePlateListener implements Listener {
                     Waterlogged waterlogged = (Waterlogged) e.getTo().getBlock().getBlockData();
                     if (waterlogged.isWaterlogged() && ConfigUtil.getBoolean("Settings.Teleport.On-Water", true)) {
                         HubParkourPlayer player = CacheManager.getPlayer(e.getPlayer());
-
-                        Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                        Parkour parkour = player.getParkour();
+                        Location l = parkour.getRestartPoint().getLocation().clone();
                         if (player.getLastReached() != 0) {
-                            l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                            l = parkour.getCheckpoint(player.getLastReached()).getLocation().clone();
                         }
                         l.setX(l.getX() + 0.5);
                         l.setY(l.getY() + 0.5);
@@ -154,9 +169,8 @@ public class PressurePlateListener implements Listener {
                 Player p = e.getPlayer();
                 HubParkourPlayer player = CacheManager.getPlayer(p);
                 Parkour parkour = player.getParkour();
-                if (player.getParkour().getBorders().size() == 2) {
+                if (parkour.getBorders().size() == 2) {
                     Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
-
 
                     double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
                     if (borderA.getX() > borderB.getX()) {
@@ -183,9 +197,9 @@ public class PressurePlateListener implements Listener {
                         lowZ = borderA.getZ();
                     }
                     if ((highX < p.getLocation().getX() || lowX > p.getLocation().getX()) || (highY < p.getLocation().getY() || lowY > p.getLocation().getY()) || (highZ < p.getLocation().getZ() || lowZ > p.getLocation().getZ())) {
-                        Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                        Location l = parkour.getRestartPoint().getLocation().clone();
                         if (player.getLastReached() != 0) {
-                            l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                            l = parkour.getCheckpoint(player.getLastReached()).getLocation().clone();
                         }
                         l.setX(l.getX() + 0.5);
                         l.setY(l.getY() + 0.5);
@@ -203,10 +217,11 @@ public class PressurePlateListener implements Listener {
                         Player p = e.getPlayer();
                         p.setFallDistance(0);
                         HubParkourPlayer player = CacheManager.getPlayer(p);
+                        Parkour parkour = player.getParkour();
 
-                        Location l = player.getParkour().getRestartPoint().getLocation().clone();
+                        Location l = parkour.getRestartPoint().getLocation().clone();
                         if (player.getLastReached() != 0) {
-                            l = player.getParkour().getCheckpoint(player.getLastReached()).getLocation().clone();
+                            l = parkour.getCheckpoint(player.getLastReached()).getLocation().clone();
                         }
                         l.setX(l.getX() + 0.5);
                         l.setY(l.getY() + 0.5);
@@ -240,16 +255,17 @@ public class PressurePlateListener implements Listener {
                 case 0:
                     //StartPoint
                     if (CacheManager.isParkour(p)) {
-                        if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
+                        HubParkourPlayer old = CacheManager.getPlayer(p);
+                        
+                        if (old.getParkour().getId() == pp.getParkour().getId()) {
                             //Restart the parkour.
 
-                            CacheManager.getPlayer(p).restart();
+                            old.restart();
                             ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Restarted", "You have restarted the parkour! Your time has been reset to 0!", true, Collections.emptyMap());
                             return;
                         } else {
                             //Do nothing, is doing a different parkour.
                             if (ConfigUtil.getBoolean("Settings.Start-When-In-Parkour", false)) {
-                                HubParkourPlayer old = CacheManager.getPlayer(p);
                                 old.end(ParkourPlayerFailEvent.FailCause.NEW_PARKOUR);
 
                                 //Start the new parkour
@@ -313,15 +329,15 @@ public class PressurePlateListener implements Listener {
 
                         ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Started", "You have started the &a{parkour-name} &rparkour!", true, bindings);
 
-
                     }
                     break;
                 case 1:
                     //EndPoint
                     if (CacheManager.isParkour(p)) {
-                        if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
+                        HubParkourPlayer player = CacheManager.getPlayer(p);
+                        if (player.getParkour().getId() == pp.getParkour().getId()) {
                             //End the parkour.
-                            CacheManager.getPlayer(p).end(null);
+                            player.end(null);
                             return;
                         } else {
                             //Do nothing, is doing a different parkour.
@@ -337,16 +353,17 @@ public class PressurePlateListener implements Listener {
                 case 3:
                     //Checkpoint
                     if (CacheManager.isParkour(p)) {
-                        if (CacheManager.getPlayer(p).getParkour().getId() == pp.getParkour().getId()) {
+                        HubParkourPlayer player = CacheManager.getPlayer(p);
+                        if (player.getParkour().getId() == pp.getParkour().getId()) {
                             //Checkpoint the parkour.
                             Checkpoint checkpoint = (Checkpoint) pp;
-                            ParkourPlayerCheckpointEvent event = new ParkourPlayerCheckpointEvent(pp.getParkour(), CacheManager.getPlayer(p), checkpoint);
+                            ParkourPlayerCheckpointEvent event = new ParkourPlayerCheckpointEvent(pp.getParkour(), player, checkpoint);
                             Bukkit.getPluginManager().callEvent(event);
                             if (event.isCancelled()) {
                                 return;
                             }
 
-                            CacheManager.getPlayer(p).checkpoint(checkpoint);
+                            player.checkpoint(checkpoint);
                             return;
                         } else {
                             //Do nothing, is doing a different parkour.

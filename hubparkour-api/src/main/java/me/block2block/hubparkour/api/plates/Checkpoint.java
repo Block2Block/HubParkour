@@ -2,6 +2,9 @@ package me.block2block.hubparkour.api.plates;
 
 import org.bukkit.Location;
 
+/**
+ * Pressure plate to symbolize the parkour checkpoints.
+ */
 public class Checkpoint extends PressurePlate {
 
     private int checkpointNo;

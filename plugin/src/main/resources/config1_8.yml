@@ -219,7 +219,8 @@ Messages:
         Given-Setup-Stick: "You have been given the setup stick."
         Please-Set-Start: "Welcome to the parkour setup wizard!\n\nBefore we start, please note that the setup wizard will use your player location when clicking to register locations, not where you look when clicking the stick. When players use commands, they will get teleported facing the direction you are facing when clicking the stick.\nIn order to start, please start off by clicking where you would like your start pressure plate with the stick. Do not worry about placing any pressure plates, the plugin will do that for you! If you wish to cancel at any time, enter 'cancel' or type /parkour cancel."
         Please-Set-End: "Start point set! Now, click where you would like your end pressure plate with your stick."
-        Please-Set-Respawn: "End point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point."
+        Please-Set-Exit: "End point set! Next, you need to set your exit point. Click the stick while standing in your exit point. You can say 'none' for no exit location."
+        Please-Set-Respawn: "Exit point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point."
         Please-Set-Checkpoints: "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done' or execute /parkour done."
         Checkpoint-Added: "Checkpoint successfully added."
 
@@ -248,6 +249,9 @@ Messages:
 
         Already-Someone-In-Setup: "Someone is already setting up a parkour. Please wait for them to finish in order to setup another parkour."
 
+        Exit-Skip:
+          Please-Set-Respawn-Location: "Exit location skipped. Next, you need to set your respawn point. Click the stick while standing in your respawn point."
+
         Must-Not-Be-In-Parkour: "You must not be in a parkour in order to set up a parkour."
         Not-In-Setup: "You are not currently in setup. If you want to setup a parkour, use /parkour setup."
       Edit:
@@ -270,7 +274,8 @@ Messages:
           - "&a7&r - Checkpoints"
           - "&a8&r - Border Points"
           - "&a9&r - Reward Cooldown"
-          - "&a10&r - Exit Edit Mode"
+          - "&a10&r - Exit Point"
+          - "&a11&r - Exit Edit Mode"
         Choose-Checkpoint-Edit:
           - "What would you like to edit about checkpoints on parkour &a{parkour-name}&r? Type the digit into chat or type it with /parkour input [name]."
           - "&a1&r - Delete checkpoints"
@@ -314,6 +319,11 @@ Messages:
           Not-Valid: "That checkpoint is not valid. If you want this to become the first checkpoint, just type 0."
           Select-Checkpoint: "Please use the setup stick and select a new checkpoint to add. This will take the location of where you are standing, and does take into account where you are looking."
           Success: "The checkpoint has been successfully added!"
+
+        Please-Set-Exit-Location: "Please use the setup stick and select the new Exit Location. This will take the location of where you are standing, and does take into account where you are looking."
+        Exit-Point-Already-Nothing: "Exit point is already set to nothing."
+        Exit-Point-Updated-None: "Exit point successfully wiped."
+        Exit-Point-Set: "Your new exit point has been set!"
 
 
 

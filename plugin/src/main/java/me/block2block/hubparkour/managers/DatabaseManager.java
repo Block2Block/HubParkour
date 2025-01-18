@@ -537,7 +537,7 @@ public class DatabaseManager {
                         }
                     }
 
-                    CacheManager.addParkour(new Parkour(result.getInt(1), ((result.getString(6) == null)?null:UUID.fromString(result.getString(6))), result.getString(2), start, end, checkpoints, restart, borderPoints, checkCommand, endCommand, result.getInt(5)));
+                    CacheManager.addParkour(new Parkour(result.getInt(1), ((result.getString(6) == null)?null:UUID.fromString(result.getString(6))), result.getString(2), start, end, exit, checkpoints, restart, borderPoints, checkCommand, endCommand, result.getInt(5)));
                 }
 
             } catch (SQLException e) {
@@ -902,6 +902,27 @@ public class DatabaseManager {
     }
 
     public void setExitPoint(int id, ExitPoint point) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_locations VALUES(?, 5, ?, ?, ?, ?, ?, ?, ?)");
+            statement.setInt(1, id);
+
+
+            statement.setInt(2, point.getLocation().getBlockX());
+            statement.setInt(3, point.getLocation().getBlockY());
+            statement.setInt(4, point.getLocation().getBlockZ());
+            statement.setFloat(5, point.getLocation().getPitch());
+            statement.setFloat(6, point.getLocation().getYaw());
+            statement.setNull(7, Types.INTEGER);
+            statement.setString(8, point.getLocation().getWorld().getName());
+            statement.execute();
+        } catch (SQLException e) {
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            error = true;
+            e.printStackTrace();
+        }
+    }
+
+    public void updateExitPoint(int id, ExitPoint point) {
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 5");
             statement.setInt(1, point.getLocation().getBlockX());

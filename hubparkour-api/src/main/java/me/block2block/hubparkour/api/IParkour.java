@@ -39,6 +39,12 @@ public interface IParkour {
     EndPoint getEndPoint();
 
     /**
+     * Get the exit point pressure plate.
+     * @return the exit point.
+     */
+    ExitPoint getExitPoint();
+
+    /**
      * Get the list of checkpoints active in this parkour.
      * @return list of all checkpoints.
      */
@@ -170,6 +176,13 @@ public interface IParkour {
     void setEndPoint(EndPoint point);
 
     /**
+     * Set the exit point of the parkour.
+     * @param exitPoint The new exit point for the parkour.
+     * @param alreadyExists Whether the point already exists.
+     */
+    void setExitPoint(ExitPoint exitPoint, boolean alreadyExists);
+
+    /**
      * Set the restart point of the parkour.
      * @param point The new restart point for the parkour.
      */
@@ -187,6 +200,11 @@ public interface IParkour {
      * @param point The checkpoint to remove.
      */
     void deleteCheckpoint(Checkpoint point);
+
+    /**
+     * Removes the exit point.
+     */
+    void deleteExitPoint();
 
     /**
      * Get a list of the border points setup for the map. Should only ever have length of 2.

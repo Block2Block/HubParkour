@@ -44,32 +44,10 @@ public class Parkour implements IParkour {
         this.start.setParkour(this);
         this.endPoint = end;
         this.endPoint.setParkour(this);
-        this.exitPoint = exit;
-        this.exitPoint.setParkour(this);
-        this.checkpoints = checkpoints;
-        for (Checkpoint checkpoint : checkpoints) {
-            checkpoint.setParkour(this);
+        if (exit != null) {
+            this.exitPoint = exit;
+            this.exitPoint.setParkour(this);
         }
-        this.players = new ArrayList<>();
-        this.checkpointCommand = checkpointCommand;
-        this.endCommand = endCommand;
-        this.name = name;
-        this.restartPoint = restartPoint;
-        this.borderPoints = borderPoints;
-        for (BorderPoint borderPoint : borderPoints) {
-            borderPoint.setParkour(this);
-        }
-        this.rewardCooldown = rewardCooldown;
-    }
-
-    @SuppressWarnings("unused")
-    public Parkour(int id, UUID server, String name, StartPoint start, EndPoint end, List<Checkpoint> checkpoints, RestartPoint restartPoint, List<BorderPoint> borderPoints, String checkpointCommand, String endCommand, int rewardCooldown) {
-        this.id = id;
-        this.server = server;
-        this.start = start;
-        this.start.setParkour(this);
-        this.endPoint = end;
-        this.endPoint.setParkour(this);
         this.checkpoints = checkpoints;
         for (Checkpoint checkpoint : checkpoints) {
             checkpoint.setParkour(this);
@@ -154,6 +132,7 @@ public class Parkour implements IParkour {
         List<PressurePlate> pressurePlates = new ArrayList<>(checkpoints);
         pressurePlates.add(endPoint);
         pressurePlates.add(start);
+        pressurePlates.add(exitPoint);
         pressurePlates.add(restartPoint);
         pressurePlates.addAll(borderPoints);
         return pressurePlates;
@@ -374,12 +353,22 @@ public class Parkour implements IParkour {
         CacheManager.addPoint(point);
         this.exitPoint.setParkour(this);
         point.placeMaterial();
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                HubParkour.getInstance().getDbManager().setExitPoint(id, point);
-            }
-        }.runTaskAsynchronously(HubParkour.getInstance());
+        if (alreadyExists) {
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    HubParkour.getInstance().getDbManager().updateExitPoint(id, point);
+                }
+            }.runTaskAsynchronously(HubParkour.getInstance());
+        } else {
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    HubParkour.getInstance().getDbManager().setExitPoint(id, point);
+                }
+            }.runTaskAsynchronously(HubParkour.getInstance());
+        }
+
     }
 
     public void setRestartPoint(RestartPoint point) {

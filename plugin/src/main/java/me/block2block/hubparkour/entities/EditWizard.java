@@ -241,12 +241,13 @@ public class EditWizard {
                 }
                 if (message.equalsIgnoreCase("none")) {
                     if (parkour.getExitPoint() == null) {
-                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Exit-Point-Already-Null", "Exit point is already set to nothing.", true, Collections.emptyMap());
+                        ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Exit-Point-Already-Nothing", "Exit point is already set to nothing.", true, Collections.emptyMap());
                         returnToMainMenu();
                         return true;
                     }
                     parkour.deleteExitPoint();
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Exit-Point-Updated-None", "Exit point successfully wiped.", true, Collections.emptyMap());
+                    returnToMainMenu();
                     return true;
                 }
         }

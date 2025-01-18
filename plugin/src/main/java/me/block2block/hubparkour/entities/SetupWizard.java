@@ -43,7 +43,7 @@ public class SetupWizard {
             case 2:
                 if (message.equalsIgnoreCase("none")) {
                     currentStage++;
-                    ConfigUtil.sendMessageOrDefault(player, "Message.Commands.Admin.Exit-Skip.Please-Set-Respawn-Location", "Exit location skipped. Next, you need to set your respawn point. Click the stick while standing in your respawn point.", true, Collections.emptyMap());
+                    ConfigUtil.sendMessageOrDefault(player, "Message.Commands.Admin.Setup.Exit-Skip.Please-Set-Respawn-Location", "Exit location skipped. Next, you need to set your respawn point. Click the stick while standing in your respawn point.", true, Collections.emptyMap());
                 }
 
                 return true;
@@ -121,12 +121,7 @@ public class SetupWizard {
                         return true;
                     }
 
-                    final Parkour parkour;
-                    if (exitPoint != null) {
-                        parkour = new Parkour(-1, ((global?null:HubParkour.getServerUuid())), name, startPoint, endPoint, exitPoint, checkpoints, restartPoint, borderPoints, checkpointCommand, endCommand, cooldown);
-                    } else {
-                        parkour = new Parkour(-1, ((global?null:HubParkour.getServerUuid())), name, startPoint, endPoint, checkpoints, restartPoint, borderPoints, checkpointCommand, endCommand, cooldown);
-                    }
+                    final Parkour parkour = new Parkour(-1, ((global?null:HubParkour.getServerUuid())), name, startPoint, endPoint, null, checkpoints, restartPoint, borderPoints, checkpointCommand, endCommand, cooldown);
 
                     ParkourSetupEvent setupEvent = new ParkourSetupEvent(parkour, player);
                     Bukkit.getPluginManager().callEvent(setupEvent);
@@ -208,7 +203,7 @@ public class SetupWizard {
             case 3:
                 restartPoint = new RestartPoint(location);
                 currentStage++;
-                ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Checkpoints", "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done'.", true, Collections.emptyMap());
+                ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Setup.Please-Set-Checkpoints", "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done'.", true, Collections.emptyMap());
                 break;
             case 4:
                 for (PressurePlate p : checkpoints) {

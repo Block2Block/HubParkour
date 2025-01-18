@@ -169,7 +169,7 @@ public class SetupWizard {
                     return true;
                 } else if (message.equalsIgnoreCase("done")) {
                     if (currentStage == 4 || currentStage == 5) {
-                        currentStage = 6;
+                        currentStage = 7;
                         borderPoints.clear();
                         ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Name", "Now, you need to set a name for your parkour! Please enter a name for your parkour into chat or type it with /parkour input [name]. It must be one word and not a duplicate. Names are compatible with formatting codes.", true, Collections.emptyMap());
                         return true;
@@ -204,6 +204,7 @@ public class SetupWizard {
                 exitPoint = new ExitPoint(location);
                 currentStage++;
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Respawn", "Exit point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point.", true, Collections.emptyMap());
+                break;
             case 3:
                 restartPoint = new RestartPoint(location);
                 currentStage++;

@@ -9,7 +9,7 @@ public class BorderPoint extends PressurePlate {
 
     @SuppressWarnings("unused")
     public BorderPoint(Location location) {
-        super(location);
+        super(location, null);
     }
 
     @Override

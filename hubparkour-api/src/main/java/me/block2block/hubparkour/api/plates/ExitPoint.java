@@ -9,7 +9,7 @@ import org.bukkit.Location;
 public class ExitPoint extends PressurePlate {
 
     public ExitPoint(Location location) {
-        super(location);
+        super(location, null);
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.bukkit.Location;
 public class EndPoint extends PressurePlate {
     @SuppressWarnings("unused")
     public EndPoint(Location location) {
-        super(location);
+        super(location, null);
     }
 
     @Override

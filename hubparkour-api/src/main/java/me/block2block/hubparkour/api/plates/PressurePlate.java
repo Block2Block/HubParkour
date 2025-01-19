@@ -6,9 +6,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
+import java.util.List;
+
 /**
  * Represents a generic pressure plate.
- *
+ * <p>
  * <strong>WARNING:</strong> never create PressurePlate objects. Always extend this class.
  */
 public abstract class PressurePlate {
@@ -16,16 +18,18 @@ public abstract class PressurePlate {
     protected final Location location;
     protected IParkour parkour;
     protected Material material;
+    protected List<String> rewards;
 
     @SuppressWarnings("unused")
-    public PressurePlate(Location location) {
+    public PressurePlate(Location location, List<String> rewards) {
         this.location =  location;
         this.material = HubParkourAPI.getPressurePlateType(this.getType());
+        this.rewards = rewards;
     }
 
     /**
      * Set the parkour the pressure plate belongs to.
-     *
+     * <p>
      * <strong>WARNING:</strong> It is not recommended that you use this once the parkour has been setup.
      * @param parkour the parkour it belongs to.
      */
@@ -43,7 +47,7 @@ public abstract class PressurePlate {
 
     /**
      * The type of pressure plate. This is just an arbitrary value.
-     *
+     * <p>
      * Default ID's:
      * 0 - Start Point
      * 1 - End Point
@@ -94,5 +98,23 @@ public abstract class PressurePlate {
      */
     public IParkour getParkour() {
         return parkour;
+    }
+
+
+    /**
+     * Retrieves the commands associated with the pressure plate.
+     * @return a list of commands, represented as strings, or null if this is not a checkpoint.
+     */
+    public List<String> getRewards() {
+        return rewards;
+    }
+
+    /**
+     * Sets the commands associated with the pressure plate. Does nothing if this is not a checkpoint.
+     * @param rewards a list of commands, represented as strings, to be associated with this pressure plate.
+     */
+    public void setRewards(List<String> rewards) {
+        if (getType() != 3) return;
+        this.rewards = rewards;
     }
 }

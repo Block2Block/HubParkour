@@ -9,7 +9,7 @@ public class StartPoint extends PressurePlate {
 
     @SuppressWarnings("unused")
     public StartPoint(Location location) {
-        super(location);
+        super(location, null);
     }
 
     @Override

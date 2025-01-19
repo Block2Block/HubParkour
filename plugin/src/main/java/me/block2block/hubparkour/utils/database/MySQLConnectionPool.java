@@ -20,6 +20,10 @@ public class MySQLConnectionPool {
      *            Username
      * @param password
      *            Password
+     * @param jdbcOptions
+     *            options for the JDBC connection string
+     * @throws ClassNotFoundException
+     *            if the required libraries are not present
      */
     public MySQLConnectionPool(String hostname, String port, String username,
                                String password, String jdbcOptions) throws ClassNotFoundException {
@@ -39,6 +43,10 @@ public class MySQLConnectionPool {
      *            Username
      * @param password
      *            Password
+     * @param jdbcOptions
+     *            options for the JDBC connection string
+     * @throws ClassNotFoundException
+     *            if the required libraries are not present
      */
     public MySQLConnectionPool(String hostname, String port, String database,
                                String username, String password, String jdbcOptions) throws ClassNotFoundException {

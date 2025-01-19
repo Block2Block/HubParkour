@@ -40,6 +40,7 @@ public class DatabaseManager {
     private static MySQLConnectionPool dbMySql;
     private static boolean isMysql;
     private static boolean error;
+    private static String tablePrefix;
 
     @SuppressWarnings("unused")
     public DatabaseManager() {
@@ -53,6 +54,8 @@ public class DatabaseManager {
         } else {
             setupSQLite(ConfigUtil.getString("Settings.Database.Details.SQLite.File-Name", "hp-storage.db"));
         }
+
+        tablePrefix = ConfigUtil.getString("Settings.Database.Table-Prefix", "hp_");
 
         boolean tables = hasTables();
         return tables;
@@ -69,76 +72,74 @@ public class DatabaseManager {
     private void createTables() throws SQLException {
         if (isMysql) {
             try (Connection connection = dbMySql.getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_playertimes (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL,`time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
+                PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "playertimes (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL,`time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
                 boolean set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_parkours (`id` INT NOT NULL AUTO_INCREMENT,`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL, `reward_cooldown` INT NOT NULL DEFAULT -1, PRIMARY KEY (id), `server` varchar(36) DEFAULT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "parkours (`id` INT NOT NULL AUTO_INCREMENT,`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL, `reward_cooldown` INT NOT NULL DEFAULT -1, PRIMARY KEY (id), `server` varchar(36) DEFAULT NULL, `item_material` TEXT NOT NULL DEFAULT 'SLIME_BALL', `item_data` SMALLINT NOT NULL DEFAULT 0)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_locations (`parkour_id` INT,`type` tinyint(3) NOT NULL,`x` bigint(64) NOT NULL, `y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `pitch` FLOAT NOT NULL, `yaw` FLOAT NOT NULL, `checkno` tinyint(64) NULL, `world` varchar(64) NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "locations (`parkour_id` INT,`type` tinyint(3) NOT NULL,`x` bigint(64) NOT NULL, `y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `pitch` FLOAT NOT NULL, `yaw` FLOAT NOT NULL, `checkno` tinyint(64) NULL, `world` varchar(64) NOT NULL, `rewards` TEXT DEFAULT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_holograms (`hologram_id` INT NOT NULL AUTO_INCREMENT, `parkour_id` INT,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, PRIMARY KEY (hologram_id))");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "holograms (`hologram_id` INT NOT NULL AUTO_INCREMENT, `parkour_id` INT,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, PRIMARY KEY (hologram_id))");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_splittimes (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL, `time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "splittimes (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL, `time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_reachedcheckpoints (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "reachedcheckpoints (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_lastruncompleted (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "lastruncompleted (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_rewardtimestamps (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL, `timestamp` TIMESTAMP NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "rewardtimestamps (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `checkpoint` INT NOT NULL, `timestamp` TIMESTAMP NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_stats (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `completions` INT NOT NULL, `attempts` INT NOT NULL, `jumps` INT NOT NULL, `checkpoints` INT NOT NULL, `distance` DOUBLE NOT NULL, `total_time` bigint(64) NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "stats (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL, `completions` INT NOT NULL, `attempts` INT NOT NULL, `jumps` INT NOT NULL, `checkpoints` INT NOT NULL, `distance` DOUBLE NOT NULL, `total_time` bigint(64) NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_signs (`sign_id` INT NOT NULL AUTO_INCREMENT, `parkour_id` INT,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, `type` INT NOT NULL, `facing` TEXT NOT NULL, `wall` BOOLEAN NOT NULL, PRIMARY KEY (sign_id))");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "signs (`sign_id` INT NOT NULL AUTO_INCREMENT, `parkour_id` INT,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, `type` INT NOT NULL, `facing` TEXT NOT NULL, `wall` BOOLEAN NOT NULL, PRIMARY KEY (sign_id))");
                 set = statement.execute();
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
                 throw e;
             }
         } else {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_playertimes (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL,`time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
+                PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "playertimes (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL,`time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
                 boolean set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_parkours (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL, `reward_cooldown` INTEGER NOT NULL DEFAULT -1, `server` varchar(36) DEFAULT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "parkours (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL, `reward_cooldown` INTEGER NOT NULL DEFAULT -1, `server` varchar(36) DEFAULT NULL, `item_material` TEXT NOT NULL DEFAULT 'SLIME_BALL', `item_data` INTEGER NOT NULL DEFAULT 0)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_locations (`parkour_id` INTEGER,`type` tinyint(3) NOT NULL,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `pitch` FLOAT NOT NULL, `yaw` FLOAT NOT NULL, `checkno` tinyint(64) NULL, `world` varchar(64) NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "locations (`parkour_id` INTEGER,`type` tinyint(3) NOT NULL,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `pitch` FLOAT NOT NULL, `yaw` FLOAT NOT NULL, `checkno` tinyint(64) NULL, `world` varchar(64) NOT NULL, `rewards` TEXT)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_holograms (`hologram_id` INTEGER PRIMARY KEY AUTOINCREMENT, `parkour_id` INTEGER,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "holograms (`hologram_id` INTEGER PRIMARY KEY AUTOINCREMENT, `parkour_id` INTEGER,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_splittimes (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `checkpoint` INTEGER NOT NULL, `time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "splittimes (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `checkpoint` INTEGER NOT NULL, `time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_reachedcheckpoints (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `checkpoint` INTEGER NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "reachedcheckpoints (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `checkpoint` INTEGER NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_rewardtimestamps (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `checkpoint` INTEGER NOT NULL, `timestamp` TIMESTAMP NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "rewardtimestamps (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `checkpoint` INTEGER NOT NULL, `timestamp` TIMESTAMP NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_lastruncompleted (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "lastruncompleted (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_stats (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `completions` INTEGER NOT NULL, `attempts` INTEGER NOT NULL, `jumps` INTEGER NOT NULL, `checkpoints` INTEGER NOT NULL, `distance` DOUBLE NOT NULL, `total_time` bigint(64) NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "stats (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL, `completions` INTEGER NOT NULL, `attempts` INTEGER NOT NULL, `jumps` INTEGER NOT NULL, `checkpoints` INTEGER NOT NULL, `distance` DOUBLE NOT NULL, `total_time` bigint(64) NOT NULL)");
                 set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS hp_signs (`sign_id` INTEGER PRIMARY KEY AUTOINCREMENT, `parkour_id` INTEGER,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, `type` INTEGER NOT NULL, `facing` TEXT NOT NULL, `wall` BOOLEAN NOT NULL)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "signs (`sign_id` INTEGER PRIMARY KEY AUTOINCREMENT, `parkour_id` INTEGER,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `world` varchar(64) NOT NULL, `type` INTEGER NOT NULL, `facing` TEXT NOT NULL, `wall` BOOLEAN NOT NULL)");
                 set = statement.execute();
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error creating the tables. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
                 throw e;
             }
         }
@@ -148,26 +149,30 @@ public class DatabaseManager {
     public Parkour addParkour(Parkour parkour) {
         if (error) return null;
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_parkours(`name`,`finish_reward`,`checkpoint_reward`, `reward_cooldown`, `server`) VALUES (?,?,?,?,?)");
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "parkours(`name`,`finish_reward`,`checkpoint_reward`, `reward_cooldown`, `server`, `item_material`, `item_data`) VALUES (?,?,?,?,?,?,?)");
                 statement.setString(1, parkour.getName());
-                statement.setString(2, parkour.getEndCommand());
-                statement.setString(3, parkour.getCheckpointCommand());
+                statement.setString(2, String.join(";", parkour.getEndCommands()));
+                statement.setString(3, String.join(";", parkour.getGlobalCheckpointCommands()));
                 statement.setInt(4, parkour.getRewardCooldown());
                 if (parkour.getServer() != null) {
                     statement.setString(5, parkour.getServer().toString());
                 } else {
                     statement.setNull(5, Types.VARCHAR);
                 }
+
+                statement.setString(6, parkour.getItemMaterial().name());
+                statement.setShort(7, parkour.getItemData());
+
                 statement.execute();
 
-                statement = connection.prepareStatement("SELECT id FROM hp_parkours WHERE name = ?");
+                statement = connection.prepareStatement("SELECT id FROM " + tablePrefix + "parkours WHERE name = ?");
                 statement.setString(1, parkour.getName());
                 ResultSet results = statement.executeQuery();
 
                 results.next();
                 int id = results.getInt(1);
                 for (PressurePlate plate : parkour.getAllPoints()) {
-                    statement = connection.prepareStatement("INSERT INTO hp_locations VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "locations VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                     statement.setInt(1, id);
                     statement.setInt(2, plate.getType());
                     statement.setInt(3, plate.getLocation().getBlockX());
@@ -176,6 +181,11 @@ public class DatabaseManager {
                     statement.setFloat(6, plate.getLocation().getPitch());
                     statement.setFloat(7, plate.getLocation().getYaw());
                     statement.setString(9, plate.getLocation().getWorld().getName());
+                    if (plate.getRewards() != null) {
+                        statement.setString(10, String.join(";", plate.getRewards()));
+                    } else {
+                        statement.setNull(10, Types.VARCHAR);
+                    }
 
                     if (plate.getType() == 3) {
                         Checkpoint checkpoint = (Checkpoint) plate;
@@ -193,9 +203,8 @@ public class DatabaseManager {
 
 
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error loading parkours. Database functionality has been disabled until the server is restarted. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error loading parkours. Database functionality has been disabled until the server is restarted. Try checking your config file to ensure that all details are correct and that your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
                 return null;
             }
     }
@@ -208,7 +217,7 @@ public class DatabaseManager {
         HashMap<Integer, List<String>> leaderboard = new HashMap<>();
 
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC" + ((limit!=-1)?" LIMIT " + limit:""));
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "playertimes WHERE parkour_id = ? ORDER BY `time` ASC" + ((limit!=-1)?" LIMIT " + limit:""));
                 statement.setInt(1, parkour.getId());
 
                 ResultSet results = statement.executeQuery();
@@ -223,9 +232,8 @@ public class DatabaseManager {
                 }
 
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
         return leaderboard;
     }
@@ -235,7 +243,7 @@ public class DatabaseManager {
         HashMap<Integer, List<String>> leaderboard = new HashMap<>();
 
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes" + ((limit!=-1)?" LIMIT " + limit:""));
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "playertimes" + ((limit!=-1)?" LIMIT " + limit:""));
             ResultSet results = statement.executeQuery();
             Map<String, List<String>> times = new HashMap<>();
             Map<String, String> uuidToNames = new HashMap<>();
@@ -272,16 +280,15 @@ public class DatabaseManager {
                 counter++;
             }
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
         return leaderboard;
     }
 
     public int leaderboardPosition(Player player, Parkour parkour) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC ");
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "playertimes WHERE parkour_id = ? ORDER BY `time` ASC ");
                 statement.setInt(1, parkour.getId());
 
                 ResultSet results = statement.executeQuery();
@@ -303,7 +310,7 @@ public class DatabaseManager {
     public List<List<String>> getLocations(Parkour parkour) {
         List<List<String>> locations = new ArrayList<>();
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_locations WHERE parkour_id = ? ORDER BY `type`, `checkno` ASC");
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "locations WHERE parkour_id = ? ORDER BY `type`, `checkno` ASC");
                 statement.setInt(1, parkour.getId());
 
                 ResultSet results = statement.executeQuery();
@@ -323,16 +330,15 @@ public class DatabaseManager {
                 }
 
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
         return locations;
     }
 
     public long getTime(Player player, Parkour parkour) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? AND uuid = ?");
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "playertimes WHERE parkour_id = ? AND uuid = ?");
                 statement.setString(2, player.getUniqueId().toString());
                 statement.setInt(1, parkour.getId());
 
@@ -344,15 +350,14 @@ public class DatabaseManager {
                     return -1;
                 }
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             }
         return -1;
     }
 
     public List<Checkpoint> getReachedCheckpoints(Player player, Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_reachedcheckpoints WHERE parkour_id = ? AND uuid = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "reachedcheckpoints WHERE parkour_id = ? AND uuid = ?");
             statement.setString(2, player.getUniqueId().toString());
             statement.setInt(1, parkour.getId());
 
@@ -364,43 +369,40 @@ public class DatabaseManager {
             }
             return checkpoints;
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
         }
         return new ArrayList<>();
     }
 
     public void resetReachedCheckpoints(Player player, Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_reachedcheckpoints WHERE parkour_id = ? AND uuid = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "reachedcheckpoints WHERE parkour_id = ? AND uuid = ?");
             statement.setString(2, player.getUniqueId().toString());
             statement.setInt(1, parkour.getId());
 
             statement.execute();
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
         }
     }
 
 
     public void reachedCheckpoint(Player player, Parkour parkour, Checkpoint checkpoint) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_reachedcheckpoints VALUES (?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "reachedcheckpoints VALUES (?, ?, ?)");
             statement.setString(1, player.getUniqueId().toString());
             statement.setInt(2, parkour.getId());
             statement.setInt(3, checkpoint.getCheckpointNo());
 
             statement.execute();
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
         }
     }
 
     public boolean wasCompletedLastRun(Player player, Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_lastruncompleted WHERE parkour_id = ? AND uuid = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "lastruncompleted WHERE parkour_id = ? AND uuid = ?");
             statement.setString(2, player.getUniqueId().toString());
             statement.setInt(1, parkour.getId());
 
@@ -408,41 +410,38 @@ public class DatabaseManager {
 
             return resultSet.next();
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
         }
         return false;
     }
 
     public void resetLastRun(Player player, Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_lastruncompleted WHERE parkour_id = ? AND uuid = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "lastruncompleted WHERE parkour_id = ? AND uuid = ?");
             statement.setString(2, player.getUniqueId().toString());
             statement.setInt(1, parkour.getId());
 
             statement.execute();
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
         }
     }
 
     public void completedLastRun(Player player, Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_lastruncompleted VALUES (?,?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "lastruncompleted VALUES (?,?)");
             statement.setString(1, player.getUniqueId().toString());
             statement.setInt(2, parkour.getId());
 
             statement.execute();
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
         }
     }
 
     public long getTime(String player, Parkour parkour) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_playertimes WHERE parkour_id = ? AND name = ?");
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "playertimes WHERE parkour_id = ? AND name = ?");
                 statement.setString(2, player);
                 statement.setInt(1, parkour.getId());
 
@@ -454,8 +453,7 @@ public class DatabaseManager {
                     return -1;
                 }
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             }
         return -1;
     }
@@ -464,7 +462,7 @@ public class DatabaseManager {
     public void newTime(Player player, long time, boolean beatBefore, Parkour parkour) {
         if (beatBefore) {
                 try (Connection connection = getConnection()) {
-                    PreparedStatement statement = connection.prepareStatement("UPDATE hp_playertimes SET time = ? WHERE uuid = ? AND parkour_id = ?");
+                    PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "playertimes SET time = ? WHERE uuid = ? AND parkour_id = ?");
 
                     statement.setLong(1, time);
                     statement.setString(2, player.getUniqueId().toString());
@@ -472,13 +470,12 @@ public class DatabaseManager {
 
                     boolean result = statement.execute();
                 } catch (Exception e) {
-                    HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                    HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                     error = true;
-                    e.printStackTrace();
                 }
         } else {
                 try (Connection connection = getConnection()) {
-                    PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_playertimes(uuid, parkour_id, time, name) values (?,?,?,?)");
+                    PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "playertimes(uuid, parkour_id, time, name) values (?,?,?,?)");
 
                     statement.setString(1, player.getUniqueId().toString());
                     statement.setInt(2, parkour.getId());
@@ -487,9 +484,8 @@ public class DatabaseManager {
 
                     boolean result = statement.execute();
                 } catch (Exception e) {
-                    HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                    HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                     error = true;
-                    e.printStackTrace();
                 }
         }
     }
@@ -497,12 +493,12 @@ public class DatabaseManager {
     @SuppressWarnings("unused")
     public void loadParkours() {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_parkours WHERE server IS NULL OR server = ?");
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "parkours WHERE server IS NULL OR server = ?");
                 statement.setString(1, HubParkour.getServerUuid().toString());
                 ResultSet result = statement.executeQuery();
                 List<Parkour> parkours = new ArrayList<>();
                 while (result.next()) {
-                    statement = connection.prepareStatement("SELECT * FROM hp_locations WHERE parkour_id = " + result.getInt(1));
+                    statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "locations WHERE parkour_id = " + result.getInt(1));
                     ResultSet parkourPoints = statement.executeQuery();
 
                     StartPoint start = null;
@@ -512,7 +508,15 @@ public class DatabaseManager {
                     List<BorderPoint> borderPoints = new ArrayList<>();
                     RestartPoint restart = null;
                     String endCommand = result.getString(3);
+                    List<String> endCommands = null;
+                    if (endCommand != null) {
+                        endCommands = new ArrayList<>(Arrays.asList(endCommand.split(";")));
+                    }
                     String checkCommand = result.getString(4);
+                    List<String> checkCommands = null;
+                    if (checkCommand != null) {
+                        checkCommands = new ArrayList<>(Arrays.asList(checkCommand.split(";")));
+                    }
 
                     while (parkourPoints.next()) {
                         switch(parkourPoints.getInt(2)) {
@@ -527,7 +531,12 @@ public class DatabaseManager {
                                 restart = new RestartPoint(new Location(Bukkit.getWorld(parkourPoints.getString(9)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5), parkourPoints.getFloat(7), parkourPoints.getFloat(6)));
                                 break;
                             case 3:
-                                checkpoints.add(new Checkpoint(new Location(Bukkit.getWorld(parkourPoints.getString(9)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5), parkourPoints.getFloat(7), parkourPoints.getFloat(6)), parkourPoints.getInt(8)));
+                                String rewards = parkourPoints.getString(10);
+                                List<String> commands = null;
+                                if (rewards != null) {
+                                    commands = new ArrayList<>(Arrays.asList(rewards.split(";")));
+                                }
+                                checkpoints.add(new Checkpoint(new Location(Bukkit.getWorld(parkourPoints.getString(9)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5), parkourPoints.getFloat(7), parkourPoints.getFloat(6)), parkourPoints.getInt(8), commands));
                                 break;
                             case 4:
                                 borderPoints.add(new BorderPoint(new Location(Bukkit.getWorld(parkourPoints.getString(9)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5), parkourPoints.getFloat(7), parkourPoints.getFloat(6))));
@@ -537,33 +546,38 @@ public class DatabaseManager {
                         }
                     }
 
-                    CacheManager.addParkour(new Parkour(result.getInt(1), ((result.getString(6) == null)?null:UUID.fromString(result.getString(6))), result.getString(2), start, end, exit, checkpoints, restart, borderPoints, checkCommand, endCommand, result.getInt(5)));
+                    Material material;
+                    try {
+                        material = Material.valueOf(result.getString(7));
+                    } catch (IllegalArgumentException | NullPointerException e) {
+                        HubParkour.getInstance().getLogger().log(Level.SEVERE, "One of your parkours has a material that is not valid. We have defaulted the value to a Slime Ball. Please change this using edit mode. Stack trace:", e);
+                        material = Material.SLIME_BALL;
+                    }
+                    CacheManager.addParkour(new Parkour(result.getInt(1), ((result.getString(6) == null)?null:UUID.fromString(result.getString(6))), result.getString(2), start, end, exit, checkpoints, restart, borderPoints, checkCommands, endCommands, result.getInt(5), material, result.getShort(8)));
                 }
 
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public int getNoParkours() {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT count(*) FROM hp_parkours");
+            PreparedStatement statement = connection.prepareStatement("SELECT count(*) FROM " + tablePrefix + "parkours");
             ResultSet result = statement.executeQuery();
             result.next();
             return result.getInt(1);
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
             return 0;
         }
     }
 
     public void loadHolograms() {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_holograms");
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "holograms");
 
                 ResultSet result = statement.executeQuery();
 
@@ -586,15 +600,14 @@ public class DatabaseManager {
                     }
                 }
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void loadSigns() {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_signs");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "signs");
 
             ResultSet result = statement.executeQuery();
 
@@ -657,15 +670,14 @@ public class DatabaseManager {
                 }
             }
         } catch (SQLException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public int addHologram(LeaderboardHologram hologram) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_holograms(parkour_id, x, y, z, world) VALUES (?, ?, ?, ?, ?)");
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "holograms(parkour_id, x, y, z, world) VALUES (?, ?, ?, ?, ?)");
                 if (hologram.getParkour() != null) {
                     statement.setInt(1, hologram.getParkour().getId());
                 } else {
@@ -678,7 +690,7 @@ public class DatabaseManager {
 
                 boolean success = statement.execute();
 
-                statement = connection.prepareStatement("SELECT hologram_id FROM hp_holograms WHERE x = ? AND y = ? AND z = ? AND world = ?");
+                statement = connection.prepareStatement("SELECT hologram_id FROM " + tablePrefix + "holograms WHERE x = ? AND y = ? AND z = ? AND world = ?");
                 statement.setInt(1, hologram.getLocation().getBlockX());
                 statement.setInt(2, hologram.getLocation().getBlockY());
                 statement.setInt(3, hologram.getLocation().getBlockZ());
@@ -688,186 +700,188 @@ public class DatabaseManager {
                 results.next();
                 return results.getInt(1);
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
                 return -1;
             }
     }
 
     public void removeHologram(LeaderboardHologram hologram) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_holograms WHERE hologram_id = ?");
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "holograms WHERE hologram_id = ?");
                 statement.setInt(1, hologram.getId());
 
                 boolean success = statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void deleteParkour(Parkour parkour) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `parkour_id` = ?");
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "playertimes WHERE `parkour_id` = ?");
                 statement.setInt(1, parkour.getId());
                 boolean result = statement.execute();
 
-                statement = connection.prepareStatement("DELETE FROM hp_splittimes WHERE `parkour_id` = ?");
+                statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "splittimes WHERE `parkour_id` = ?");
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
 
-                statement = connection.prepareStatement("DELETE FROM hp_reachedcheckpoints WHERE `parkour_id` = ?");
+                statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "reachedcheckpoints WHERE `parkour_id` = ?");
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
 
-                statement = connection.prepareStatement("DELETE FROM hp_locations WHERE `parkour_id` = ?");
+                statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "locations WHERE `parkour_id` = ?");
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
 
-                statement = connection.prepareStatement("DELETE FROM hp_parkours WHERE `id` = ?");
+                statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "parkours WHERE `id` = ?");
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
 
-                statement = connection.prepareStatement("DELETE FROM hp_holograms WHERE `parkour_id` = ?");
+                statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "holograms WHERE `parkour_id` = ?");
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
 
-                statement = connection.prepareStatement("DELETE FROM hp_lastruncompleted WHERE `parkour_id` = ?");
+                statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "lastruncompleted WHERE `parkour_id` = ?");
                 statement.setInt(1, parkour.getId());
                 result = statement.execute();
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void resetTime(String name, int parkourId) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `name` = ? AND `parkour_id` = ?");
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "playertimes WHERE `name` = ? AND `parkour_id` = ?");
                 statement.setString(1, name);
                 statement.setInt(2, parkourId);
                 statement.execute();
 
-                statement = connection.prepareStatement("DELETE FROM hp_splittimes WHERE `name` = ? AND `parkour_id` = ?");
+                statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "splittimes WHERE `name` = ? AND `parkour_id` = ?");
                 statement.setString(1, name);
                 statement.setInt(2, parkourId);
                 statement.execute();
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void resetTimes(int parkourId) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `parkour_id` = ?");
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "playertimes WHERE `parkour_id` = ?");
                 statement.setInt(1, parkourId);
                 statement.execute();
-                statement = connection.prepareStatement("DELETE FROM hp_splittimes WHERE `parkour_id` = ?");
+                statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "splittimes WHERE `parkour_id` = ?");
                 statement.setInt(1, parkourId);
                 statement.execute();
             } catch (Exception e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void resetTimes(String name) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes WHERE `name` = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "playertimes WHERE `name` = ?");
             statement.setString(1, name);
             statement.execute();
-            statement = connection.prepareStatement("DELETE FROM hp_splittimes WHERE `name` = ?");
+            statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "splittimes WHERE `name` = ?");
             statement.setString(1, name);
             statement.execute();
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void resetTimes() {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_playertimes");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "playertimes");
             statement.execute();
-            statement = connection.prepareStatement("DELETE FROM hp_splittimes");
+            statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "splittimes");
             statement.execute();
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void setName(int id, String name) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET name = ? WHERE id = ?");
+                PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "parkours SET name = ? WHERE id = ?");
                 statement.setString(1, name);
                 statement.setInt(2, id);
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void setRewardCooldown(int id, int cooldown) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET reward_cooldown = ? WHERE id = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "parkours SET reward_cooldown = ? WHERE id = ?");
             statement.setInt(1, cooldown);
             statement.setInt(2, id);
             statement.execute();
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
-    public void setEndCommand(int id, String command) {
+    public void setItem(int id, Material item, short data) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "parkours SET item_material = ?, item_data = ? WHERE id = ?");
+            statement.setString(1, item.name());
+            statement.setShort(2, data);
+            statement.setInt(3, id);
+            statement.execute();
+        } catch (SQLException e) {
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
+            error = true;
+        }
+    }
+
+    public void setEndCommands(int id, List<String> commands) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET finish_reward = ? WHERE id = ?");
-                if (command == null) {
-                    statement.setNull(1, Types.VARCHAR);
+                PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "parkours SET finish_reward = ? WHERE id = ?");
+                if (commands != null) {
+                    statement.setString(1, String.join(";", commands));
                 } else {
-                    statement.setString(1, command);
+                    statement.setNull(1, Types.VARCHAR);
                 }
                 statement.setInt(2, id);
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
-    public void setCheckpointCommand(int id, String command) {
+    public void setGlobalCheckpointCommands(int id, List<String> commands) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_parkours SET checkpoint_reward = ? WHERE id = ?");
-                if (command != null) {
-                    statement.setString(1, command);
+                PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "parkours SET checkpoint_reward = ? WHERE id = ?");
+                if (commands != null) {
+                    statement.setString(1, String.join(";", commands));
                 } else {
                     statement.setNull(1, Types.VARCHAR);
                 }
                 statement.setInt(2, id);
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void setStartPoint(int id, StartPoint point) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 0");
+                PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 0");
                 statement.setInt(1, point.getLocation().getBlockX());
                 statement.setInt(2, point.getLocation().getBlockY());
                 statement.setInt(3, point.getLocation().getBlockZ());
@@ -877,15 +891,14 @@ public class DatabaseManager {
                 statement.setInt(7, id);
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void setEndPoint(int id, EndPoint point) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 1");
+                PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 1");
                 statement.setInt(1, point.getLocation().getBlockX());
                 statement.setInt(2, point.getLocation().getBlockY());
                 statement.setInt(3, point.getLocation().getBlockZ());
@@ -895,15 +908,14 @@ public class DatabaseManager {
                 statement.setInt(7, id);
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void setExitPoint(int id, ExitPoint point) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_locations VALUES(?, 5, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "locations VALUES(?, 5, ?, ?, ?, ?, ?, ?, ?, NULL)");
             statement.setInt(1, id);
 
 
@@ -916,15 +928,14 @@ public class DatabaseManager {
             statement.setString(8, point.getLocation().getWorld().getName());
             statement.execute();
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void updateExitPoint(int id, ExitPoint point) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 5");
+            PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 5");
             statement.setInt(1, point.getLocation().getBlockX());
             statement.setInt(2, point.getLocation().getBlockY());
             statement.setInt(3, point.getLocation().getBlockZ());
@@ -934,27 +945,25 @@ public class DatabaseManager {
             statement.setInt(7, id);
             statement.execute();
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void deleteExitPoint(int id) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_locations WHERE parkour_id = ? AND type = 5");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "locations WHERE parkour_id = ? AND type = 5");
             statement.setInt(1, id);
             statement.execute();
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void setRestartPoint(int id, RestartPoint point) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 2");
+                PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "locations SET x = ?, y = ?, z = ?, pitch = ?, yaw = ?, world = ? WHERE parkour_id = ? AND type = 2");
                 statement.setInt(1, point.getLocation().getBlockX());
                 statement.setInt(2, point.getLocation().getBlockY());
                 statement.setInt(3, point.getLocation().getBlockZ());
@@ -964,15 +973,14 @@ public class DatabaseManager {
                 statement.setInt(7, id);
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void updateCheckpointNumber(int id, Checkpoint point) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE hp_locations SET checkno = ? WHERE parkour_id = ? AND type = 3 AND x = ? AND y = ? AND z = ? AND pitch = ? AND yaw = ? AND world = ?");
+                PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "locations SET checkno = ? WHERE parkour_id = ? AND type = 3 AND x = ? AND y = ? AND z = ? AND pitch = ? AND yaw = ? AND world = ?");
                 statement.setInt(1, point.getCheckpointNo());
                 statement.setInt(2, id);
                 statement.setInt(3, point.getLocation().getBlockX());
@@ -983,15 +991,14 @@ public class DatabaseManager {
                 statement.setString(8, point.getLocation().getWorld().getName());
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void addCheckpoint(int id, Checkpoint checkpoint) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_locations VALUES (?, 3, ?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "locations VALUES (?, 3, ?, ?, ?, ?, ?, ?, ?, ?)");
                 statement.setInt(1, id);
                 statement.setInt(2, checkpoint.getLocation().getBlockX());
                 statement.setInt(3, checkpoint.getLocation().getBlockY());
@@ -1000,34 +1007,54 @@ public class DatabaseManager {
                 statement.setFloat(6, checkpoint.getLocation().getYaw());
                 statement.setInt(7, checkpoint.getCheckpointNo());
                 statement.setString(8, checkpoint.getLocation().getWorld().getName());
+                if (checkpoint.getRewards() != null && checkpoint.getRewards().size() > 0) {
+                    statement.setString(9, String.join(";", checkpoint.getRewards()));
+                } else {
+                    statement.setNull(9, Types.VARCHAR);
+                }
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
+    }
+
+    public void updateCheckpointRewards(int id, Checkpoint checkpoint) {
+        try (Connection connection = getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "locations SET rewards = ? WHERE parkour_id = ? AND type = 3 AND checkno = ?");
+            if (checkpoint.getRewards() != null && checkpoint.getRewards().size() > 0) {
+                statement.setString(1, String.join(";", checkpoint.getRewards()));
+            } else {
+                statement.setNull(1, Types.VARCHAR);
+            }
+            statement.setInt(2, id);
+            statement.setInt(3, checkpoint.getCheckpointNo());
+            statement.execute();
+        } catch (SQLException e) {
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
+            error = true;
+        }
     }
 
     public void deleteCheckpoint(int id, Checkpoint checkpoint) {
             try (Connection connection = getConnection()) {
-                PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_locations WHERE parkour_id = ? AND type = 3 AND checkno = ?");
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "locations WHERE parkour_id = ? AND type = 3 AND checkno = ?");
                 statement.setInt(1, id);
                 statement.setInt(2, checkpoint.getCheckpointNo());
                 statement.execute();
             } catch (SQLException e) {
-                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
                 error = true;
-                e.printStackTrace();
             }
     }
 
     public void setBorders(int id, List<BorderPoint> borderPoints) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_locations WHERE parkour_id = ? AND type = 4");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "locations WHERE parkour_id = ? AND type = 4");
             statement.setInt(1, id);
             statement.execute();
             for (BorderPoint point : borderPoints) {
-                statement = connection.prepareStatement("INSERT INTO hp_locations VALUES (?, 4, ?, ?, ?, ?, ?, NULL, ?)");
+                statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "locations VALUES (?, 4, ?, ?, ?, ?, ?, NULL, ?, NULL)");
                 statement.setInt(1, id);
                 statement.setInt(2, point.getLocation().getBlockX());
                 statement.setInt(3, point.getLocation().getBlockY());
@@ -1038,16 +1065,15 @@ public class DatabaseManager {
                 statement.execute();
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public Map<Integer, Long> getSplitTimes(Player player, Parkour parkour) {
         HashMap<Integer, Long> splitTimes = new HashMap<>();
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_splittimes WHERE uuid = ? AND parkour_id = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "splittimes WHERE uuid = ? AND parkour_id = ?");
             statement.setString(1, player.getUniqueId().toString());
             statement.setInt(2, parkour.getId());
 
@@ -1056,9 +1082,8 @@ public class DatabaseManager {
                 splitTimes.put(set.getInt(3), set.getLong(4));
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
         return splitTimes;
     }
@@ -1067,13 +1092,13 @@ public class DatabaseManager {
         try (Connection connection = getConnection()) {
             PreparedStatement statement;
             if (reachedBefore) {
-                statement = connection.prepareStatement("UPDATE hp_splittimes SET time = ? WHERE uuid = ? AND parkour_id = ? AND checkpoint = ?");
+                statement = connection.prepareStatement("UPDATE " + tablePrefix + "splittimes SET time = ? WHERE uuid = ? AND parkour_id = ? AND checkpoint = ?");
                 statement.setLong(1, time);
                 statement.setString(2, player.getUniqueId().toString());
                 statement.setInt(3, parkour.getId());
                 statement.setInt(4, checkpoint);
             } else {
-                statement = connection.prepareStatement("INSERT INTO hp_splittimes VALUES(?, ?, ?, ?, ?)");
+                statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "splittimes VALUES(?, ?, ?, ?, ?)");
                 statement.setString(1, player.getUniqueId().toString());
                 statement.setInt(2, parkour.getId());
                 statement.setInt(3, checkpoint);
@@ -1083,27 +1108,25 @@ public class DatabaseManager {
 
             statement.execute();
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void resetSplitTimes(int parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_splittimes WHERE parkour_id = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "splittimes WHERE parkour_id = ?");
             statement.setInt(1, parkour);
             statement.execute();
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public long getRecordTime(Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM " + tablePrefix + "playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT 1");
             statement.setInt(1, parkour.getId());
             ResultSet set = statement.executeQuery();
             if (set.next()) {
@@ -1112,16 +1135,15 @@ public class DatabaseManager {
                 return -1;
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
         return -1;
     }
 
     public String getRecordHolder(Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT 1");
+            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM " + tablePrefix + "playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT 1");
             statement.setInt(1, parkour.getId());
             ResultSet set = statement.executeQuery();
             if (set.next()) {
@@ -1130,16 +1152,15 @@ public class DatabaseManager {
                 return null;
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
         return null;
     }
 
     public long getPositionTime(Parkour parkour, int position) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT ?,1");
+            PreparedStatement statement = connection.prepareStatement("SELECT `time` FROM " + tablePrefix + "playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT ?,1");
             statement.setInt(1, parkour.getId());
             statement.setInt(2, position - 1);
             ResultSet set = statement.executeQuery();
@@ -1149,16 +1170,15 @@ public class DatabaseManager {
                 return -1;
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
         return -1;
     }
 
     public String getPositionHolder(Parkour parkour, int position) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM hp_playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT ?,1");
+            PreparedStatement statement = connection.prepareStatement("SELECT `name` FROM " + tablePrefix + "playertimes WHERE parkour_id = ? ORDER BY `time` ASC LIMIT ?,1");
             statement.setInt(1, parkour.getId());
             statement.setInt(2, position - 1);
             ResultSet set = statement.executeQuery();
@@ -1168,9 +1188,8 @@ public class DatabaseManager {
                 return null;
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
         return null;
     }
@@ -1178,12 +1197,12 @@ public class DatabaseManager {
 
     public void addCompletion(HubParkourPlayer player, Parkour parkour, long time) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_stats WHERE parkour_id = ? AND uuid = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "stats WHERE parkour_id = ? AND uuid = ?");
             statement.setInt(1, parkour.getId());
             statement.setString(2, player.getPlayer().getUniqueId().toString());
             ResultSet set = statement.executeQuery();
             if (set.next()) {
-                statement = connection.prepareStatement("UPDATE hp_stats SET completions = completions + 1, attempts = attempts + 1, total_time = (total_time + ?), checkpoints = checkpoints + ?, jumps = jumps + ?, distance = distance + ? WHERE parkour_id = ? AND uuid = ?");
+                statement = connection.prepareStatement("UPDATE " + tablePrefix + "stats SET completions = completions + 1, attempts = attempts + 1, total_time = (total_time + ?), checkpoints = checkpoints + ?, jumps = jumps + ?, distance = distance + ? WHERE parkour_id = ? AND uuid = ?");
                 statement.setLong(1, time);
                 statement.setInt(2, player.getParkourRun().getCheckpointsHit());
                 statement.setInt(3, player.getParkourRun().getJumps());
@@ -1192,7 +1211,7 @@ public class DatabaseManager {
                 statement.setString(6, player.getPlayer().getUniqueId().toString());
                 statement.execute();
             } else {
-                statement = connection.prepareStatement("INSERT INTO hp_stats VALUES (?, ?, 1, 1, ?, ?, ?, ?)");
+                statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "stats VALUES (?, ?, 1, 1, ?, ?, ?, ?)");
                 statement.setString(1, player.getPlayer().getUniqueId().toString());
                 statement.setInt(2, parkour.getId());
                 statement.setLong(6, time);
@@ -1202,20 +1221,19 @@ public class DatabaseManager {
                 statement.execute();
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void addAttempt(HubParkourPlayer player, Parkour parkour, long time) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_stats WHERE parkour_id = ? AND uuid = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "stats WHERE parkour_id = ? AND uuid = ?");
             statement.setInt(1, parkour.getId());
             statement.setString(2, player.getPlayer().getUniqueId().toString());
             ResultSet set = statement.executeQuery();
             if (set.next()) {
-                statement = connection.prepareStatement("UPDATE hp_stats SET attempts = attempts + 1, total_time = (total_time + ?), checkpoints = checkpoints + ?, jumps = jumps + ?, distance = distance + ? WHERE parkour_id = ? AND uuid = ?");
+                statement = connection.prepareStatement("UPDATE " + tablePrefix + "stats SET attempts = attempts + 1, total_time = (total_time + ?), checkpoints = checkpoints + ?, jumps = jumps + ?, distance = distance + ? WHERE parkour_id = ? AND uuid = ?");
                 statement.setLong(1, time);
                 statement.setInt(2, player.getParkourRun().getCheckpointsHit());
                 statement.setInt(3, player.getParkourRun().getJumps());
@@ -1224,7 +1242,7 @@ public class DatabaseManager {
                 statement.setString(6, player.getPlayer().getUniqueId().toString());
                 statement.execute();
             } else {
-                statement = connection.prepareStatement("INSERT INTO hp_stats VALUES (?, ?, 0, 1, ?, ?, ?, ?)");
+                statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "stats VALUES (?, ?, 0, 1, ?, ?, ?, ?)");
                 statement.setString(1, player.getPlayer().getUniqueId().toString());
                 statement.setInt(2, parkour.getId());
                 statement.setLong(6, time);
@@ -1234,15 +1252,14 @@ public class DatabaseManager {
                 statement.execute();
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public Statistics getParkourStatistics(Player player, Parkour parkour) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_stats WHERE parkour_id = ? AND uuid = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "stats WHERE parkour_id = ? AND uuid = ?");
             statement.setInt(1, parkour.getId());
             statement.setString(2, player.getPlayer().getUniqueId().toString());
             ResultSet set = statement.executeQuery();
@@ -1262,16 +1279,15 @@ public class DatabaseManager {
             }
             return new Statistics(player.getName(), jumps, completions, attempts, checkpointsHit, totalDistanceTravelled, totalTime);
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
             return null;
         }
     }
 
     public Statistics getGeneralStats(Player player) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_stats WHERE uuid = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "stats WHERE uuid = ?");
             statement.setString(1, player.getPlayer().getUniqueId().toString());
             ResultSet set = statement.executeQuery();
             Map<Integer, Integer> jumps = new HashMap<>();
@@ -1290,9 +1306,8 @@ public class DatabaseManager {
             }
             return new Statistics(player.getName(), jumps, completions, attempts, checkpointsHit, totalDistanceTravelled, totalTime);
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
             return null;
         }
     }
@@ -1305,7 +1320,7 @@ public class DatabaseManager {
             try {
                 Class.forName("org.sqlite.JDBC");
             } catch (Exception e) {
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.SEVERE, "Unable to initialise MySQL Connection Libraries. Stack Trace:", e);
             }
             File dataFolder = Bukkit.getPluginManager().getPlugin("HubParkour").getDataFolder();
             String dbLocation = ConfigUtil.getString("Settings.Database.Details.SQLite.File-Name", "hp-storage.db");
@@ -1330,32 +1345,30 @@ public class DatabaseManager {
                     file.createNewFile();
                     HubParkour.getInstance().getLogger().info("Database file " + dbLocation + " successfully created!");
                 } catch (IOException e) {
-                    HubParkour.getInstance().getLogger().info("Unable to create database. Stack Trace:");
-                    e.printStackTrace();
+                    HubParkour.getInstance().getLogger().log(Level.SEVERE, "Unable to create database. Stack Trace:", e);
                 }
             }
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().info("Unable to initialise SQLite connection. Stack Trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "Unable to initialise SQLite connection. Stack Trace:", e);
         }
     }
 
     public void updateTimestamp(UUID uuid, int id, int checkpoint, long timestamp) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM hp_rewardtimestamps WHERE parkour_id = ? AND uuid = ? AND checkpoint = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "rewardtimestamps WHERE parkour_id = ? AND uuid = ? AND checkpoint = ?");
             statement.setInt(1, id);
             statement.setString(2, uuid.toString());
             statement.setInt(3, checkpoint);
             ResultSet set = statement.executeQuery();
             if (set.next()) {
-                statement = connection.prepareStatement("UPDATE hp_rewardtimestamps SET timestamp = ? WHERE uuid = ? AND parkour_id = ? AND checkpoint = ?");
+                statement = connection.prepareStatement("UPDATE " + tablePrefix + "rewardtimestamps SET timestamp = ? WHERE uuid = ? AND parkour_id = ? AND checkpoint = ?");
                 statement.setTimestamp(1, new Timestamp(timestamp));
                 statement.setString(2, uuid.toString());
                 statement.setInt(3, id);
                 statement.setInt(4, checkpoint);
                 statement.execute();
             } else {
-                statement = connection.prepareStatement("INSERT INTO hp_rewardtimestamps VALUES (?, ?, ?, ?)");
+                statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "rewardtimestamps VALUES (?, ?, ?, ?)");
                 statement.setString(1, uuid.toString());
                 statement.setInt(2, id);
                 statement.setInt(3, checkpoint);
@@ -1363,15 +1376,14 @@ public class DatabaseManager {
                 statement.execute();
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public long getTimestamp(UUID uuid, int id, int checkpoint) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `timestamp` FROM hp_rewardtimestamps WHERE parkour_id = ? AND uuid = ? AND checkpoint = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT `timestamp` FROM " + tablePrefix + "rewardtimestamps WHERE parkour_id = ? AND uuid = ? AND checkpoint = ?");
             statement.setInt(1, id);
             statement.setString(2, uuid.toString());
             statement.setInt(3, checkpoint);
@@ -1382,16 +1394,15 @@ public class DatabaseManager {
                 return -1;
             }
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
             return -1;
         }
     }
 
     public void addSign(ClickableSign sign) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO hp_signs(parkour_id, x, y, z, world, type, facing, wall) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO " + tablePrefix + "signs(parkour_id, x, y, z, world, type, facing, wall) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setInt(1, sign.getParkour().getId());
             statement.setInt(2, sign.getSignState().getLocation().getBlockX());
             statement.setInt(3, sign.getSignState().getLocation().getBlockY());
@@ -1403,7 +1414,7 @@ public class DatabaseManager {
 
             boolean success = statement.execute();
 
-            statement = connection.prepareStatement("SELECT sign_id FROM hp_signs WHERE parkour_id = ? AND x = ? AND y = ? AND z = ? AND world = ? AND type = ?");
+            statement = connection.prepareStatement("SELECT sign_id FROM " + tablePrefix + "signs WHERE parkour_id = ? AND x = ? AND y = ? AND z = ? AND world = ? AND type = ?");
             statement.setInt(1, sign.getParkour().getId());
             statement.setInt(2, sign.getSignState().getLocation().getBlockX());
             statement.setInt(3, sign.getSignState().getLocation().getBlockY());
@@ -1415,36 +1426,33 @@ public class DatabaseManager {
             results.next();
             sign.setId(results.getInt(1));
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void updateFacingWall(int sign, BlockFace face, boolean wall) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE hp_signs set facing = ?, wall = ? WHERE sign_id = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "signs set facing = ?, wall = ? WHERE sign_id = ?");
             statement.setString(1, face.name());
             statement.setBoolean(2, wall);
             statement.setInt(3, sign);
 
             statement.execute();
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
     public void removeSign(ClickableSign sign) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM hp_signs WHERE sign_id = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM " + tablePrefix + "signs WHERE sign_id = ?");
             statement.setInt(1, sign.getId());
             statement.execute();
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
         }
     }
 
@@ -1452,7 +1460,7 @@ public class DatabaseManager {
         try (Connection connection = getConnection()) {
             String sql;
             if (isMysql) {
-                sql = "DESCRIBE " + ConfigUtil.getString("Settings.Database.Details.MySQL.Database", "HubParkour") + ".hp_parkours";
+                sql = "DESCRIBE " + ConfigUtil.getString("Settings.Database.Details.MySQL.Database", "HubParkour") + "." + tablePrefix + "parkours";
             } else {
                 sql = "SELECT name FROM sqlite_master " +
                         "WHERE type='table'" +
@@ -1473,9 +1481,8 @@ public class DatabaseManager {
             set.next();
             return set.getInt(1) > 0;
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
             return false;
         }
     }
@@ -1484,7 +1491,7 @@ public class DatabaseManager {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (Exception e) {
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "Unable to initialise MySQL Connection Libraries. Stack Trace:", e);
         }
         File dataFolder = Bukkit.getPluginManager().getPlugin("HubParkour").getDataFolder();
         String dbLocation = ConfigUtil.getString("Settings.Database.Details.SQLite.File-Name", "hp-storage.db");
@@ -1494,20 +1501,19 @@ public class DatabaseManager {
                         + dbLocation);) {
 
 
-            copy("hp_parkours", dbSqlite, connection);
-            copy("hp_locations", dbSqlite, connection);
-            copy("hp_playertimes", dbSqlite, connection);
-            copy("hp_lastruncompleted", dbSqlite, connection);
-            copy("hp_reachedcheckpoints", dbSqlite, connection);
-            copy("hp_rewardtimestamps", dbSqlite, connection);
-            copy("hp_splittimes", dbSqlite, connection);
-            copy("hp_stats", dbSqlite, connection);
-            copy("hp_holograms", dbSqlite, connection);
+            copy(tablePrefix + "parkours", dbSqlite, connection);
+            copy(tablePrefix + "locations", dbSqlite, connection);
+            copy(tablePrefix + "playertimes", dbSqlite, connection);
+            copy(tablePrefix + "lastruncompleted", dbSqlite, connection);
+            copy(tablePrefix + "reachedcheckpoints", dbSqlite, connection);
+            copy(tablePrefix + "rewardtimestamps", dbSqlite, connection);
+            copy(tablePrefix + "splittimes", dbSqlite, connection);
+            copy(tablePrefix + "stats", dbSqlite, connection);
+            copy(tablePrefix + "holograms", dbSqlite, connection);
             return true;
         } catch (SQLException e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
             error = true;
-            e.printStackTrace();
             return false;
         }
     }
@@ -1544,5 +1550,9 @@ public class DatabaseManager {
 
     public static boolean isMysql() {
         return isMysql;
+    }
+
+    public static String getTablePrefix() {
+        return tablePrefix;
     }
 }

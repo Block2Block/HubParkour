@@ -1,6 +1,7 @@
 package me.block2block.hubparkour.managers;
 
 import me.block2block.hubparkour.HubParkour;
+import me.block2block.hubparkour.api.gui.GUI;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.api.signs.ClickableSign;
 import me.block2block.hubparkour.entities.*;
@@ -23,11 +24,13 @@ public class CacheManager {
     private static final List<Parkour> parkours;
     private static final List<LeaderboardHologram> leaderboards;
     private static final Map<Location, ClickableSign> signs;
+    private static final Map<Player, GUI> guis;
     private static SetupWizard setupWizard;
     private static EditWizard editWizard;
 
     static {
         players = new HashMap<>();
+        guis = new HashMap<>();
         points = new HashMap<>();
         types = new HashMap<>();
         items = new HashMap<>();
@@ -231,5 +234,21 @@ public class CacheManager {
 
     public static Map<Location, ClickableSign> getSigns() {
         return signs;
+    }
+
+    public static void openGUI(Player player, GUI gui) {
+        guis.put(player, gui);
+    }
+
+    public static GUI getGUI(Player player) {
+        return guis.get(player);
+    }
+
+    public static void closeGUI(Player player) {
+        guis.remove(player);
+    }
+
+    public static Map<Player, GUI> getGuis() {
+        return guis;
     }
 }

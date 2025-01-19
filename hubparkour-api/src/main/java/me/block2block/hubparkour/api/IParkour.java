@@ -1,6 +1,7 @@
 package me.block2block.hubparkour.api;
 
 import me.block2block.hubparkour.api.plates.*;
+import org.bukkit.Material;
 
 import java.util.List;
 import java.util.UUID;
@@ -73,18 +74,18 @@ public interface IParkour {
     StartPoint getStart();
 
     /**
-     * Get the command to execute for every checkpoint the user gets to.
-     * @return the command.
+     * Returns a list commands to execute for every checkpoint the user gets to.
+     * @return the commands.
      */
     @SuppressWarnings("unused")
-    String getCheckpointCommand();
+    List<String> getGlobalCheckpointCommands();
 
     /**
-     * Get the command to execute for the end of the parkour.
-     * @return the command.
+     * Get the list of commands to execute for the end of the parkour.
+     * @return the commands.
      */
     @SuppressWarnings("unused")
-    String getEndCommand();
+    List<String> getEndCommands();
 
     /**
      * Get a list of all points for this parkour.
@@ -152,16 +153,16 @@ public interface IParkour {
     void setName(String name);
 
     /**
-     * Set the end command for the parkour.
-     * @param endCommand The new end command for the parkour.
+     * Set the end commands for the parkour.
+     * @param endCommands The new end commands for the parkour.
      */
-    void setEndCommand(String endCommand);
+    void setEndCommands(List<String> endCommands);
 
     /**
-     * Set the checkpoint command for the parkour.
-     * @param checkpointCommand The new checkpoint command for the parkour.
+     * Sets the commands that will be executed globally for every checkpoint in this parkour.
+     * @param globalCheckpointCommands The list of commands to be executed for global checkpoints.
      */
-    void setCheckpointCommand(String checkpointCommand);
+    void setGlobalCheckpointCommands(List<String> globalCheckpointCommands);
 
     /**
      * Set the start point of the parkour.
@@ -223,5 +224,27 @@ public interface IParkour {
      * @return the UUID of the server, or <i>null</i> if this parkour is global.
      */
     UUID getServer();
+
+    /**
+     * Retrieves the material of the item associated with this parkour.
+     *
+     * @return the material of the associated item.
+     */
+    Material getItemMaterial();
+
+    /**
+     * Retrieves the data for the item associated with this parkour.
+     *
+     * @return the data of the associated item.
+     */
+    short getItemData();
+
+    /**
+     * Sets the item associated with this parkour.
+     *
+     * @param material The material of the item to set.
+     * @param data The data value of the item to set.
+     */
+    void setItem(Material material, short data);
 }
 

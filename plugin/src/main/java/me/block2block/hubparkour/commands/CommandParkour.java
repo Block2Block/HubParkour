@@ -13,6 +13,7 @@ import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
 import me.block2block.hubparkour.entities.Statistics;
+import me.block2block.hubparkour.gui.ParkourListGUI;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.managers.DatabaseManager;
 import me.block2block.hubparkour.utils.ConfigUtil;
@@ -511,17 +512,13 @@ public class CommandParkour implements CommandExecutor {
                                             } else{
                                                 ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Edit.Someone-Already-Editing", "Someone is already editing a parkour. Wait for them to finish before editing another.", true, Collections.emptyMap());
                                             }
-                                            return;
                                         } else {
-                                            if (parkour.getPlayers().size() > 0) {
+                                            if (!parkour.getPlayers().isEmpty()) {
                                                 ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.Edit.Must-Be-Empty", "The parkour must be empty before you can edit it.", true, Collections.emptyMap());
                                                 return;
                                             }
                                             CacheManager.enterEditMode(p, parkour);
                                         }
-
-                                        return;
-
                                     }
                                 }.runTaskAsynchronously(HubParkour.getInstance());
                             } else {
@@ -556,7 +553,7 @@ public class CommandParkour implements CommandExecutor {
                                             p.teleport(l);
                                             ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Teleport.Teleported", "You have been teleported to the parkour restart point.", true, Collections.emptyMap());
                                         } else {
-                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Teleport.Currently-In-Another-Parkour", "You cannot teleport to a parkour start point while in a different parkour. Please leave your parkour and try again.", true, Collections.emptyMap());
+                                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Teleport.Currently-In-Parkour", "You cannot teleport to a parkour start point while in a parkour. Please leave your parkour and try again.", true, Collections.emptyMap());
                                         }
                                     } else {
                                         Location l = parkour.getRestartPoint().getLocation().clone();
@@ -577,6 +574,19 @@ public class CommandParkour implements CommandExecutor {
                         }
 
                         break;
+                    case "gui": {
+                        if (p.hasPermission("hubparkour.command.gui")) {
+                            if (ConfigUtil.getBoolean("Settings.GUI.Enabled", true)) {
+                                ParkourListGUI parkourListGUI = new ParkourListGUI(p);
+                                parkourListGUI.open();
+                            } else {
+                                ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.GUI-Not-Enabled", "The Parkour List GUI is not enabled.", true, Collections.emptyMap());
+                            }
+                        } else {
+                            ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Admin.No-Permission", "You do not have permission to perform this command.", true, Collections.emptyMap());
+                        }
+                        break;
+                    }
                     case "done":
                         if (p.hasPermission("hubparkour.admin.setup")) {
                             if (CacheManager.isSetup(p)) {
@@ -736,7 +746,7 @@ public class CommandParkour implements CommandExecutor {
                                         if (parkour != null) {
                                             Statistics statistics = HubParkour.getInstance().getDbManager().getParkourStatistics(p.getPlayer(), parkour);
 
-                                            if (statistics.getAttempts().size() == 0) {
+                                            if (statistics.getAttempts().isEmpty()) {
                                                 ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Stats.No-Parkour-Stats", "No stats have been tracked for you in this parkour yet. Attempt this parkour to earn stats!", true, Collections.emptyMap());
                                                 return;
                                             }
@@ -782,7 +792,7 @@ public class CommandParkour implements CommandExecutor {
                                     } else {
                                         Statistics statistics = HubParkour.getInstance().getDbManager().getGeneralStats(p.getPlayer());
 
-                                        if (statistics.getAttempts().size() == 0) {
+                                        if (statistics.getAttempts().isEmpty()) {
                                             ConfigUtil.sendMessageOrDefault(p, "Messages.Commands.Stats.No-Parkour-Stats", "No stats have been tracked for you in this parkour yet. Attempt this parkour to earn stats!", true, Collections.emptyMap());
                                             return;
                                         }
@@ -916,6 +926,7 @@ public class CommandParkour implements CommandExecutor {
                 defaultList.add("&a/parkour leave &r- Makes you leave the parkour.");
                 defaultList.add("&a/parkour leaderboard [parkour] &r- View the leaderboard for specific Parkour.");
                 defaultList.add("&a/parkour teleport [parkour] &r- Teleport to the beginning of a parkour.");
+                defaultList.add("&a/parkour gui &r- Open the Parkour List GUI.");
 
                 for (String s : ConfigUtil.getStringList("Messages.Commands.Help", defaultList)) {
                     sb.append(s).append("\n");

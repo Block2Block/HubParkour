@@ -1,5 +1,6 @@
 package me.block2block.hubparkour.api;
 
+import me.block2block.hubparkour.api.gui.GUI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -71,6 +72,47 @@ public class HubParkourAPI {
     @SuppressWarnings("unused")
     public static ItemStack getItem(int type) throws NullPointerException {
         return BackendAPI.getImplementation().getItem(type);
+    }
+
+    /**
+     * Retrieves the GUI instance associated with the provided player.
+     *
+     * @param player the player for whom the GUI is being retrieved. Must not be null.
+     * @return the GUI instance corresponding to the specified player, or null if no GUI is associated.
+     * @throws NullPointerException if the provided player is null.
+     */
+    public static GUI getGUI(Player player) {
+        return BackendAPI.getImplementation().getGUI(player);
+    }
+
+    /**
+     * Closes the GUI associated with the specified player, if any.
+     *
+     * @param player the player whose GUI should be closed. Must not be null.
+     * @throws NullPointerException if the provided player is null.
+     */
+    public static void closeGUI(Player player) {
+        BackendAPI.getImplementation().closeGUI(player);
+    }
+
+    /**
+     * Opens the specified GUI for the given player.
+     *
+     * @param player the player for whom the GUI will be opened. Must not be null.
+     * @param gui the GUI instance to open for the specified player. Must not be null.
+     * @throws NullPointerException if either the player or the GUI is null.
+     */
+    public static void openGUI(Player player, GUI gui) {
+        BackendAPI.getImplementation().openGUI(player, gui);
+    }
+
+    /**
+     * Determines whether the server version is before 1.13.
+     *
+     * @return true if the server version is 1.12 or lower; false otherwise.
+     */
+    public static boolean isPre1_13() {
+        return BackendAPI.getImplementation().isPre1_13();
     }
 
 }

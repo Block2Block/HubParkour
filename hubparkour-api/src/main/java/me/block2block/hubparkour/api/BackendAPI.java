@@ -1,5 +1,6 @@
 package me.block2block.hubparkour.api;
 
+import me.block2block.hubparkour.api.gui.GUI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -72,5 +73,40 @@ public abstract class BackendAPI {
      * @return the ItemStack.
      */
     public abstract ItemStack getItem(int type);
+
+    /**
+     * Retrieves a GUI instance associated with the provided player.
+     *
+     * @param player the player for whom the GUI is being retrieved.
+     *               Must not be null.
+     * @return the GUI instance corresponding to the specified player, or null if no GUI is associated.
+     * @throws NullPointerException if the provided player is null.
+     */
+    public abstract GUI getGUI(Player player);
+
+    /**
+     * Closes the GUI associated with the specified player, if any.
+     *
+     * @param player the player whose GUI should be closed. Must not be null.
+     * @throws NullPointerException if the provided player is null.
+     */
+    public abstract void closeGUI(Player player);
+
+    /**
+     * Opens a specified GUI for the given player. This method associates the player with
+     * the provided GUI instance and displays the interface.
+     *
+     * @param player the player for whom the GUI will be opened. Must not be null.
+     * @param gui the GUI instance to be opened for the player. Must not be null.
+     * @throws NullPointerException if either the player or GUI is null.
+     */
+    public abstract void openGUI(Player player, GUI gui);
+
+    /**
+     * Determines whether the server is before 1.13.
+     *
+     * @return true if the server is 1.12 or below.
+     */
+    public abstract boolean isPre1_13();
 
 }

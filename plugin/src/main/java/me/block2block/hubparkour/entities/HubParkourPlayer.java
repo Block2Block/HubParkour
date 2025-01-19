@@ -177,7 +177,8 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
             //Give checkpoint reward if not already reached.
             if (!previouslyReachedCheckpoints.contains(checkpoint)) {
-                if (parkour.getCheckpointCommand() != null) {
+                if ((checkpoint.getRewards() != null && !checkpoint.getRewards().isEmpty()) ||
+                        (parkour.getGlobalCheckpointCommands() != null && !parkour.getGlobalCheckpointCommands().isEmpty())) {
                     long timestamp = System.currentTimeMillis();
                     if (parkour.getRewardCooldown() != -1) {
                         new BukkitRunnable() {
@@ -196,20 +197,46 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                                 new BukkitRunnable(){
                                     @Override
                                     public void run() {
-                                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                        if (checkpoint.getRewards() != null && !checkpoint.getRewards().isEmpty()) {
+                                            for (String command : checkpoint.getRewards()) {
+                                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                            }
+                                        }
+                                        if (parkour.getGlobalCheckpointCommands() != null && !parkour.getGlobalCheckpointCommands().isEmpty()) {
+                                            for (String command : parkour.getGlobalCheckpointCommands()) {
+                                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                            }
+                                        }
+
                                     }
                                 }.runTask(HubParkour.getInstance());
                                 HubParkour.getInstance().getDbManager().updateTimestamp(player.getUniqueId(), parkour.getId(), checkpoint.getCheckpointNo(), timestamp);
                             }
                         }.runTaskAsynchronously(HubParkour.getInstance());
                     } else {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                        if (checkpoint.getRewards() != null && !checkpoint.getRewards().isEmpty()) {
+                            for (String command : checkpoint.getRewards()) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                            }
+                        }
+                        if (parkour.getGlobalCheckpointCommands() != null && !parkour.getGlobalCheckpointCommands().isEmpty()) {
+                            for (String command : parkour.getGlobalCheckpointCommands()) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                            }
+                        }
                     }
                 }
             } else {
                 if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Checkpoint-Rewards-Everytime", false)) {
-                    if (parkour.getCheckpointCommand() != null) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getCheckpointCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                    if (checkpoint.getRewards() != null && !checkpoint.getRewards().isEmpty()) {
+                        for (String command : checkpoint.getRewards()) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                        }
+                    }
+                    if (parkour.getGlobalCheckpointCommands() != null && !parkour.getGlobalCheckpointCommands().isEmpty()) {
+                        for (String command : parkour.getGlobalCheckpointCommands()) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                        }
                     }
                 }
             }
@@ -309,7 +336,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
             int check = 0;
 
-            if (checkpoints.size() > 0) {
+            if (!checkpoints.isEmpty()) {
                 check = checkpoints.get(checkpoints.size() - 1).getCheckpointNo() + 1;
             }
 
@@ -352,7 +379,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
             if (previous > 0) {
                 if (ConfigUtil.getBoolean("Settings.Repeat-Rewards", true)) {
-                    if (parkour.getEndCommand() != null) {
+                    if (parkour.getEndCommands() != null && !parkour.getEndCommands().isEmpty()) {
                         long timestamp = System.currentTimeMillis();
                         if (parkour.getRewardCooldown() != -1) {
                             new BukkitRunnable() {
@@ -371,14 +398,18 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                                      new BukkitRunnable(){
                                          @Override
                                          public void run() {
-                                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                             for (String command : parkour.getEndCommands()) {
+                                                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                             }
                                          }
                                      }.runTask(HubParkour.getInstance());
                                     HubParkour.getInstance().getDbManager().updateTimestamp(player.getUniqueId(), parkour.getId(), -1, timestamp);
                                 }
                             }.runTaskAsynchronously(HubParkour.getInstance());
                         } else {
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                            for (String command : parkour.getEndCommands()) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                            }
                         }
                     }
                 }
@@ -427,7 +458,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                 }
             } else {
                 if (previous == -1) {
-                    if (parkour.getEndCommand() != null) {
+                    if (parkour.getEndCommands() != null && !parkour.getEndCommands().isEmpty()) {
                         long timestamp = System.currentTimeMillis();
                         if (parkour.getRewardCooldown() != -1) {
                             new BukkitRunnable() {
@@ -446,14 +477,18 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
-                                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                            for (String command : parkour.getEndCommands()) {
+                                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                                            }
                                         }
                                     }.runTask(HubParkour.getInstance());
                                     HubParkour.getInstance().getDbManager().updateTimestamp(player.getUniqueId(), parkour.getId(), -1, timestamp);
                                 }
                             }.runTaskAsynchronously(HubParkour.getInstance());
                         } else {
-                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parkour.getEndCommand().replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                            for (String command : parkour.getEndCommands()) {
+                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("{player-name}",player.getName()).replace("{player-uuid}",player.getUniqueId().toString()));
+                            }
                         }
 
                     }
@@ -526,6 +561,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         return parkourItems;
     }
 
+    @SuppressWarnings("deprecation")
     public void startParkour() {
         inventory = player.getInventory().getContents();
         armorContents = player.getInventory().getArmorContents();
@@ -595,6 +631,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         return prevGamemode;
     }
 
+    @SuppressWarnings("deprecation")
     public void setToPrevState() {
         if (ConfigUtil.getBoolean("Settings.Health.Heal-To-Full", true)) {
             if (HubParkour.isPre1_13()) {

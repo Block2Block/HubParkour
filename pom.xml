@@ -10,6 +10,10 @@
     <packaging>pom</packaging>
     <version>2.6</version>
 
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
     <modules>
         <module>hubparkour-api</module>
         <module>plugin</module>

@@ -16,11 +16,11 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Update file paths in CONTRIBUTING.md for accuracy&#10;&#10;Corrected internal links to SECURITY.md and CODE_OF_CONDUCT.md by including the .github directory for proper navigation. This ensures contributors are directed to the correct resources.">
-      <change afterPath="$PROJECT_DIR$/.github/pull_request_template.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/README.md" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Move LICENSE and added PR template&#10;&#10;Added a Pull Request Template for new Pull Requests, and updated the location of the license to GitHub detects it correctly.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hubparkour-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,6 +193,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Maven.hubparkour [clean,package,deploy,-pl...].executor": "Run",
+    "Maven.hubparkour [clean,package,deploy].executor": "Run",
     "Maven.hubparkour [clean,package].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -236,8 +238,9 @@
     <option name="myCommands">
       <command value="mvn deploy" />
       <command value="mvn clean package -Xlint:deprecation" />
-      <command value="mvn clean package deploy" />
       <command value="mvn clean package" />
+      <command value="mvn clean package deploy" />
+      <command value="mvn clean package deploy -pl hubparkour-api -am" />
     </option>
   </component>
   <component name="RunManager" selected="Maven.hubparkour [clean,package]">
@@ -1053,7 +1056,7 @@
       <option name="project" value="LOCAL" />
       <updated>1681495150549</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1098,8 +1101,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.6.1: Bug fixes&#10;- Fixed a bug where commands would not get executed properly for rewards.&#10;- Fixed a bug where waterlogged blocks would not count as water when Teleport-On-Water is enabled." />
-    <MESSAGE value="v2.6.2: SQL Bugfix&#10;- Fixed a bug with SQL where timestamps for reward cooldowns wouldn't get pushed into the Database properly." />
     <MESSAGE value="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed." />
     <MESSAGE value="Hopefully a fix for Travis" />
     <MESSAGE value="whoops, this will fix travis" />
@@ -1123,6 +1124,8 @@
     <MESSAGE value="Add contribution guidelines and security policy  &#10;&#10;Moved `LICENSE` and `CODE_OF_CONDUCT.md` to `.github` directory and introduced new `CONTRIBUTING.md` and `SECURITY.md`. Updated project settings to reflect these changes." />
     <MESSAGE value="Update file paths in CONTRIBUTING.md for accuracy&#10;&#10;Corrected internal links to SECURITY.md and CODE_OF_CONDUCT.md by including the .github directory for proper navigation. This ensures contributors are directed to the correct resources." />
     <MESSAGE value="Introduced bug report, feature request templates, code of conduct, contributing, security guidelines, and relocated the license&#10;&#10;This commit introduces a structured template for bug reports and feature requests to facilitate effective communication of issues or suggestions by the community. It also provides a code of conduct that outlines expected behavioural norms for community participation. Alongside this, a guide on how to effectively contribute to the project has been added.&#10;&#10;This commit also enhances project's security by providing clear guidelines on how to report vulnerabilities. Furthermore, the project's license file has been moved to the .github directory. This aligns with standard open source project conventions, providing a clear and accessible place for legal documents." />
-    <option name="LAST_COMMIT_MESSAGE" value="Introduced bug report, feature request templates, code of conduct, contributing, security guidelines, and relocated the license&#10;&#10;This commit introduces a structured template for bug reports and feature requests to facilitate effective communication of issues or suggestions by the community. It also provides a code of conduct that outlines expected behavioural norms for community participation. Alongside this, a guide on how to effectively contribute to the project has been added.&#10;&#10;This commit also enhances project's security by providing clear guidelines on how to report vulnerabilities. Furthermore, the project's license file has been moved to the .github directory. This aligns with standard open source project conventions, providing a clear and accessible place for legal documents." />
+    <MESSAGE value="Streamline contribution process and update documentation&#10;&#10;Added CONTRIBUTING.md, SECURITY.md, and code of conduct to define contribution and security guidelines. Relocated LICENSE and related files to the .github directory for better accessibility. Updated project configuration and README to align with these changes." />
+    <MESSAGE value="Move LICENSE and added PR template&#10;&#10;Added a Pull Request Template for new Pull Requests, and updated the location of the license to GitHub detects it correctly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Move LICENSE and added PR template&#10;&#10;Added a Pull Request Template for new Pull Requests, and updated the location of the license to GitHub detects it correctly." />
   </component>
 </project>

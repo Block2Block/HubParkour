@@ -5,6 +5,7 @@ import me.block2block.hubparkour.api.db.DatabaseSchemaUpdate;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
+import me.block2block.hubparkour.dbschema.Four;
 import me.block2block.hubparkour.dbschema.One;
 import me.block2block.hubparkour.dbschema.Three;
 import me.block2block.hubparkour.dbschema.Two;
@@ -29,14 +30,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class HubParkour extends JavaPlugin {
 
-    private static final int CURRENT_SCHEMA = 3;
+    private static final int CURRENT_SCHEMA = 4;
     private static final Map<Integer, DatabaseSchemaUpdate> schemaUpdates = new HashMap<>();
 
     private static HubParkour instance;
@@ -55,6 +58,7 @@ public class HubParkour extends JavaPlugin {
         registerSchema(new One());
         registerSchema(new Two());
         registerSchema(new Three());
+        registerSchema(new Four());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -140,7 +144,7 @@ public class HubParkour extends JavaPlugin {
         try {
             config.load(configFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "An exception occurred when attempting to load configuration files", e);
         }
         config.options().copyHeader(true);
 
@@ -148,15 +152,15 @@ public class HubParkour extends JavaPlugin {
         try {
             internal.load(internalFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "An exception occurred when attempting to load configuration files", e);
         }
         internal.options().copyHeader(true);
 
-        ConfigUtil.init(config, configFile, internal, internalFile);
+        ConfigUtil.init(config, configFile, internal);
 
         String suuid = internal.getString("server-uuid");
 
-        if (suuid.equals("")) {
+        if (suuid.isEmpty()) {
             serverUuid = UUID.randomUUID();
             internal.set("server-uuid", serverUuid.toString());
         } else {
@@ -184,8 +188,7 @@ public class HubParkour extends JavaPlugin {
             tables = dbManager.setup(mysql);
 
         } catch (Exception e) {
-            getLogger().severe("There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:\n");
-            e.printStackTrace();
+            getLogger().log(Level.SEVERE, "There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:", e);
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -219,8 +222,7 @@ public class HubParkour extends JavaPlugin {
         try {
             dbManager.load();
         } catch (Exception e) {
-            getLogger().severe("There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:\n");
-            e.printStackTrace();
+            getLogger().log(Level.SEVERE, "There has been an error connecting to the database. The plugin will now be disabled.  Stack Trace:", e);
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -237,6 +239,7 @@ public class HubParkour extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MountListener(), this);
         Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
         Bukkit.getPluginManager().registerEvents(new SignListener(), this);
+        Bukkit.getPluginManager().registerEvents(new GUIListener(), this);
 
         getCommand("parkour").setExecutor(new CommandParkour());
         getCommand("parkour").setTabCompleter(new ParkourTabComplete());
@@ -316,7 +319,7 @@ public class HubParkour extends JavaPlugin {
 
     private void copy(InputStream in, File file) {
         try {
-            OutputStream out = new FileOutputStream(file);
+            OutputStream out = Files.newOutputStream(file.toPath());
             byte[] buf = new byte[1024];
             int len;
             while((len=in.read(buf))>0){
@@ -325,7 +328,7 @@ public class HubParkour extends JavaPlugin {
             out.close();
             in.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "An exception occurred when attempting to copy configuration files from the classpath", e);
         }
     }
 

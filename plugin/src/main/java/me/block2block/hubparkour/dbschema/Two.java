@@ -26,8 +26,7 @@ public class Two extends DatabaseSchemaUpdate {
             statement = connection.prepareStatement("ALTER TABLE `hp_parkours` ADD `server` VARCHAR(36) NULL DEFAULT NULL" + ((DatabaseManager.isMysql())?" AFTER `reward_cooldown`":"") + ";");
             statement.execute();
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
         }
 
     }

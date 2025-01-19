@@ -68,7 +68,7 @@ public class FallListener implements Listener {
                     return;
                 }
 
-                Location l = point.getLocation();
+                Location l = point.getLocation().clone();
                 l.setX(l.getX() + 0.5);
                 l.setY(l.getY() + 0.5);
                 l.setZ(l.getZ() + 0.5);

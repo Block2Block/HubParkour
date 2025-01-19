@@ -16,11 +16,9 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="Move LICENSE and added PR template&#10;&#10;Added a Pull Request Template for new Pull Requests, and updated the location of the license to GitHub detects it correctly.">
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.8-SNAPSHOT: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite.&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;- Fixed a bug where Exit Points would not work until the server is restarted.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
+      <change beforePath="$PROJECT_DIR$/.github/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +80,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="Exception" />
         <option value="Class" />
       </list>
     </option>
@@ -167,7 +166,12 @@
       </list>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings">{}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Block2Block/HubParkour.git&quot;,
+    &quot;accountId&quot;: &quot;e48afc10-7980-4fd9-bd8e-e19e9d60f5d7&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -177,6 +181,9 @@
         <option name="vmOptionsForImporter" value="-Xmx768m" />
       </MavenImportingSettings>
     </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -191,27 +198,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.hubparkour [clean,package,deploy,-pl...].executor": "Run",
-    "Maven.hubparkour [clean,package,deploy].executor": "Run",
-    "Maven.hubparkour [clean,package].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Programming Projects/Java/HubParkour",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.hubparkour [clean,package,deploy,-pl...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package,deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop/2.8&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Programming Projects/Java/HubParkour&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;AtomSelectConfig&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="community" />
@@ -227,11 +234,11 @@
       <recent name="E:\Programming Projects\Java\HubParkour\plugin\src\main\resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="me.block2block.hubparkour.api.gui.exception" />
+      <recent name="me.block2block.hubparkour.api.gui" />
       <recent name="me.block2block.hubparkour.dbschema" />
       <recent name="me.block2block.hubparkour.signs" />
       <recent name="me.block2block.hubparkour.api.plates" />
-      <recent name="me.block2block.hubparkour.api.items" />
-      <recent name="me.block2block.hubparkour.api.events.admin" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -712,6 +719,10 @@
       <workItem from="1706917966950" duration="4000" />
       <workItem from="1706919549822" duration="21000" />
       <workItem from="1710272471082" duration="2599000" />
+      <workItem from="1737253344869" duration="218000" />
+      <workItem from="1737293065618" duration="3068000" />
+      <workItem from="1737299072219" duration="13336000" />
+      <workItem from="1737317862194" duration="9485000" />
     </task>
     <task id="LOCAL-00026" summary="Updating readme.md">
       <created>1588429523231</created>
@@ -1056,7 +1067,7 @@
       <option name="project" value="LOCAL" />
       <updated>1681495150549</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1101,10 +1112,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.6.3: PlaceholderAPI Bugfix&#10;- Fixed a bug where the PlaceholderAPI identifier had changed." />
-    <MESSAGE value="Hopefully a fix for Travis" />
-    <MESSAGE value="whoops, this will fix travis" />
-    <MESSAGE value="Fixed travis not getting the plugin jar properly" />
     <MESSAGE value="v2.6.4: Placeholder Bugfix" />
     <MESSAGE value="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports." />
     <MESSAGE value="v2.6.5: Another Placeholder Bugfix&#10; - Fixed an issue where the positionname placeholder wouldn't be recognised if the position did not yet exist.&#10; - Fixed an issue with resolving dependencies for API users." />
@@ -1126,6 +1133,14 @@
     <MESSAGE value="Introduced bug report, feature request templates, code of conduct, contributing, security guidelines, and relocated the license&#10;&#10;This commit introduces a structured template for bug reports and feature requests to facilitate effective communication of issues or suggestions by the community. It also provides a code of conduct that outlines expected behavioural norms for community participation. Alongside this, a guide on how to effectively contribute to the project has been added.&#10;&#10;This commit also enhances project's security by providing clear guidelines on how to report vulnerabilities. Furthermore, the project's license file has been moved to the .github directory. This aligns with standard open source project conventions, providing a clear and accessible place for legal documents." />
     <MESSAGE value="Streamline contribution process and update documentation&#10;&#10;Added CONTRIBUTING.md, SECURITY.md, and code of conduct to define contribution and security guidelines. Relocated LICENSE and related files to the .github directory for better accessibility. Updated project configuration and README to align with these changes." />
     <MESSAGE value="Move LICENSE and added PR template&#10;&#10;Added a Pull Request Template for new Pull Requests, and updated the location of the license to GitHub detects it correctly." />
-    <option name="LAST_COMMIT_MESSAGE" value="Move LICENSE and added PR template&#10;&#10;Added a Pull Request Template for new Pull Requests, and updated the location of the license to GitHub detects it correctly." />
+    <MESSAGE value="v2.7.8: Exit Points, more Placeholders and API Changes&#10;- The ParkourPlayerTeleportEvent event has been expanded with a new Teleport Reason field. (Courtesy of Color_yr)&#10;- Fixed a typo in a startup log message (Courtesy of ANameSpace)&#10;- Expanded the PlaceholderAPI expansion to include variables related to the player's current parkour. (Courtesy of ItsNxthaniel)&#10;- The Time placeholders are now formatted based on the format set in the config. (Courtesy of ItsNxthaniel)&#10;- Added a new Exit Location point which specifies where a player is teleported once a parkour has been completed. (Courtesy of ItsNxthaniel)" />
+    <MESSAGE value="v2.8-SNAPSHOT: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite.&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging." />
+    <MESSAGE value="v2.8-SNAPSHOT: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite.&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <MESSAGE value="v2.8-SNAPSHOT: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite.&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;- Fixed a bug where Exit Points would not work until the server is restarted.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.8-SNAPSHOT: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite.&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;- Fixed a bug where Exit Points would not work until the server is restarted.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

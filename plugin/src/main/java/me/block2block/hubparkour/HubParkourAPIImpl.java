@@ -3,6 +3,7 @@ package me.block2block.hubparkour;
 import me.block2block.hubparkour.api.BackendAPI;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.IParkour;
+import me.block2block.hubparkour.api.gui.GUI;
 import me.block2block.hubparkour.managers.CacheManager;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -50,6 +51,38 @@ public class HubParkourAPIImpl extends BackendAPI {
     @Override
     public ItemStack getItem(int type) {
         return CacheManager.getItems().get(type);
+    }
+
+    @Override
+    public GUI getGUI(Player player) {
+        if (player == null) {
+            throw new NullPointerException("player cannot be null");
+        }
+        return CacheManager.getGUI(player);
+    }
+
+    @Override
+    public void closeGUI(Player player) {
+        if (player == null) {
+            throw new NullPointerException("player cannot be null");
+        }
+        CacheManager.closeGUI(player);
+    }
+
+    @Override
+    public void openGUI(Player player, GUI gui) {
+        if (player == null) {
+            throw new NullPointerException("player cannot be null");
+        }
+        if (gui == null) {
+            throw new NullPointerException("gui cannot be null");
+        }
+        CacheManager.openGUI(player, gui);
+    }
+
+    @Override
+    public boolean isPre1_13() {
+        return HubParkour.isPre1_13();
     }
 
 }

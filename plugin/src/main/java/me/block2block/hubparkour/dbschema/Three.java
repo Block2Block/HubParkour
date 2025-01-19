@@ -27,8 +27,7 @@ public class Three extends DatabaseSchemaUpdate {
                 statement.execute();
             }
         } catch (Exception e) {
-            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:");
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
         }
 
     }

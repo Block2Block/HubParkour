@@ -8,15 +8,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
+import java.util.Objects;
+import java.util.logging.Level;
 
 public class TitleUtil {
 
     public static void sendActionBar(Player player, String message, ChatColor color, boolean bold) {
         try {
             if (!HubParkour.isPost1_9()) {
-                Object chatTitle = getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\": \"" + message + "\",\"color\":\"" + color.name().toLowerCase() + "\",\"bold\":\"" + ((bold)?"true":"false") + "\"}");
+                Object chatTitle = Objects.requireNonNull(getNMSClass("IChatBaseComponent")).getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\": \"" + message + "\",\"color\":\"" + color.name().toLowerCase() + "\",\"bold\":\"" + ((bold)?"true":"false") + "\"}");
 
-                Constructor<?> titleConstructor = getNMSClass("PacketPlayOutChat").getConstructor(getNMSClass("IChatBaseComponent"), byte.class);
+                Constructor<?> titleConstructor = Objects.requireNonNull(getNMSClass("PacketPlayOutChat")).getConstructor(getNMSClass("IChatBaseComponent"), byte.class);
 
                 Object packet = titleConstructor.newInstance(chatTitle, (byte) 2);
                 sendPacket(player, packet);
@@ -28,7 +30,7 @@ public class TitleUtil {
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, textComponent);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "An exception occurred when attempting to send an action bar message", e);
         }
     }
 
@@ -42,7 +44,7 @@ public class TitleUtil {
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "An exception occurred when attempting to send a packet", ex);
         }
     }
 
@@ -54,7 +56,7 @@ public class TitleUtil {
         }
         catch(ClassNotFoundException ex)
         {
-            ex.printStackTrace();
+            HubParkour.getInstance().getLogger().log(Level.SEVERE, "An exception occurred when attempting to fetch an NMS class", ex);
         }
         return null;
     }

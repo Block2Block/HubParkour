@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class ConfigUtil {
 
@@ -17,24 +18,30 @@ public class ConfigUtil {
     private static File configFile;
 
     private static FileConfiguration internal;
-    private static File internalFile;
 
-    public static void init(FileConfiguration config, File configFile, FileConfiguration internal, File internalFile) {
+    public static void init(FileConfiguration config, File configFile, FileConfiguration internal) {
         ConfigUtil.config = config;
         ConfigUtil.configFile = configFile;
         ConfigUtil.internal = internal;
-        ConfigUtil.internalFile = internalFile;
     }
 
     /**
-     * Send message to user, or nothing if the config ID is missing or blank.
-     * @param player the player to send the message to.
-     * @param id the id of the config value you want.
+     * Sends a message to a player based on a given message ID from the configuration.
+     * If the message ID does not exist in the configuration, the provided default value
+     * will be used and added to the configuration file. Variables within the message can
+     * be dynamically replaced using the provided variable mappings. Optionally, a prefix
+     * can be applied to the message.
+     *
+     * @param player the player to whom the message will be sent
+     * @param id the identifier of the message in the configuration
+     * @param defaultValue the default message to use if the message ID is not found in the configuration
+     * @param prefix whether a prefix should be included in the message
+     * @param variableMappings a map containing placeholder keys and their replacement values for the message
      */
     public static void sendMessage(Player player, String id, String defaultValue, boolean prefix, Map<String, String> variableMappings) {
-        String message = config.getString(id);
-        if (message != null) {
-            if (!message.equals("")) {
+        if (config.contains(id)) {
+            String message = config.getString(id);
+            if (!message.isEmpty()) {
                 for (Map.Entry<String, String> entry : variableMappings.entrySet()) {
                     message = message.replace("{" + entry.getKey() + "}", entry.getValue());
                 }
@@ -48,10 +55,9 @@ public class ConfigUtil {
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
-            message = defaultValue;
+            String message = defaultValue;
             for (Map.Entry<String, String> entry : variableMappings.entrySet()) {
                 message = message.replace("{" + entry.getKey() + "}", entry.getValue());
             }
@@ -62,38 +68,45 @@ public class ConfigUtil {
         }
     }
 
+    /**
+     * Sends a message to a player based on the given ID. If the message ID does not exist in the configuration
+     * or is blank, the specified defaultMessage will be used instead. The message can also include variable mappings
+     * that dynamically replace placeholders, and optionally, a prefix can be applied to the message.
+     *
+     * @param player the player to send the message to
+     * @param id the ID of the message in the configuration
+     * @param defaultMessage the default message to send if the ID is missing or blank in the configuration
+     * @param prefix whether to include a prefix in the message
+     * @param variableMappings a map of placeholders and their corresponding replacement values for the message
+     */
     public static void sendMessageOrDefault(Player player, String id, String defaultMessage, boolean prefix, Map<String, String> variableMappings) {
-        String message = config.getString(id);
-        if (message != null) {
-            if (!message.equals("")) {
-                for (Map.Entry<String, String> entry : variableMappings.entrySet()) {
-                    message = message.replace("{" + entry.getKey() + "}", entry.getValue());
-                }
-                if (HubParkour.isPlaceholders()) {
-                    message = PlaceholderAPI.setPlaceholders(player, message);
-                }
-                player.getPlayer().sendMessage(HubParkour.c(prefix, message));
+        if (config.contains(id) && !config.getString(id).isEmpty()) {
+            String message = config.getString(id);
+            for (Map.Entry<String, String> entry : variableMappings.entrySet()) {
+                message = message.replace("{" + entry.getKey() + "}", entry.getValue());
             }
+            if (HubParkour.isPlaceholders()) {
+                message = PlaceholderAPI.setPlaceholders(player, message);
+            }
+            player.getPlayer().sendMessage(HubParkour.c(prefix, message));
         } else {
             config.set(id, defaultMessage);
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
             player.getPlayer().sendMessage(HubParkour.c(prefix, defaultMessage));
         }
     }
 
     public static boolean getBoolean(String id, boolean defaultValue) {
-        if (config.get(id) == null) {
+        if (!config.contains(id)) {
             config.set(id, defaultValue);
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
             return defaultValue;
         }
@@ -102,45 +115,39 @@ public class ConfigUtil {
     }
 
     public static String getString(String id, String defaultValue) {
-        String value = config.getString(id);
-        if (value == null) {
+        if (!config.contains(id)) {
             config.set(id, defaultValue);
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
             return defaultValue;
         }
 
-        return value;
+        return config.getString(id);
     }
 
     public static List<String> getStringList(String id, List<String> defaultValue) {
-        List<String> value = config.getStringList(id);
-        if (value == null) {
+        if (!config.contains(id)) {
             config.set(id, defaultValue);
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
             return defaultValue;
         }
-
-        return value;
+        return config.getStringList(id);
     }
 
     public static int getInt(String id, int defaultValue) {
-        if (config.get(id) == null) {
+        if (!config.contains(id)) {
             config.set(id, defaultValue);
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
             return defaultValue;
         }
@@ -148,14 +155,14 @@ public class ConfigUtil {
         return config.getInt(id);
     }
 
+    @SuppressWarnings("unused")
     public static long getLong(String id, long defaultValue) {
-        if (config.get(id) == null) {
+        if (!config.contains(id)) {
             config.set(id, defaultValue);
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
             return defaultValue;
         }
@@ -164,13 +171,12 @@ public class ConfigUtil {
     }
 
     public static double getDouble(String id, double defaultValue) {
-        if (config.get(id) == null) {
+        if (!config.contains(id)) {
             config.set(id, defaultValue);
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
             return defaultValue;
         }
@@ -186,8 +192,7 @@ public class ConfigUtil {
             try {
                 config.save(configFile);
             } catch (IOException e) {
-                HubParkour.getInstance().getLogger().warning("An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:");
-                e.printStackTrace();
+                HubParkour.getInstance().getLogger().log(Level.WARNING, "An attempt was made to insert a missing config value but an error occurred during the attempt. Stack trace:", e);
             }
             format = "ss.MMM";
         }

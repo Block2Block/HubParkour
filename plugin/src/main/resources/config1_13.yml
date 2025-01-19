@@ -92,6 +92,7 @@ Messages:
       - "&a/parkour leaderboard [parkour] &r- View the leaderboard for specific Parkour."
       - "&a/parkour teleport [parkour] &r- Teleport to the beginning of a parkour."
       - "&a/parkour stats <parkour> &r- View your general stats or stats for a specific parkour."
+      - "&a/parkour gui &r- Open the Parkour List GUI."
     Help-Admin:
       - "&a/parkour setup&r - Enter setup mode and begin parkour setup."
       - "&a/parkour done&r - Continues with the setup wizard when setting checkpoints."
@@ -141,7 +142,7 @@ Messages:
 
     Teleport:
       Not-Valid-Parkour: "That is not a valid parkour."
-      Currently-In-Another-Parkour: "You cannot teleport to a parkour start point while in a different parkour. Please leave your parkour and try again."
+      Currently-In-Parkour: "You cannot teleport to a parkour start point while in a parkour. Please leave your parkour and try again."
       Teleported: "You have been teleported to the parkour restart point."
 
     Stats:
@@ -164,6 +165,8 @@ Messages:
         - "&aTotal checkpoints hit:&r {checkpoints}"
         - "&aTotal distance travelled:&r {distance} blocks"
         - "&aTotal time in parkour:&r {time}"
+
+    GUI-Not-Enabled: "The Parkour List GUI is not enabled."
 
     #Admin command messages.
     Admin:
@@ -222,7 +225,7 @@ Messages:
         Please-Set-Exit: "End point set! Next, you need to set your exit point. Click the stick while standing in your exit point. You can say 'none' for no exit location."
         Please-Set-Respawn: "Exit point set! Next, you need to set your respawn point. Click the stick while standing in your respawn point."
         Please-Set-Checkpoints: "Respawn point set! Now, you need to select any checkpoints you want. Click on each checkpoint pressure plate, in order you want them completed, then enter 'done' or execute /parkour done."
-        Checkpoint-Added: "Checkpoint successfully added."
+        Checkpoint-Added: "Checkpoint successfully added. If you wish to add rewards for this particular checkpoint, type them in chat or type it with /parkour input [command]. You can specify more than one by submitting commands several times. To continue, either add another checkpoint or type 'done' to finish adding checkpoints."
 
         Please-Set-Border: "Next, you need to set your border points. In order to do so, please click the stick while in the location you would like to set your border points. If you do not wish to use border points, then enter 'done' or execute /parkour done."
         Please-Set-Second-Border: "Great, now set your second border point! If you do not wish to use border points, then enter 'done' or execute /parkour done."
@@ -233,15 +236,19 @@ Messages:
           Checkpoint: "One of your checkpoints is currently outside your border! Please try again!"
 
         Please-Set-Name: "Now, you need to set a name for your parkour! Please enter a name for your parkour into chat or type it with /parkour input [name]. It must not be a duplicate. Names are compatible with formatting codes."
-        Please-Set-End-Command: "The name has been set! Please now type out your reward command for the end of your parkour into chat or type it with /parkour input [name]. If you don't want one, just type 'none'. Available placeholders are {player-uuid} and {player-name}."
-        Please-Set-Checkpoint-Command: "The End Command has been set! Please now type out your reward command for checkpoints of your parkour into chat or type it with /parkour input [name]. This command will only be executed for each reached checkpoint after they finish the parkour to prevent exploitation. If you don't want one, just type 'none'. Available placeholders are {player-uuid} and {player-name}."
+        Please-Set-End-Command: "The name has been set! Please now type out your reward commands for the end of your parkour into chat or type it with /parkour input [command]. You can specify more than one by submitting commands several times. When you're done or if you don't want any, type 'done'. Available placeholders are {player-uuid} and {player-name}."
+        Please-Set-Checkpoint-Command: "The End Commands have been set! Please now type out your reward commands for all checkpoints of your parkour into chat or type it with /parkour input [command]. You can specify more than one by submitting commands several times. This command will only be executed for each reached checkpoint after they finish the parkour to prevent exploitation. When you're finished or if you don't want one, just type 'done'. Available placeholders are {player-uuid} and {player-name}."
         Please-Set-Reward-Cooldown: "Please specify a cooldown for you rewards in hours (only applicable when you have repeat-rewards enabled). If you do not wish to have one, please type 'none'."
+        Command-Added: "The command has been added! When you're finished, type 'done'."
         Invalid-Cooldown: "That cooldown is not valid. Please try again. If you do not wish to have one, please type 'none'."
+        Please-Set-GUI-Item: "Cooldown has been set! Please specify how you wish for the GUI to display in-game. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number."
+        Invalid-GUI-Item: "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number."
+
         Name-Taken: "That name is already taken. Please try again."
 
         Invalid-Placement: "The place you are trying to setup that point is currently set for a different type of point. If this is a mistake, please type 'cancel' and re-setup your parkour."
 
-        Is-Parkour-Global: "Would you like this parkour to be global (appear on all of your servers)? Type 'y' to make this parkour global, or 'n' to make it server-specific. This cannot be changed once the parkour has been created."
+        Is-Parkour-Global: "Item successfully set! Would you like this parkour to be global (appear on all of your servers)? Type 'y' to make this parkour global, or 'n' to make it server-specific. This cannot be changed once the parkour has been created."
 
         Setup-Complete: "Parkour setup complete!"
         Setup-Cancelled: "Parkour setup was cancelled. Any points that were setup have been deleted."
@@ -251,7 +258,6 @@ Messages:
 
         Exit-Skip:
           Please-Set-Respawn-Location: "Exit location skipped. Next, you need to set your respawn point. Click the stick while standing in your respawn point."
-
 
         Must-Not-Be-In-Parkour: "You must not be in a parkour in order to set up a parkour."
         Not-In-Setup: "You are not currently in setup. If you want to setup a parkour, use /parkour setup."
@@ -264,31 +270,42 @@ Messages:
         Entered-Edit-Mode: "You have entered edit mode. You have been given the setup stick."
         Exited-Edit-Mode: "You have left edit mode."
         Choose-Edit:
-          - "Please select what you would like to edit about parkour &a{parkour-name}&r. Type the digit into chat or type it with /parkour input [name]."
+          - "Please select what you would like to edit about parkour &a{parkour-name}&r. Type the digit into chat or type it with /parkour input [number]."
           - "Please note that split times will be reset for this parkour upon modifications to any parkour points."
           - "&a1&r - Name"
-          - "&a2&r - End Command"
-          - "&a3&r - Checkpoint Command"
-          - "&a4&r - Start Point"
-          - "&a5&r - End Point"
-          - "&a6&r - Restart Point"
-          - "&a7&r - Checkpoints"
-          - "&a8&r - Border Points"
-          - "&a9&r - Reward Cooldown"
-          - "&a10&r - Exit Point"
-          - "&a11&r - Exit Edit Mode"
+          - "&a2&r - GUI Item"
+          - "&a3&r - End Commands"
+          - "&a4&r - Global Checkpoint Commands"
+          - "&a5&r - Start Point"
+          - "&a6&r - End Point"
+          - "&a7&r - Restart Point"
+          - "&a8&r - Checkpoints"
+          - "&a9&r - Border Points"
+          - "&a10&r - Reward Cooldown"
+          - "&a11&r - Exit Point"
+          - "&a12&r - Exit Edit Mode"
         Choose-Checkpoint-Edit:
-          - "What would you like to edit about checkpoints on parkour &a{parkour-name}&r? Type the digit into chat or type it with /parkour input [name]."
-          - "&a1&r - Delete checkpoints"
+          - "What would you like to edit about checkpoints on parkour &a{parkour-name}&r? Type the digit into chat or type it with /parkour input [number]."
+          - "&a1&r - Delete Checkpoints"
           - "&a2&r - Add Checkpoints"
-          - "&a3&r - Cancel"
+          - "&a3&r - Edit Checkpoint Rewards"
+          - "&a4&r - Cancel"
+
+        Commands:
+          List-Header: "Your current {type} commands:"
+          List-No-Commands: "You currently have no commands set up."
+          List-Entry: "&a{number}&r - {command}"
+          List-Footer: "If you wish to delete a command, type 1. If you wish to add new commands, type 2. To cancel, type 'cancel'."
+          Delete-No-Commands: "You cannot delete any commands as you have none set up. Either add a command or type 'cancel'."
+          Select-Command: "Which command number would you like to delete? Type the number of the command from the list above. Type 'cancel' to cancel."
+          Command-Deleted: "Command successfully deleted!"
+          Not-Valid-Command: "That is not a valid command. Type the number of the command in chat."
+          Type-Command: "Please type your new commands in chat or type it with /parkour input [command].  Type 'done' once you're finished."
+          Command-Added: "Command successfully added! Type 'done' once you're finished."
+
         Enter-New-Name: "Please enter a new name for your parkour into chat or type it with /parkour input [name]. It must not be a duplicate. Names are compatible with formatting codes."
         Name-Set: "Your new name has been set!"
         Name-Taken: "That name is already taken! Try again!"
-        Enter-New-End-Command: "Please enter a new end command for your parkour into chat or type it with /parkour input [name]. If you don't want one, just type 'none'."
-        End-Command-Set: "Your new end command has been set!"
-        Enter-New-Checkpoint-Command: "Please enter a new checkpoint command for your parkour into chat or type it with /parkour input [name]. If you don't want one, just type 'none'."
-        Checkpoint-Command-Set: "Your new checkpoint command has been set!"
         Select-New-Start-Point: "Please use the setup stick and select a new start point. This will take the location of where you are standing, and does take into account where you are looking."
         Start-Point-Set: "Your new start point has been set!"
         Select-New-End-Point: "Please use the setup stick and select a new end point. This will take the location of where you are standing, and does take into account where you are looking."
@@ -309,17 +326,26 @@ Messages:
         Please-Set-Reward-Cooldown: "Please specify a new cooldown for you rewards in hours (only applicable when you have repeat-rewards enabled). If you do not wish to have one, please type 'none'."
         Invalid-Cooldown: "That cooldown is not valid. Please try again. If you do not wish to have one, please type 'none'."
         Reward-Cooldown-Updated: "Reward cooldown successfully updated!"
-
-        Checkpoint-Delete:
-          No-Checkpoints: "There are currently no checkpoints to delete! Try adding one instead!"
-          Please-Enter-Checkpoint: "Which checkpoint number would you like to delete? Type the checkpoint number into chat or type it with /parkour input [name]."
-          Not-Valid-Checkpoint: "That is not a valid checkpoint, please try again. If you would like to cancel, type 'cancel'."
-          Success: "Checkpoint successfully deleted!"
-        Checkpoint-Add:
-          After-Which: "What checkpoint should this checkpoint come &a&lafter&r? Type the checkpoint number in chat. If you want this to become the first checkpoint, just type 0."
-          Not-Valid: "That checkpoint is not valid. If you want this to become the first checkpoint, just type 0."
-          Select-Checkpoint: "Please use the setup stick and select a new checkpoint to add. This will take the location of where you are standing, and does take into account where you are looking."
-          Success: "The checkpoint has been successfully added!"
+        Item:
+          Enter-Item: "Please specify how you wish for the GUI to display in-game. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number. To cancel, type 'cancel'."
+          Invalid-GUI-Item: "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number."
+          Successful: "Item set successfully!"
+        Checkpoints:
+          Delete:
+            No-Checkpoints: "There are currently no checkpoints to delete! Try adding one instead!"
+            Please-Enter-Checkpoint: "Which checkpoint number would you like to delete? Type the checkpoint number into chat or type it with /parkour input [name]."
+            Not-Valid-Checkpoint: "That is not a valid checkpoint, please try again. If you would like to cancel, type 'cancel'."
+            Success: "Checkpoint successfully deleted!"
+          Add:
+            After-Which: "What checkpoint should this checkpoint come &a&lafter&r? Type the checkpoint number in chat. If you want this to become the first checkpoint, just type 0."
+            Not-Valid: "That checkpoint is not valid. If you want this to become the first checkpoint, just type 0."
+            Select-Checkpoint: "Please use the setup stick and select a new checkpoint to add. This will take the location of where you are standing, and does take into account where you are looking."
+            Type-Rewards: "If you wish to add rewards for this particular checkpoint, type them in chat or type it with /parkour input [command]. You can specify more than one by submitting commands several times. Once you're finished, type 'done'."
+            Command-Added: "Command successfully added! If you're finished, type 'done'."
+            Success: "The checkpoint has been successfully added!"
+          Rewards:
+            Select-Checkpoint: "Which checkpoint would you like to edit? You have {checkpoints} checkpoints. Type the checkpoint number into chat or type it with /parkour input [number]. Type 'cancel' to cancel."
+            Not-Valid: "That checkpoint is not valid."
 
         Please-Set-Exit-Location: "Please use the setup stick and select the new Exit Location. This will take the location of where you are standing, and does take into account where you are looking."
         Exit-Point-Already-Nothing: "Exit point is already set to nothing."
@@ -384,6 +410,23 @@ Settings:
     Start: true
     #Whether end holograms should generate.
     End: true
+
+  GUI:
+    #Whether the GUI is enabled or not.
+    Enabled: true
+    #Title of the GUI
+    Title: "&a&lParkour List"
+    #How often, in ticks, should the GUI update. Lowest = more often. May cause lag if too low.
+    Refresh-Frequency: 200
+    Previous-Page-Title: "&a&lPrevious Page"
+    Next-Page-Title: "&a&lNext Page"
+    #The format of the lore of items in the GUI.
+    Item-Lore:
+      - "&r"
+      - "&r&fPlayers: &a{players}"
+      - "&r&fCheckpoints: &a{checkpoints}"
+      - "&r"
+      - "&aClick to Teleport!"
 
   #Whether to display an action bar title (above the hotbar) about the users current time.
   Action-Bar:
@@ -514,6 +557,7 @@ Settings:
     #There are only 2 valid databases you can use, MySQL and SQLite.
     #If another value is typed, the plugin will assume you want to use SQLite
     Type: "SQLite"
+    Table-Prefix: "hp_"
     #Details of the MySQL Database.
     Details:
       MySQL:

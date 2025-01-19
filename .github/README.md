@@ -72,6 +72,6 @@ We expect all contributors to follow our Code of Conduct, whether that is creati
 
 ## License
 
-This software is distributed with the Apache 2.0 license. For details about this, please view our full license [here](LICENSE).
+This software is distributed with the Apache 2.0 license. For details about this, please view our full license [here](../LICENSE).
 
 

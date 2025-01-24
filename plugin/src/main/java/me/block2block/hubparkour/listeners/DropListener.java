@@ -1,5 +1,6 @@
 package me.block2block.hubparkour.listeners;
 
+import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.HubParkourAPI;
 import me.block2block.hubparkour.api.items.ParkourItem;
 import me.block2block.hubparkour.managers.CacheManager;
@@ -40,18 +41,7 @@ public class DropListener implements Listener {
         if (e.getWhoClicked() instanceof Player) {
             Player player = (Player) e.getWhoClicked();
             if (CacheManager.isParkour(player)) {
-                for (ParkourItem item : HubParkourAPI.getPlayer(player).getParkourItems()) {
-                    if (item != null) {
-                        if (item.getItem() != null) {
-                            if (e.getCurrentItem() != null) {
-                                if (item.getItem().equals(e.getCurrentItem())) {
-                                    e.setCancelled(true);
-                                    return;
-                                }
-                            }
-                        }
-                    }
-                }
+                e.setCancelled(true);
             }
 
         }

@@ -17,10 +17,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.8: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite. (Issue #37)&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;- Fixed a bug where Exit Points would not work until the server is restarted.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
-      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/javadoc/overview.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/database/MySQLConnectionPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/utils/database/MySQLConnectionPool.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,30 +198,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Maven.hubparkour [clean,javadoc:javadoc].executor": "Run",
-    "Maven.hubparkour [clean,package,deploy,-pl...].executor": "Run",
-    "Maven.hubparkour [clean,package,deploy].executor": "Run",
-    "Maven.hubparkour [clean,package].executor": "Run",
-    "Maven.hubparkour [javadoc:javadoc].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Programming Projects/Java/HubParkour",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "AtomSelectConfig",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Maven.hubparkour [clean,javadoc:javadoc].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package,deploy,-pl...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package,deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [javadoc:javadoc].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Programming Projects/Java/HubParkour&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;AtomSelectConfig&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="community" />
@@ -322,8 +319,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.117" />
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.117" />
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.153" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.153" />
       </set>
     </attachedChunks>
   </component>

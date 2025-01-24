@@ -511,11 +511,13 @@ public class DatabaseManager {
                     List<String> endCommands = null;
                     if (endCommand != null) {
                         endCommands = new ArrayList<>(Arrays.asList(endCommand.split(";")));
+                        endCommands.remove("");
                     }
                     String checkCommand = result.getString(4);
                     List<String> checkCommands = null;
                     if (checkCommand != null) {
                         checkCommands = new ArrayList<>(Arrays.asList(checkCommand.split(";")));
+                        checkCommands.remove("");
                     }
 
                     while (parkourPoints.next()) {
@@ -535,6 +537,7 @@ public class DatabaseManager {
                                 List<String> commands = null;
                                 if (rewards != null) {
                                     commands = new ArrayList<>(Arrays.asList(rewards.split(";")));
+                                    commands.remove("");
                                 }
                                 checkpoints.add(new Checkpoint(new Location(Bukkit.getWorld(parkourPoints.getString(9)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5), parkourPoints.getFloat(7), parkourPoints.getFloat(6)), parkourPoints.getInt(8), commands));
                                 break;

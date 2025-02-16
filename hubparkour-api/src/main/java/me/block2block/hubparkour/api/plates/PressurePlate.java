@@ -89,6 +89,7 @@ public abstract class PressurePlate {
      * Remove the material by setting it to air.
      */
     public void removeMaterial() {
+        if (location == null || location.getWorld() == null) return;
         location.getBlock().setType(Material.AIR);
     }
 

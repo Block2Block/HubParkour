@@ -240,11 +240,19 @@ public interface IParkour {
     short getItemData();
 
     /**
+     * Retrieves the custom model data of the item associated with this parkour.
+     *
+     * @return the custom model data of the associated item.
+     */
+    int getCustomModelData();
+
+    /**
      * Sets the item associated with this parkour.
      *
      * @param material The material of the item to set.
      * @param data The data value of the item to set.
+     * @param customModelData the data of the custom model to apply to the item.
      */
-    void setItem(Material material, short data);
+    void setItem(Material material, short data, int customModelData);
 }
 

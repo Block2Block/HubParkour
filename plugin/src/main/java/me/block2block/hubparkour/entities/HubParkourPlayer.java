@@ -42,6 +42,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
     private ItemStack[] extraContents;
     private ItemStack[] armorContents;
     private ItemStack[] storageContents;
+    private ItemStack inHand;
     private BukkitTask actionBarTask;
     private GameMode prevGamemode;
     private double prevHealth;
@@ -569,8 +570,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
             extraContents = player.getInventory().getExtraContents();
             storageContents = player.getInventory().getStorageContents();
         }
+        inHand = player.getItemOnCursor();
         if (ConfigUtil.getBoolean("Settings.Parkour-Items.Clear-Inventory-On-Parkour-Start", true)) {
             player.getInventory().clear();
+            player.setItemOnCursor(null);
         }
         for (ParkourItem item : parkourItems) {
             item.giveItem();
@@ -664,6 +667,9 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                 if (storageContents != null) {
                     player.getInventory().setStorageContents(storageContents);
                 }
+            }
+            if (inHand != null) {
+                player.getInventory().addItem(inHand);
             }
 
         }

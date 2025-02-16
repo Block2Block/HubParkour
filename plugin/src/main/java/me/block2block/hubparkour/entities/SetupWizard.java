@@ -33,6 +33,7 @@ public class SetupWizard {
 
     private Material material;
     private short data;
+    private int customModelData;
 
 
     public SetupWizard(Player player) {
@@ -100,26 +101,33 @@ public class SetupWizard {
                     return true;
                 }
                 currentStage = SetupStage.GUI_ITEM;
-                ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Select-GUI-Item", "Cooldown has been set! Please specify how you wish for the GUI to display in-game. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number.", true, Collections.emptyMap());
+                ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Select-GUI-Item", "Cooldown has been set! Please specify how you wish for the GUI to display in-game. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
                 return true;
             }
             case GUI_ITEM: {
                 String[] parts = message.split(":");
-                if (parts.length != 2) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number.", true, Collections.emptyMap());
+                if (parts.length != 3) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
                     return true;
                 }
 
                 try {
                     data = Short.parseShort(parts[1]);
                 } catch (NumberFormatException e) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number.", true, Collections.emptyMap());
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
                     return true;
                 }
                 try {
                     material = Material.valueOf(parts[0].toUpperCase());
                 } catch (IllegalArgumentException e) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number.", true, Collections.emptyMap());
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
+                    return true;
+                }
+
+                try {
+                    customModelData = Integer.parseInt(parts[2]);
+                } catch (NumberFormatException e) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
                     return true;
                 }
 
@@ -136,7 +144,7 @@ public class SetupWizard {
                     return true;
                 }
 
-                final Parkour parkour = new Parkour(-1, ((global ? null : HubParkour.getServerUuid())), name, startPoint, endPoint, exitPoint, checkpoints, restartPoint, borderPoints, globalCheckpointRewards, endCommands, cooldown, material, data);
+                final Parkour parkour = new Parkour(-1, ((global ? null : HubParkour.getServerUuid())), name, startPoint, endPoint, exitPoint, checkpoints, restartPoint, borderPoints, globalCheckpointRewards, endCommands, cooldown, material, data, customModelData);
 
                 ParkourSetupEvent setupEvent = new ParkourSetupEvent(parkour, player);
                 Bukkit.getPluginManager().callEvent(setupEvent);

@@ -8,10 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.logging.Level;
 
-public class Four extends DatabaseSchemaUpdate {
+public class Five extends DatabaseSchemaUpdate {
 
-    public Four() {
-        super(4);
+    public Five() {
+        super(5);
     }
 
     @Override
@@ -19,16 +19,12 @@ public class Four extends DatabaseSchemaUpdate {
         String prefix = DatabaseManager.getTablePrefix();
         try (Connection connection = HubParkour.getInstance().getDbManager().getConnection()) {
             if (DatabaseManager.isMysql()) {
-                PreparedStatement statement = connection.prepareStatement("ALTER TABLE `" + prefix + "locations` ADD `rewards` TEXT AFTER `world`;");
+                PreparedStatement statement = connection.prepareStatement("ALTER TABLE `" + prefix + "parkours` DROP COLUMN `item_material`, DROP COLUMN `item_data`;");
                 statement.execute();
-                statement = connection.prepareStatement("ALTER TABLE `" + prefix + "parkours` ADD `item_material` TEXT NOT NULL AFTER `server`, ADD `item_data` SMALLINT NOT NULL DEFAULT 0 AFTER `server`;");
+                statement = connection.prepareStatement("ALTER TABLE `" + prefix + "parkours` ADD `item_material` TEXT NOT NULL AFTER `rewards`, ADD `item_data` SMALLINT NOT NULL DEFAULT 0 AFTER `item_material`, ADD `item_model_data` SMALLINT NOT NULL DEFAULT -1 AFTER `item_data`;");
                 statement.execute();
             } else {
-                PreparedStatement statement = connection.prepareStatement("ALTER TABLE `" + prefix + "locations` ADD `rewards` TEXT;");
-                statement.execute();
-                statement = connection.prepareStatement("ALTER TABLE `" + prefix + "parkours` ADD `item_material` TEXT NOT NULL;");
-                statement.execute();
-                statement = connection.prepareStatement("ALTER TABLE `" + prefix + "parkours` ADD `item_data` INTEGER NOT NULL DEFAULT 0;");
+                PreparedStatement statement = connection.prepareStatement("ALTER TABLE `" + prefix + "parkours` ADD `item_model_data` INTEGER NOT NULL DEFAULT -1;");
                 statement.execute();
             }
         } catch (Exception e) {

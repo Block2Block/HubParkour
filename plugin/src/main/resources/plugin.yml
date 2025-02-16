@@ -1,6 +1,6 @@
 name: HubParkour
 main: me.block2block.hubparkour.HubParkour
-version: "2.8.1"
+version: "2.8.2"
 author: Block2Block
 website: https://block2block.me/
 description: This is an all-in-one lightweight Parkour plugin for your Hub server!

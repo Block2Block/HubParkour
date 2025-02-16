@@ -75,7 +75,7 @@ public class DatabaseManager {
                 PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "playertimes (`uuid` varchar(36) NOT NULL, `parkour_id` INT NOT NULL,`time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
                 boolean set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "parkours (`id` INT NOT NULL AUTO_INCREMENT,`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL, `reward_cooldown` INT NOT NULL DEFAULT -1, PRIMARY KEY (id), `server` varchar(36) DEFAULT NULL, `item_material` TEXT NOT NULL DEFAULT 'SLIME_BALL', `item_data` SMALLINT NOT NULL DEFAULT 0)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "parkours (`id` INT NOT NULL AUTO_INCREMENT,`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL, `reward_cooldown` INT NOT NULL DEFAULT -1, PRIMARY KEY (id), `server` varchar(36) DEFAULT NULL, `item_material` TEXT NOT NULL, `item_data` SMALLINT NOT NULL DEFAULT 0, `item_model_data` SMALLINT NOT NULL DEFAULT -1)");
                 set = statement.execute();
 
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "locations (`parkour_id` INT,`type` tinyint(3) NOT NULL,`x` bigint(64) NOT NULL, `y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `pitch` FLOAT NOT NULL, `yaw` FLOAT NOT NULL, `checkno` tinyint(64) NULL, `world` varchar(64) NOT NULL, `rewards` TEXT DEFAULT NULL)");
@@ -111,7 +111,7 @@ public class DatabaseManager {
                 PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "playertimes (`uuid` varchar(36) NOT NULL, `parkour_id` INTEGER NOT NULL,`time` bigint(64) NOT NULL, `name` varchar(16) NOT NULL)");
                 boolean set = statement.execute();
 
-                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "parkours (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL, `reward_cooldown` INTEGER NOT NULL DEFAULT -1, `server` varchar(36) DEFAULT NULL, `item_material` TEXT NOT NULL DEFAULT 'SLIME_BALL', `item_data` INTEGER NOT NULL DEFAULT 0)");
+                statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "parkours (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`name` TEXT NOT NULL,`finish_reward` TEXT DEFAULT NULL,`checkpoint_reward` TEXT DEFAULT NULL, `reward_cooldown` INTEGER NOT NULL DEFAULT -1, `server` varchar(36) DEFAULT NULL, `item_material` TEXT NOT NULL DEFAULT 'SLIME_BALL', `item_data` INTEGER NOT NULL DEFAULT 0, `item_model_data` INTEGER NOT NULL DEFAULT -1)");
                 set = statement.execute();
 
                 statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS " + tablePrefix + "locations (`parkour_id` INTEGER,`type` tinyint(3) NOT NULL,`x` bigint(64) NOT NULL,`y` bigint(64) NOT NULL,`z` bigint(64) NOT NULL, `pitch` FLOAT NOT NULL, `yaw` FLOAT NOT NULL, `checkno` tinyint(64) NULL, `world` varchar(64) NOT NULL, `rewards` TEXT)");
@@ -521,7 +521,7 @@ public class DatabaseManager {
                     }
 
                     while (parkourPoints.next()) {
-                        switch(parkourPoints.getInt(2)) {
+                        switch (parkourPoints.getInt(2)) {
                             case 0:
                                 //3457
                                 start = new StartPoint(new Location(Bukkit.getWorld(parkourPoints.getString(9)), parkourPoints.getInt(3), parkourPoints.getInt(4), parkourPoints.getInt(5), parkourPoints.getFloat(7), parkourPoints.getFloat(6)));
@@ -551,12 +551,35 @@ public class DatabaseManager {
 
                     Material material;
                     try {
-                        material = Material.valueOf(result.getString(7));
+                        String mat = result.getString(7);
+                        if (mat == null || mat.isEmpty()) {
+                            material = Material.SLIME_BALL;
+                        } else {
+                            material = Material.valueOf(result.getString(7));
+                        }
                     } catch (IllegalArgumentException | NullPointerException e) {
                         HubParkour.getInstance().getLogger().log(Level.SEVERE, "One of your parkours has a material that is not valid. We have defaulted the value to a Slime Ball. Please change this using edit mode. Stack trace:", e);
                         material = Material.SLIME_BALL;
                     }
-                    CacheManager.addParkour(new Parkour(result.getInt(1), ((result.getString(6) == null)?null:UUID.fromString(result.getString(6))), result.getString(2), start, end, exit, checkpoints, restart, borderPoints, checkCommands, endCommands, result.getInt(5), material, result.getShort(8)));
+                    CacheManager.addParkour(
+                            new Parkour(
+                                    result.getInt(1),
+                                    ((result.getString(6) == null) ? null : UUID.fromString(result.getString(6))),
+                                    result.getString(2),
+                                    start,
+                                    end,
+                                    exit,
+                                    checkpoints,
+                                    restart,
+                                    borderPoints,
+                                    checkCommands,
+                                    endCommands,
+                                    result.getInt(5),
+                                    material,
+                                    result.getShort(8),
+                                    result.getShort(9)
+                            )
+                    );
                 }
 
             } catch (SQLException e) {
@@ -627,9 +650,9 @@ public class DatabaseManager {
                     continue;
                 }
                 Location location = new Location(world, result.getInt(3), result.getInt(4), result.getInt(5));
-                if (location.getBlock().getType() != Material.SIGN && location.getBlock().getType() != Material.WALL_SIGN && HubParkour.isPre1_13() && location.getBlock().getType() != Material.matchMaterial("SIGN_POST")) {
+                if (!location.getBlock().getType().name().equals("SIGN") && !location.getBlock().getType().name().equals("WALL_SIGN") && HubParkour.isPre1_13() && !location.getBlock().getType().name().equals("SIGN_POST")) {
                     HubParkour.getInstance().getLogger().info("A registered sign has been removed from the world. Placing a sign back. It is recommended you remove then replace the sign.");
-                    location.getBlock().setType(((result.getBoolean(9)?Material.WALL_SIGN: ((HubParkour.isPre1_13())?Material.matchMaterial("SIGN_POST"):Material.SIGN))));
+                    location.getBlock().setType(((result.getBoolean(9)?Material.matchMaterial("WALL_SIGN"): ((HubParkour.isPre1_13())?Material.matchMaterial("SIGN_POST"):Material.matchMaterial("SIGN")))));
                     org.bukkit.material.Sign sign = (org.bukkit.material.Sign) location.getBlock().getState().getData();
                     String face = result.getString(8);
                     if (face == null || face.equals("")) {
@@ -646,7 +669,7 @@ public class DatabaseManager {
                     location.getBlock().getState().update(true);
 
                 } else {
-                    updateFacingWall(result.getInt(1), ((org.bukkit.material.Sign) location.getBlock().getState().getData()).getFacing(), location.getBlock().getType() == Material.WALL_SIGN);
+                    updateFacingWall(result.getInt(1), ((org.bukkit.material.Sign) location.getBlock().getState().getData()).getFacing(), location.getBlock().getType() == Material.matchMaterial("WALL_SIGN"));
                 }
                 switch (result.getInt(7)) {
                     case 0: {
@@ -837,12 +860,13 @@ public class DatabaseManager {
         }
     }
 
-    public void setItem(int id, Material item, short data) {
+    public void setItem(int id, Material item, short data, int customModelData) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "parkours SET item_material = ?, item_data = ? WHERE id = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE " + tablePrefix + "parkours SET item_material = ?, item_data = ?, item_model = ? WHERE id = ?");
             statement.setString(1, item.name());
             statement.setShort(2, data);
-            statement.setInt(3, id);
+            statement.setInt(3, customModelData);
+            statement.setInt(4, id);
             statement.execute();
         } catch (SQLException e) {
             HubParkour.getInstance().getLogger().log(Level.SEVERE, "There has been an error accessing the database. Try checking your database is online. Stack trace:", e);
@@ -1413,7 +1437,7 @@ public class DatabaseManager {
             statement.setString(5, sign.getSignState().getLocation().getWorld().getName());
             statement.setInt(6, sign.getType());
             statement.setString(7, ((org.bukkit.material.Sign)sign.getSignState().getData()).getFacing().name());
-            statement.setBoolean(8, sign.getSignState().getBlock().getType() == Material.WALL_SIGN);
+            statement.setBoolean(8, sign.getSignState().getBlock().getType().name().equals("WALL_SIGN"));
 
             boolean success = statement.execute();
 

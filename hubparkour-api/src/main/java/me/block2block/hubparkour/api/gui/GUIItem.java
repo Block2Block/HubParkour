@@ -32,6 +32,10 @@ public class GUIItem {
         this(material, name, amount, lore, data, false);
     }
 
+    public GUIItem(Material material, String name, int amount, List<String> lore, short data, boolean glowing) {
+        this(material, name, amount, lore, data, glowing, -1);
+    }
+
     /**
      * Constructs a new GUI item with the specified properties.
      *
@@ -41,8 +45,9 @@ public class GUIItem {
      * @param lore the lore (description) for the item, may be null
      * @param data the data value of the item
      * @param glowing whether the item has a glowing effect
+     * @param customModelData the data of the custom model to apply to the item (1.14+ only)
      */
-    public GUIItem(Material material, String name, int amount, List<String> lore, short data, boolean glowing) {
+    public GUIItem(Material material, String name, int amount, List<String> lore, short data, boolean glowing, int customModelData) {
         ItemStack item = new ItemStack(material, amount, data);
         ItemMeta im = item.getItemMeta();
 
@@ -65,6 +70,15 @@ public class GUIItem {
             im.addEnchant(Enchantment.DURABILITY, 1, true);
             im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         }
+
+        if (HubParkourAPI.isPost1_14()) {
+            if (customModelData != -1) {
+                im.setCustomModelData(customModelData);
+            } else {
+                im.setCustomModelData(null);
+            }
+        }
+
         item.setItemMeta(im);
 
         this.item = item;

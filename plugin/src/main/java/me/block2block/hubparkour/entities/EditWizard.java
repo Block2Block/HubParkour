@@ -126,22 +126,34 @@ public class EditWizard {
                 }
                 String[] parts = message.split(":");
 
+                if (parts.length != 3) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Item.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
+                    return true;
+                }
+
                 short data;
                 Material material;
+                int customModelData;
                 try {
                     data = Short.parseShort(parts[1]);
                 } catch (NumberFormatException e) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Item.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number.", true, Collections.emptyMap());
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Item.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
+                    return true;
+                }
+                try {
+                    customModelData = Integer.parseInt(parts[2]);
+                } catch (NumberFormatException e) {
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Item.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
                     return true;
                 }
                 try {
                     material = Material.valueOf(parts[0].toUpperCase());
                 } catch (IllegalArgumentException e) {
-                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Item.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number.", true, Collections.emptyMap());
+                    ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Item.Invalid-GUI-Item", "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable).", true, Collections.emptyMap());
                     return true;
                 }
 
-                parkour.setItem(material, data);
+                parkour.setItem(material, data, customModelData);
                 returnToMainMenu();
                 return true;
             }
@@ -281,7 +293,7 @@ public class EditWizard {
                     commands = new ArrayList<>();
                 }
                 commands.add(message);
-                parkour.setEndCommands(commands);
+                parkour.setGlobalCheckpointCommands(commands);
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Commands.Command-Added", "Command successfully added! Type 'done' once you're finished.", true, Collections.emptyMap());
                 return true;
             }
@@ -638,7 +650,6 @@ public class EditWizard {
                         return;
                     }
                 }
-
                 parkour.setBorders(Arrays.asList(point, new BorderPoint(location)));
                 point = null;
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Border-Updated", "Border successfully updated!", true, Collections.emptyMap());
@@ -658,7 +669,7 @@ public class EditWizard {
     }
 
     private boolean borderCheck(Location location) {
-        if (!parkour.getBorders().isEmpty()) {
+        if (parkour.getBorders().size() == 2) {
             Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
 
 
@@ -739,7 +750,7 @@ public class EditWizard {
     }
 
     private void displayGlobalCheckpointMenu() {
-        currentModification = WizardStep.END_COMMAND;
+        currentModification = WizardStep.CHECKPOINT_COMMAND;
         StringBuilder msg = new StringBuilder(ConfigUtil.getString("Messages.Commands.Admin.Edit.Commands.List-Header", "Your current {type} commands:").replace("{type}", "global checkpoint") + "\n");
 
         if (parkour.getGlobalCheckpointCommands() != null && !parkour.getGlobalCheckpointCommands().isEmpty()) {

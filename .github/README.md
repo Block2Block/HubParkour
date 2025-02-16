@@ -1,6 +1,6 @@
 # HubParkour
 
-Welcome to HubParkour, the ultimate Hub Parkour solution!
+Welcome to HubParkour, the ultimate Hub Parkour solution! This plugin contains lots of features and is aimed to be as lightweight as possible! It is completely configurable, including all messages and functionality!
 
 ## Installation
 
@@ -25,13 +25,13 @@ Maven:
     <dependency>
         <groupId>me.block2block.hubparkour</groupId>
         <artifactId>hubparkour-api</artifactId>
-        <version>2.8</version>
+        <version>2.8.1</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
 ```
 
-**Note:** Old versions of the API have been removed from Nexus as it was causing issues with the current deployment. Please update your API version.
+**Note:** Only version 2.7.2+ are deployed to the repository due to issues we encountered with nexus.
 
 ### Usage
 
@@ -74,4 +74,6 @@ We expect all contributors to follow our Code of Conduct, whether that is creati
 
 This software is distributed with the Apache 2.0 license. For details about this, please view our full license [here](../LICENSE).
 
+## Support
 
+You can find our support channels in discord, which is [here](https://discord.gg/PVdDNWs). Please make sure you read the messages in #faq and #tickets before you make a ticket.

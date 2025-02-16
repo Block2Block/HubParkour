@@ -39,9 +39,10 @@ public class Parkour implements IParkour {
 
     private Material material;
     private short data;
+    private int customModelData;
 
     @SuppressWarnings("unused")
-    public Parkour(int id, UUID server, String name, StartPoint start, EndPoint end, ExitPoint exit, List<Checkpoint> checkpoints, RestartPoint restartPoint, List<BorderPoint> borderPoints, List<String> globalCheckpointCommands, List<String> endCommands, int rewardCooldown, Material material, short data) {
+    public Parkour(int id, UUID server, String name, StartPoint start, EndPoint end, ExitPoint exit, List<Checkpoint> checkpoints, RestartPoint restartPoint, List<BorderPoint> borderPoints, List<String> globalCheckpointCommands, List<String> endCommands, int rewardCooldown, Material material, short data, int customModelData) {
         this.id = id;
         this.server = server;
         this.start = start;
@@ -69,6 +70,7 @@ public class Parkour implements IParkour {
 
         this.material = material;
         this.data = data;
+        this.customModelData = customModelData;
     }
 
     @SuppressWarnings("unused")
@@ -95,6 +97,7 @@ public class Parkour implements IParkour {
         this.rewardCooldown = parkour.getRewardCooldown();
         this.material = parkour.getItemMaterial();
         this.data = parkour.getItemData();
+        this.customModelData = parkour.getCustomModelData();
     }
 
     public int getNoCheckpoints() {
@@ -206,6 +209,7 @@ public class Parkour implements IParkour {
                     defaultValues.add("&9&lCheckpoint #{checkpoint}");
                     break;
                 default:
+                    continue;
             }
             Location l = p.getLocation().clone();
             l.setX(l.getX() + 0.5);
@@ -241,6 +245,32 @@ public class Parkour implements IParkour {
     public void removeHolograms() {
         for (Hologram h : holograms.values()) {
             h.delete();
+        }
+        for (PressurePlate p : getAllPoints()) {
+            switch (p.getType()) {
+                case 0:
+                    if (!ConfigUtil.getBoolean("Settings.Holograms.Start", true)) {
+                        continue;
+                    }
+                    break;
+                case 1:
+                    if (!ConfigUtil.getBoolean("Settings.Holograms.End", true)) {
+                        continue;
+                    }
+                    break;
+                case 3:
+                    if (!ConfigUtil.getBoolean("Settings.Holograms.Checkpoint", true)) {
+                        continue;
+                    }
+                    break;
+                default:
+                    continue;
+            }
+
+            Hologram hologram = DHAPI.getHologram("hp_" + id + "-" + p.getType() + ((p instanceof Checkpoint)?"-" + ((Checkpoint) p).getCheckpointNo():""));
+            if (hologram != null) {
+                hologram.delete();
+            }
         }
     }
 
@@ -516,13 +546,19 @@ public class Parkour implements IParkour {
     }
 
     @Override
-    public void setItem(Material material, short data) {
+    public int getCustomModelData() {
+        return customModelData;
+    }
+
+    @Override
+    public void setItem(Material material, short data, int customModelData) {
         this.material = material;
         this.data = data;
+        this.customModelData = customModelData;
         new BukkitRunnable(){
             @Override
             public void run() {
-                HubParkour.getInstance().getDbManager().setItem(id, material, data);
+                HubParkour.getInstance().getDbManager().setItem(id, material, data, customModelData);
             }
         }.runTaskAsynchronously(HubParkour.getInstance());
     }

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AIAssistantCustomInstructionsStorage">
+    <option name="instructions">
+      <map>
+        <entry key="AIAssistant.VCS.GenerateCommitMessage">
+          <value>
+            <AIAssistantStoredInstruction>
+              <option name="actionId" value="AIAssistant.VCS.GenerateCommitMessage" />
+              <option name="content" value="Avoid overly verbose descriptions or unnecessary details.&#10;The first line should start with the version number including a 'v' at the start, following by a colon and a short overview of the changes (less than 10 words)&#10;The next lines should be a bullet pointed list of changes and bugfixes. It should not contain any class details.&#10;The list should be in the format: &quot; - Change&quot;." />
+            </AIAssistantStoredInstruction>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="AnalysisUIOptions">
     <option name="SCOPE_TYPE" value="4" />
   </component>
@@ -16,8 +30,10 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.8: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite. (Issue #37)&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;- Fixed a bug where Exit Points would not work until the server is restarted.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.8.2: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14.&#10; - Fixed an issue where the MySQL tables would generate incorrectly and resultantly cause issues loading parkours.&#10; - Fixed an issue where MySQL would reject a database schema update due to incorrect query.&#10; - Fixed an issue where you couldn't delete parkours that were in a world that didn't exist anymore.&#10; - Fixed an exploit where players could put items in the cursor to prevent them being removed when players inventory is cleared.&#10; - Hopefully resolved issues with holograms not disappearing until a server restart if a parkour is deleted&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
+      <change beforePath="$PROJECT_DIR$/.github/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/IParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/IParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/gui/GUIItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/gui/GUIItem.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +115,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop/2.8" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -112,32 +128,65 @@
       &quot;state&quot;: &quot;OPEN&quot;
     }
   ],
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;
-  }
+  &quot;lastFilter&quot;: {}
 }</component>
   <component name="GitHubPullRequestState">{
   &quot;prStates&quot;: [
     {
       &quot;id&quot;: {
-        &quot;id&quot;: &quot;PR_kwDODkrbms6IKpnk&quot;,
-        &quot;number&quot;: 42
-      },
-      &quot;lastSeen&quot;: 1737220847118
-    },
-    {
-      &quot;id&quot;: {
         &quot;id&quot;: &quot;PR_kwDODkrbms6IPaCY&quot;,
         &quot;number&quot;: 44
       },
-      &quot;lastSeen&quot;: 1737231529595
+      &quot;lastSeen&quot;: 1740662625149
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms6IKpnk&quot;,
+        &quot;number&quot;: 42
+      },
+      &quot;lastSeen&quot;: 1740662802321
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms4_0Zh1&quot;,
+        &quot;number&quot;: 28
+      },
+      &quot;lastSeen&quot;: 1740662970634
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms5bn8-t&quot;,
+        &quot;number&quot;: 35
+      },
+      &quot;lastSeen&quot;: 1740663028639
     },
     {
       &quot;id&quot;: {
         &quot;id&quot;: &quot;PR_kwDODkrbms5jChUa&quot;,
         &quot;number&quot;: 36
       },
-      &quot;lastSeen&quot;: 1737232128345
+      &quot;lastSeen&quot;: 1740663029508
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms54pWZt&quot;,
+        &quot;number&quot;: 40
+      },
+      &quot;lastSeen&quot;: 1740663030318
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms6IQES_&quot;,
+        &quot;number&quot;: 45
+      },
+      &quot;lastSeen&quot;: 1740663030829
+    },
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDODkrbms6IRTqy&quot;,
+        &quot;number&quot;: 46
+      },
+      &quot;lastSeen&quot;: 1740663045608
     }
   ]
 }</component>
@@ -198,30 +247,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Maven.hubparkour [clean,javadoc:javadoc].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.hubparkour [clean,package,deploy,-pl...].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.hubparkour [clean,package,deploy].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.hubparkour [clean,package].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.hubparkour [javadoc:javadoc].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Programming Projects/Java/HubParkour&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;AtomSelectConfig&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Maven.hubparkour [clean,javadoc:javadoc].executor": "Run",
+    "Maven.hubparkour [clean,package,deploy,-pl...].executor": "Run",
+    "Maven.hubparkour [clean,package,deploy].executor": "Run",
+    "Maven.hubparkour [clean,package].executor": "Run",
+    "Maven.hubparkour [javadoc:javadoc].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "extract.method.default.visibility": "private",
+    "git-widget-placeholder": "custom__models",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/Programming Projects/Java/HubParkour",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "AtomSelectConfig",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="community" />
@@ -238,9 +287,9 @@
       <recent name="E:\Programming Projects\Java\HubParkour\plugin\src\main\resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="me.block2block.hubparkour.dbschema" />
       <recent name="me.block2block.hubparkour.api.gui.exception" />
       <recent name="me.block2block.hubparkour.api.gui" />
-      <recent name="me.block2block.hubparkour.dbschema" />
       <recent name="me.block2block.hubparkour.signs" />
       <recent name="me.block2block.hubparkour.api.plates" />
     </key>
@@ -249,11 +298,11 @@
     <option name="myCommands">
       <command value="mvn deploy" />
       <command value="mvn clean package -Xlint:deprecation" />
-      <command value="mvn clean package" />
       <command value="mvn clean package deploy -pl hubparkour-api -am" />
       <command value="mvn clean package deploy" />
       <command value="mvn javadoc:javadoc" />
       <command value="mvn clean javadoc:javadoc" />
+      <command value="mvn clean package" />
     </option>
   </component>
   <component name="RunManager" selected="Maven.hubparkour [clean,package]">
@@ -319,8 +368,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.153" />
-        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.153" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
       </set>
     </attachedChunks>
   </component>
@@ -729,6 +778,15 @@
       <workItem from="1737293065618" duration="3068000" />
       <workItem from="1737299072219" duration="13336000" />
       <workItem from="1737317862194" duration="9485000" />
+      <workItem from="1737825309616" duration="218000" />
+      <workItem from="1739117299034" duration="4213000" />
+      <workItem from="1739149198735" duration="24000" />
+      <workItem from="1739149234324" duration="351000" />
+      <workItem from="1740409680477" duration="5523000" />
+      <workItem from="1740662212587" duration="1560000" />
+      <workItem from="1741679060289" duration="399000" />
+      <workItem from="1741865843161" duration="3000" />
+      <workItem from="1743172768559" duration="2548000" />
     </task>
     <task id="LOCAL-00026" summary="Updating readme.md">
       <created>1588429523231</created>
@@ -1073,7 +1131,7 @@
       <option name="project" value="LOCAL" />
       <updated>1681495150549</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1118,11 +1176,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.6.4: Placeholder Bugfix&#10; - Fixed a bug where position name and time placeholders did not work as intended.&#10; - Optimised imports." />
-    <MESSAGE value="v2.6.5: Another Placeholder Bugfix&#10; - Fixed an issue where the positionname placeholder wouldn't be recognised if the position did not yet exist.&#10; - Fixed an issue with resolving dependencies for API users." />
-    <MESSAGE value="v2.6.6: Command bugfix&#10; - Fixed an issue where checkpoint reward commands would cause an exception." />
-    <MESSAGE value="v2.6.6: Command bugfix&#10; - Fixed an issue where checkpoint reward commands would cause an exception.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
-    <MESSAGE value="v2.6.7: Metrics bugfix&#10; - Fixed an issue where metrics would prevent the plugin from loading." />
     <MESSAGE value="v2.6.7: Metrics bugfix&#10; - Fixed an issue where metrics would prevent the plugin from loading.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
     <MESSAGE value="Start work on 2.7&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
     <MESSAGE value="Implement all features, awaiting testing" />
@@ -1143,7 +1196,12 @@
     <MESSAGE value="v2.8-SNAPSHOT: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite.&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
     <MESSAGE value="v2.8-SNAPSHOT: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite.&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;- Fixed a bug where Exit Points would not work until the server is restarted.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
     <MESSAGE value="v2.8: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite. (Issue #37)&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;- Fixed a bug where Exit Points would not work until the server is restarted.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.8: Rewards Overhaul, new Parkour GUI and more&#10;- You can now specify multiple end reward commands.&#10;- You can now specify multiple checkpoint rewards.&#10;- You can now specify rewards for specific checkpoints&#10;- You can now change the HubParkour table prefix for MySQL and SQLite. (Issue #37)&#10;- New Parkour List GUI to see a full list of parkours and teleport to them.&#10;- Edit Wizard has been internally revamped to make it easier to see what is happening.&#10;- Setup Wizard has been internally revamped to make it easier to see which step is current ongoing.&#10;- Some messages have been jigged around in the config to make more sense.&#10;- New GUI framework has been added to the API for easier GUI generation.&#10;- Improved exception logging.&#10;- Fixed a bug with falling where the point would move further backwards after every fall.&#10;- Fixed a bug where Exit Points would not work until the server is restarted.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <MESSAGE value="v2.8.1: Rewards bugfix&#10;- Fixed a bug where if there was no commands set, an empty string was in the command list which resultantly broke command dispatches in the Bukkit API." />
+    <MESSAGE value="v2.8.1:" />
+    <MESSAGE value="v2.8.2-SNAPSHOT: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14." />
+    <MESSAGE value="v2.8.2-SNAPSHOT: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14.&#10; - Fixed an issue where the MySQL tables would generate incorrectly and resultantly cause issues loading parkours.&#10; - Fixed an issue where MySQL would reject a database schema update due to incorrect query.&#10; - Fixed an issue where players could put items in the cursor to prevent them being removed when players inventory is cleared.&#10; - Hopefully resolved issues with holograms not disappearing until a server restart if a parkour is deleted&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <MESSAGE value="v2.8.2: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14.&#10; - Fixed an issue where the MySQL tables would generate incorrectly and resultantly cause issues loading parkours.&#10; - Fixed an issue where MySQL would reject a database schema update due to incorrect query.&#10; - Fixed an issue where you couldn't delete parkours that were in a world that didn't exist anymore.&#10; - Fixed an exploit where players could put items in the cursor to prevent them being removed when players inventory is cleared.&#10; - Hopefully resolved issues with holograms not disappearing until a server restart if a parkour is deleted&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.8.2: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14.&#10; - Fixed an issue where the MySQL tables would generate incorrectly and resultantly cause issues loading parkours.&#10; - Fixed an issue where MySQL would reject a database schema update due to incorrect query.&#10; - Fixed an issue where you couldn't delete parkours that were in a world that didn't exist anymore.&#10; - Fixed an exploit where players could put items in the cursor to prevent them being removed when players inventory is cleared.&#10; - Hopefully resolved issues with holograms not disappearing until a server restart if a parkour is deleted&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

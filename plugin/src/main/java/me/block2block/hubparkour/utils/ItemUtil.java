@@ -12,7 +12,7 @@ import java.util.Arrays;
 @SuppressWarnings("deprecation")
 public class ItemUtil {
 
-    public static ItemStack ci(Material type, String name, int amount, String lore, short data, String skullName) {
+    public static ItemStack ci(Material type, String name, int amount, String lore, short data, int customModelData, String skullName) {
         ItemStack is = new ItemStack(type, amount, data);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(HubParkour.c(false, name));
@@ -31,13 +31,28 @@ public class ItemUtil {
             im.setUnbreakable(true);
         }
 
+        if (HubParkour.isPost1_14()) {
+            if (customModelData != -1) {
+                im.setCustomModelData(customModelData);
+            } else {
+                im.setCustomModelData(null);
+            }
+        }
+
+
         im.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES);
         is.setItemMeta(im);
         return is;
     }
-    public static ItemStack ci(Material type, String name, int amount, String lore, short data) {
-        return ci(type, name, amount, lore, data, null);
+
+    public static ItemStack ci(Material type, String name, int amount, String lore, short data, int customModelData) {
+        return ci(type, name, amount, lore, data, customModelData, null);
     }
+
+    public static ItemStack ci(Material type, String name, int amount, String lore, short data) {
+        return ci(type, name, amount, lore, data, -1, null);
+    }
+
     public static ItemStack ci(Material type, String name, int amount, String lore) {
         return ci(type, name, amount, lore, (short)0);
     }

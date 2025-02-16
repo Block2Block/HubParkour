@@ -115,4 +115,13 @@ public class HubParkourAPI {
         return BackendAPI.getImplementation().isPre1_13();
     }
 
+    /**
+     * Determines whether the server version is 1.14 or newer.
+     *
+     * @return true if the server version is 1.14 or above, false otherwise.
+     */
+    public static boolean isPost1_14() {
+        return BackendAPI.getImplementation().isPost1_14();
+    }
+
 }

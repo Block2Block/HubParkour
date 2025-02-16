@@ -241,8 +241,8 @@ Messages:
         Please-Set-Reward-Cooldown: "Please specify a cooldown for you rewards in hours (only applicable when you have repeat-rewards enabled). If you do not wish to have one, please type 'none'."
         Command-Added: "The command has been added! When you're finished, type 'done'."
         Invalid-Cooldown: "That cooldown is not valid. Please try again. If you do not wish to have one, please type 'none'."
-        Please-Set-GUI-Item: "Cooldown has been set! Please specify how you wish for the GUI to display in-game. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number."
-        Invalid-GUI-Item: "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number."
+        Please-Set-GUI-Item: "Cooldown has been set! Please specify how you wish for the GUI to display in-game. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable)."
+        Invalid-GUI-Item: "That GUI item is not valid. Please try again. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable)."
 
         Name-Taken: "That name is already taken. Please try again."
 
@@ -327,8 +327,8 @@ Messages:
         Invalid-Cooldown: "That cooldown is not valid. Please try again. If you do not wish to have one, please type 'none'."
         Reward-Cooldown-Updated: "Reward cooldown successfully updated!"
         Item:
-          Enter-Item: "Please specify how you wish for the GUI to display in-game. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number. To cancel, type 'cancel'."
-          Invalid-GUI-Item: "That GUI item is not valid. Please try again. Format it MATERIAL:DATA, where MATERIAL is the item type from the Spigot API, and DATA is a number."
+          Enter-Item: "Please specify how you wish for the GUI to display in-game. Format it MATERIAL:DATA:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable). To cancel, type 'cancel'."
+          Invalid-GUI-Item: "That GUI item is not valid. Please try again. Format it MATERIAL:DATA:MODEL:MODEL, where MATERIAL is the item type from the Spigot API, DATA is a number, and MODEL is the custom model data number (1.14+ only, -1 to disable)."
           Successful: "Item set successfully!"
         Checkpoints:
           Delete:
@@ -522,18 +522,24 @@ Settings:
       Slot: 4
       Item: "GOLD_PLATE"
       Item-Data: 0
+      # 1.14+ only: allows you to specify custom item data. Set to -1 to disable.
+      Custom-Model-Data: -1
       Name: "&aTeleport to Last Checkpoint"
       Confirmation: true
     Reset:
       Slot: 5
       Item: "WOOD_DOOR"
       Item-Data: 0
+      # 1.14+ only: allows you to specify custom item data. Set to -1 to disable.
+      Custom-Model-Data: -1
       Name: "&cReset"
       Confirmation: true
     Cancel:
       Slot: 6
       Item: "BED"
       Item-Data: 0
+      # 1.14+ only: allows you to specify custom item data. Set to -1 to disable.
+      Custom-Model-Data: -1
       Name: "&cCancel"
       Confirmation: true
     Hide:
@@ -541,10 +547,14 @@ Settings:
       Hidden:
         Item: "MAGMA_CREAM"
         Item-Data: 0
+        # 1.14+ only: allows you to specify custom item data. Set to -1 to disable.
+        Custom-Model-Data: -1
         Name: "&cShow all players"
       Shown:
         Item: "SLIME_BALL"
         Item-Data: 0
+        # 1.14+ only: allows you to specify custom item data. Set to -1 to disable.
+        Custom-Model-Data: -1
         Name: "&aHide all players"
 
   Leaderboard:

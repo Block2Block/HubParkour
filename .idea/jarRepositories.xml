@@ -4,6 +4,11 @@
     <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
+      <option name="url" value="http://repository.rnd.amadeus.net/mvn-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
@@ -25,6 +30,11 @@
       <option name="id" value="spigot-repo" />
       <option name="name" value="spigot-repo" />
       <option name="url" value="https://hub.spigotmc.org/nexus/content/repositories/snapshots/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="jfe-releases" />
+      <option name="name" value="jfe-releases-repository" />
+      <option name="url" value="http://repository.rnd.amadeus.net/jfe-public-maven-release-cmjfe/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="placeholderapi" />

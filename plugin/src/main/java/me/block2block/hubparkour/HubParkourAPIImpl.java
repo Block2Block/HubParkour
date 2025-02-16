@@ -85,4 +85,8 @@ public class HubParkourAPIImpl extends BackendAPI {
         return HubParkour.isPre1_13();
     }
 
+    @Override
+    public boolean isPost1_14() {
+        return HubParkour.isPost1_14();
+    }
 }

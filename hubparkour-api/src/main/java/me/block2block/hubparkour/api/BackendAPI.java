@@ -109,4 +109,11 @@ public abstract class BackendAPI {
      */
     public abstract boolean isPre1_13();
 
+    /**
+     * Determines whether the server version is 1.14 or newer.
+     *
+     * @return true if the server version is 1.14 or above
+     */
+    public abstract boolean isPost1_14();
+
 }

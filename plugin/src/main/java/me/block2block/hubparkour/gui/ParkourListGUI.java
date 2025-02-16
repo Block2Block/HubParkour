@@ -52,7 +52,12 @@ public class ParkourListGUI extends GUI {
                     }
                 }
             } else {
-                Parkour parkour = parkours.get(((currentPage - 1) * 28) + ((row - 1) * 7) + (column - 1));
+                int pi = ((currentPage - 1) * 28) + ((row - 1) * 7) + (column - 1);
+                if (pi >= parkours.size()) {
+                    //Do nothing
+                    return;
+                }
+                Parkour parkour = parkours.get(pi);
                 if (!CacheManager.isParkour(player)) {
                     Location l = parkour.getRestartPoint().getLocation().clone();
                     l.setX(l.getX() + 0.5);

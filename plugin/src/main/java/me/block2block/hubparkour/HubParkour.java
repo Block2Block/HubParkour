@@ -5,10 +5,7 @@ import me.block2block.hubparkour.api.db.DatabaseSchemaUpdate;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
-import me.block2block.hubparkour.dbschema.Four;
-import me.block2block.hubparkour.dbschema.One;
-import me.block2block.hubparkour.dbschema.Three;
-import me.block2block.hubparkour.dbschema.Two;
+import me.block2block.hubparkour.dbschema.*;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
@@ -39,7 +36,7 @@ import java.util.logging.Level;
 
 public class HubParkour extends JavaPlugin {
 
-    private static final int CURRENT_SCHEMA = 4;
+    private static final int CURRENT_SCHEMA = 5;
     private static final Map<Integer, DatabaseSchemaUpdate> schemaUpdates = new HashMap<>();
 
     private static HubParkour instance;
@@ -51,6 +48,7 @@ public class HubParkour extends JavaPlugin {
     private static boolean pre1_13 = false;
     private static boolean post1_8 = true;
     private static boolean post1_9 = false;
+    private static boolean post1_14 = false;
 
     private static UUID serverUuid;
 
@@ -59,6 +57,7 @@ public class HubParkour extends JavaPlugin {
         registerSchema(new Two());
         registerSchema(new Three());
         registerSchema(new Four());
+        registerSchema(new Five());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -94,7 +93,18 @@ public class HubParkour extends JavaPlugin {
                     pre1_13 = true;
                     post1_8 = false;
                     break;
+                case "1_13_R1":
+                case "1_13_R2":
+                    pre1_13 = false;
+                    post1_8 = true;
+                    post1_9 = true;
+                    getLogger().info("1.13+ server version detected.");
+                    //Elytras are present in this version, register Elytra listener.
+                    Bukkit.getPluginManager().registerEvents(new ElytraListener(), this);
+                    Bukkit.getPluginManager().registerEvents(new PotionListener(), this);
+                    break;
                 default:
+                    post1_14 = true;
                     pre1_13 = false;
                     post1_8 = true;
                     post1_9 = true;
@@ -109,6 +119,7 @@ public class HubParkour extends JavaPlugin {
             // this happens due to the remapping of the package version in paper.
             // it only happens for version >= 1.20.6
 
+            post1_14 = true;
             pre1_13 = false;
             post1_8 = true;
             post1_9 = true;
@@ -376,24 +387,24 @@ public class HubParkour extends JavaPlugin {
         }
 
         if (ConfigUtil.getInt("Settings.Parkour-Items.Cancel.Slot", 6) != -1) {
-            ItemStack item = ItemUtil.ci(cancel, ConfigUtil.getString("Settings.Parkour-Items.Cancel.Name", "&cCancel"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Cancel.Item-Data", 0));
+            ItemStack item = ItemUtil.ci(cancel, ConfigUtil.getString("Settings.Parkour-Items.Cancel.Name", "&cCancel"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Cancel.Item-Data", 0), ConfigUtil.getInt("Settings.Parkour-Items.Cancel.Custom-Model-Data", -1));
             CacheManager.setItem(2, item);
         }
 
         if (ConfigUtil.getInt("Settings.Parkour-Items.Reset.Slot", 5) != -1) {
-            ItemStack item = ItemUtil.ci(reset, ConfigUtil.getString("Settings.Parkour-Items.Reset.Name", "&cReset"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Reset.Item-Data", 0));
+            ItemStack item = ItemUtil.ci(reset, ConfigUtil.getString("Settings.Parkour-Items.Reset.Name", "&cReset"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Reset.Item-Data", 0), ConfigUtil.getInt("Settings.Parkour-Items.Reset.Custom-Model-Data", -1));
             CacheManager.setItem(0, item);
         }
 
         if (ConfigUtil.getInt("Settings.Parkour-Items.Checkpoint.Slot", 4) != -1) {
-            ItemStack item = ItemUtil.ci(checkpoint, ConfigUtil.getString("Settings.Parkour-Items.Checkpoint.Name", "&aTeleport to Last Checkpoint"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Checkpoint.Item-Data", 0));
+            ItemStack item = ItemUtil.ci(checkpoint, ConfigUtil.getString("Settings.Parkour-Items.Checkpoint.Name", "&aTeleport to Last Checkpoint"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Checkpoint.Item-Data", 0), ConfigUtil.getInt("Settings.Parkour-Items.Checkpoint.Custom-Model-Data", -1));
             CacheManager.setItem(1, item);
         }
 
         if (ConfigUtil.getInt("Settings.Parkour-Items.Hide.Slot", 8) != -1) {
-            ItemStack item = ItemUtil.ci(hidden, ConfigUtil.getString("Settings.Parkour-Items.Hide.Hidden.Name", "&cShow all players"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Hide.Hidden.Item-Data", 0));
+            ItemStack item = ItemUtil.ci(hidden, ConfigUtil.getString("Settings.Parkour-Items.Hide.Hidden.Name", "&cShow all players"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Hide.Hidden.Item-Data", 0), ConfigUtil.getInt("Settings.Parkour-Items.Hide.Hidden.Custom-Model-Data", -1));
             CacheManager.setItem(4, item);
-            item = ItemUtil.ci(shown, ConfigUtil.getString("Settings.Parkour-Items.Hide.Shown.Name", "&aHide all players"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Hide.Shown.Item-Data", 0));
+            item = ItemUtil.ci(shown, ConfigUtil.getString("Settings.Parkour-Items.Hide.Shown.Name", "&aHide all players"), 1, "", (short) ConfigUtil.getInt("Settings.Parkour-Items.Hide.Shown.Item-Data", 0), ConfigUtil.getInt("Settings.Parkour-Items.Hide.Shown.Custom-Model-Data", -1));
             CacheManager.setItem(3, item);
         }
 
@@ -434,6 +445,10 @@ public class HubParkour extends JavaPlugin {
 
     public static boolean isPre1_13() {
         return pre1_13;
+    }
+
+    public static boolean isPost1_14() {
+        return post1_14;
     }
 
     public static boolean isPost1_8() {

@@ -99,7 +99,7 @@ public class PressurePlateListener implements Listener {
                 boolean tplava = ConfigUtil.getBoolean("Settings.Teleport.On-Lava", true);
                 ParkourPlayerTeleportEvent.TeleportReason reason =
                         ParkourPlayerTeleportEvent.TeleportReason.UNKNOWN;
-                if (e.getTo().getBlock().getType() == Material.WATER) {
+                if (e.getTo().getBlock().getType() == Material.WATER || e.getTo().getBlock().getType() == Material.BUBBLE_COLUMN) {
                     reason = ParkourPlayerTeleportEvent.TeleportReason.WATER;
                     if (!tpwater) {
                         return;
@@ -364,6 +364,7 @@ public class PressurePlateListener implements Listener {
                             }
 
                             player.checkpoint(checkpoint);
+                            player.setCurrentSplit();
                             return;
                         } else {
                             //Do nothing, is doing a different parkour.

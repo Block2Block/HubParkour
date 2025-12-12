@@ -139,7 +139,6 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
     public void checkpoint(Checkpoint checkpoint) {
         if (lastReached == checkpoint.getCheckpointNo()) {
-            currentSplit = System.currentTimeMillis();
             return;
         }
         if (!checkpoints.contains(checkpoint)) {
@@ -541,6 +540,10 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void setCurrentSplit(){
+        currentSplit = System.currentTimeMillis();
     }
 
     public void restart() {

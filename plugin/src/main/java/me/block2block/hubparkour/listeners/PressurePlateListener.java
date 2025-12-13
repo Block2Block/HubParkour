@@ -364,7 +364,6 @@ public class PressurePlateListener implements Listener {
                             }
 
                             player.checkpoint(checkpoint);
-                            player.setCurrentSplit();
                             return;
                         } else {
                             //Do nothing, is doing a different parkour.

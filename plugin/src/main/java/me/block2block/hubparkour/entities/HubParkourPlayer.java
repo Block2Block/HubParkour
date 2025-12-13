@@ -139,6 +139,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
 
     public void checkpoint(Checkpoint checkpoint) {
         if (lastReached == checkpoint.getCheckpointNo()) {
+            setCurrentSplit();
             return;
         }
         if (!checkpoints.contains(checkpoint)) {
@@ -249,8 +250,8 @@ public class HubParkourPlayer implements IHubParkourPlayer {
                     HubParkour.getInstance().getDbManager().reachedCheckpoint(player, parkour, checkpoint);
                 }
             }.runTaskAsynchronously(HubParkour.getInstance());
-
         }
+        setCurrentSplit();
     }
 
     public void end(ParkourPlayerFailEvent.FailCause cause) {
@@ -542,7 +543,7 @@ public class HubParkourPlayer implements IHubParkourPlayer {
         return player;
     }
 
-    public void setCurrentSplit(){
+    private void setCurrentSplit(){
         currentSplit = System.currentTimeMillis();
     }
 

@@ -474,6 +474,9 @@ Settings:
     #It is recommended to keep this disabled to prevent farming of a single checkpoint. This setting overrides repeat rewards
     #Note that this does not effect checkpoints reached in a single run, once a checkpoint reward is given in a run, it cannot be given again for the same checkpoint.
     Checkpoint-Rewards-Everytime: false
+    #Whether to prevent all inventory clicks while in parkour.
+    #This blocks clicking any items in the inventory, not just parkour items.
+    Block-Inventory-Clicks: false
     #Whether a player should be failed for doing these specific things.
     Fail:
       On-Teleport: true

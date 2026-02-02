@@ -40,6 +40,11 @@ public class DropListener implements Listener {
         if (e.getWhoClicked() instanceof Player) {
             Player player = (Player) e.getWhoClicked();
             if (CacheManager.isParkour(player)) {
+                if (ConfigUtil.getBoolean("Settings.Exploit-Prevention.Block-Inventory-Clicks", false)) {
+                    e.setCancelled(true);
+                    return;
+                }
+
                 for (ParkourItem item : HubParkourAPI.getPlayer(player).getParkourItems()) {
                     if (item != null) {
                         if (item.getItem() != null) {

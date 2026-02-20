@@ -3,7 +3,7 @@ package me.block2block.hubparkour.entities;
 
 import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
-import me.block2block.hubparkour.api.ILeaderboardHologram;
+import me.block2block.hubparkour.api.hologram.ILeaderboardHologram;
 import me.block2block.hubparkour.api.ParkourRun;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFinishEvent;

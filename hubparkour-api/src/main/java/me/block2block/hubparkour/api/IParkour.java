@@ -1,5 +1,6 @@
 package me.block2block.hubparkour.api;
 
+import me.block2block.hubparkour.api.hologram.ILeaderboardHologram;
 import me.block2block.hubparkour.api.plates.*;
 import org.bukkit.Material;
 

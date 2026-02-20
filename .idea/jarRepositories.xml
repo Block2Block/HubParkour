@@ -4,12 +4,12 @@
     <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
-      <option name="url" value="http://repository.rnd.amadeus.net/mvn-public/" />
+      <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
-      <option name="url" value="https://repo.maven.apache.org/maven2" />
+      <option name="url" value="http://repository.rnd.amadeus.net/mvn-public/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jitpack.io" />
@@ -30,6 +30,11 @@
       <option name="id" value="spigot-repo" />
       <option name="name" value="spigot-repo" />
       <option name="url" value="https://hub.spigotmc.org/nexus/content/repositories/snapshots/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="fancyinnovations-releases" />
+      <option name="name" value="FancyInnovations Repository" />
+      <option name="url" value="https://repo.fancyinnovations.com/releases" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="jfe-releases" />

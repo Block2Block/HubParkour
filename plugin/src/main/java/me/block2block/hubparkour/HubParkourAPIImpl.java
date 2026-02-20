@@ -4,7 +4,9 @@ import me.block2block.hubparkour.api.BackendAPI;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
 import me.block2block.hubparkour.api.IParkour;
 import me.block2block.hubparkour.api.gui.GUI;
+import me.block2block.hubparkour.api.hologram.IHologram;
 import me.block2block.hubparkour.managers.CacheManager;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -88,5 +90,13 @@ public class HubParkourAPIImpl extends BackendAPI {
     @Override
     public boolean isPost1_14() {
         return HubParkour.isPost1_14();
+    }
+
+    @Override
+    public IHologram createHologram(IParkour parkour, String name, Location location) {
+        if (!HubParkour.isHolograms()) {
+            return null;
+        }
+        return HubParkour.getHologramFactory().createHologram(parkour, name, location);
     }
 }

@@ -1,6 +1,7 @@
-package me.block2block.hubparkour.api;
+package me.block2block.hubparkour.api.hologram;
 
 
+import me.block2block.hubparkour.api.IParkour;
 import org.bukkit.Location;
 
 /**

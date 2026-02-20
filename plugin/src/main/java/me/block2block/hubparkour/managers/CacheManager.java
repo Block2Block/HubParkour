@@ -101,6 +101,9 @@ public class CacheManager {
     }
 
     public static void addParkour(Parkour parkour) {
+        if (parkour == null) {
+            return;
+        }
         parkours.add(parkour);
     }
 

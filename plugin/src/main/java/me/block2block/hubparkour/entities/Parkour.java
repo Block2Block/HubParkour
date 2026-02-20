@@ -4,7 +4,8 @@ import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
 import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
-import me.block2block.hubparkour.api.ILeaderboardHologram;
+import me.block2block.hubparkour.api.hologram.IHologram;
+import me.block2block.hubparkour.api.hologram.ILeaderboardHologram;
 import me.block2block.hubparkour.api.IParkour;
 import me.block2block.hubparkour.api.plates.*;
 import me.block2block.hubparkour.api.signs.ClickableSign;
@@ -33,7 +34,7 @@ public class Parkour implements IParkour {
     private List<String> endCommands;
     private RestartPoint restartPoint;
     private int rewardCooldown;
-    private final Map<PressurePlate, Hologram> holograms = new HashMap<>();
+    private final Map<PressurePlate, IHologram> holograms = new HashMap<>();
     private final List<ILeaderboardHologram> leaderboardHolograms = new ArrayList<>();
     private final List<BorderPoint> borderPoints;
 
@@ -178,6 +179,9 @@ public class Parkour implements IParkour {
 
     @SuppressWarnings("unused")
     public void generateHolograms() {
+        if (!HubParkour.isHolograms()) {
+            return;
+        }
         for (PressurePlate p : getAllPoints()) {
             List<String> defaultValues = new ArrayList<>();
             String configKey = "";
@@ -218,12 +222,7 @@ public class Parkour implements IParkour {
             if (l.getWorld() == null) {
                 continue;
             }
-            Hologram hologram = DHAPI.getHologram("hp_" + id + "-" + p.getType() + ((p instanceof Checkpoint)?"-" + ((Checkpoint) p).getCheckpointNo():""));
-            if (hologram == null) {
-                hologram = DHAPI.createHologram("hp_" + id + "-" + p.getType() + ((p instanceof Checkpoint)?"-" + ((Checkpoint) p).getCheckpointNo():""), l);
-            } else {
-                DHAPI.moveHologram(hologram, l);
-            }
+            IHologram hologram = HubParkour.getHologramFactory().createHologram(p.getParkour(), "hp_" + id + "-" + p.getType() + ((p instanceof Checkpoint)?"-" + ((Checkpoint) p).getCheckpointNo():""), l);
             int counter = 0;
 
             List<String> lines = new ArrayList<>();
@@ -236,42 +235,17 @@ public class Parkour implements IParkour {
                 lines.add(s);
                 counter++;
             }
-            DHAPI.setHologramLines(hologram, lines);
+            hologram.setLines(lines);
             holograms.put(p, hologram);
         }
 
     }
 
     public void removeHolograms() {
-        for (Hologram h : holograms.values()) {
-            h.delete();
+        for (IHologram h : holograms.values()) {
+            h.remove();
         }
-        for (PressurePlate p : getAllPoints()) {
-            switch (p.getType()) {
-                case 0:
-                    if (!ConfigUtil.getBoolean("Settings.Holograms.Start", true)) {
-                        continue;
-                    }
-                    break;
-                case 1:
-                    if (!ConfigUtil.getBoolean("Settings.Holograms.End", true)) {
-                        continue;
-                    }
-                    break;
-                case 3:
-                    if (!ConfigUtil.getBoolean("Settings.Holograms.Checkpoint", true)) {
-                        continue;
-                    }
-                    break;
-                default:
-                    continue;
-            }
-
-            Hologram hologram = DHAPI.getHologram("hp_" + id + "-" + p.getType() + ((p instanceof Checkpoint)?"-" + ((Checkpoint) p).getCheckpointNo():""));
-            if (hologram != null) {
-                hologram.delete();
-            }
-        }
+        HubParkour.getHologramFactory().removeHologramsForParkour(this);
     }
 
     public void playerStart(IHubParkourPlayer p) {

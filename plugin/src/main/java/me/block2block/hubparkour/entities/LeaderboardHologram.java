@@ -1,9 +1,8 @@
 package me.block2block.hubparkour.entities;
 
-import eu.decentsoftware.holograms.api.DHAPI;
-import eu.decentsoftware.holograms.api.holograms.Hologram;
 import me.block2block.hubparkour.HubParkour;
-import me.block2block.hubparkour.api.ILeaderboardHologram;
+import me.block2block.hubparkour.api.hologram.IHologram;
+import me.block2block.hubparkour.api.hologram.ILeaderboardHologram;
 import me.block2block.hubparkour.utils.ConfigUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,7 +17,7 @@ public class LeaderboardHologram implements ILeaderboardHologram {
     private int id;
     private final Location location;
     private final Parkour parkour;
-    private Hologram hologram;
+    private IHologram hologram;
 
     public LeaderboardHologram(Location location, Parkour parkour, int id) {
         this.location = location;
@@ -50,18 +49,13 @@ public class LeaderboardHologram implements ILeaderboardHologram {
             HubParkour.getInstance().getLogger().info("The location of one of your leaderboard holograms for parkour " + parkour.getName() + " no longer exists. Please delete leaderboard hologram " + this.id + ".");
             return;
         }
-        hologram = DHAPI.getHologram("hp_leaderboard-" + ((parkour == null)?"global":parkour.getId()) + "-" + id);
-        if (hologram == null) {
-            hologram = DHAPI.createHologram("hp_leaderboard-" + ((parkour == null)?"global":parkour.getId()) + "-" + id, location);
-        } else {
-            DHAPI.moveHologram(hologram, location);
-        }
+        hologram = HubParkour.getHologramFactory().createHologram(parkour, "hp_leaderboard-" + ((parkour == null)?"global":parkour.getId()) + "-" + id, location);
         refresh();
     }
 
     public void remove() {
         if (hologram != null) {
-            hologram.delete();
+            hologram.remove();
         }
     }
 
@@ -76,7 +70,7 @@ public class LeaderboardHologram implements ILeaderboardHologram {
         new BukkitRunnable() {
             @Override
             public void run() {
-                DHAPI.setHologramLines(hologram, lines);
+                hologram.setLines(lines);
             }
         }.runTask(HubParkour.getInstance());
     }

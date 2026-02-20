@@ -2,7 +2,7 @@ package me.block2block.hubparkour.commands;
 
 import me.block2block.hubparkour.HubParkour;
 import me.block2block.hubparkour.api.IHubParkourPlayer;
-import me.block2block.hubparkour.api.ILeaderboardHologram;
+import me.block2block.hubparkour.api.hologram.ILeaderboardHologram;
 import me.block2block.hubparkour.api.events.admin.ParkourDeleteEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerFailEvent;
 import me.block2block.hubparkour.api.events.player.ParkourPlayerLeaveEvent;
@@ -171,6 +171,7 @@ public class CommandParkour implements CommandExecutor {
                         if (p.hasPermission("hubparkour.admin.list")) {
                             StringBuilder sb = new StringBuilder(ConfigUtil.getString("Messages.Commands.Admin.List.Header", "All active parkours:") + "\n");
                             for (Parkour parkour : CacheManager.getParkours()) {
+                                if (parkour == null) continue;
                                 sb.append(ConfigUtil.getString("Messages.Commands.Admin.List.Line", "&aID: {id} &r- &a{parkour-name} &r- &a{parkour-players} &ractive players.").replace("{parkour-name}", parkour.getName()).replace("{parkour-players}", "" + parkour.getPlayers().size()).replace("{id}", "" + parkour.getId())).append("\n");
                             }
 
@@ -212,7 +213,9 @@ public class CommandParkour implements CommandExecutor {
                                         CacheManager.playerEnd((HubParkourPlayer) player);
                                     }
 
-                                    parkour.removeHolograms();
+                                    if (HubParkour.isHolograms()) {
+                                        parkour.removeHolograms();
+                                    }
                                     for (PressurePlate pp : parkour.getAllPoints()) {
                                         CacheManager.removePlate(pp);
                                     }

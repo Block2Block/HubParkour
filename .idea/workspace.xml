@@ -30,10 +30,31 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.8.2: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14.&#10; - Fixed an issue where the MySQL tables would generate incorrectly and resultantly cause issues loading parkours.&#10; - Fixed an issue where MySQL would reject a database schema update due to incorrect query.&#10; - Fixed an issue where you couldn't delete parkours that were in a world that didn't exist anymore.&#10; - Fixed an exploit where players could put items in the cursor to prevent them being removed when players inventory is cleared.&#10; - Hopefully resolved issues with holograms not disappearing until a server restart if a parkour is deleted&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
-      <change beforePath="$PROJECT_DIR$/.github/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/README.md" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.8.3: Bugfixes&#10; - Fixed some issues with null references in parkours&#10; - Fixed an issue where, if DecentHolograms was not installed, you could not delete a parkour.&#10; - Made loading the plugin more robust by catching some exceptions that could be thrown when loading signs. These are not blocking errors so should be ignored during startup.">
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/hologram/HologramFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/hologram/IHologram.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/hologram/DHHologram.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/hologram/DHHologramFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/hologram/FHHologram.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/hologram/FHHologramFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hubparkour-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/BackendAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/BackendAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/HubParkourAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/HubParkourAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/ILeaderboardHologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/hologram/ILeaderboardHologram.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/IParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/IParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/gui/GUIItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/gui/GUIItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkourAPIImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkourAPIImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,13 +112,16 @@
     </expand>
     <select />
   </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="366" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
         <option value="Exception" />
-        <option value="Class" />
         <option value="HTML File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -221,6 +245,10 @@
     &quot;accountId&quot;: &quot;e48afc10-7980-4fd9-bd8e-e19e9d60f5d7&quot;
   }
 }</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -231,15 +259,19 @@
       </MavenImportingSettings>
     </option>
   </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="1TI7TQ5gQYXoPkbFk5MlUB2PiMY" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -247,35 +279,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Maven.hubparkour [clean,javadoc:javadoc].executor": "Run",
-    "Maven.hubparkour [clean,package,deploy,-pl...].executor": "Run",
-    "Maven.hubparkour [clean,package,deploy].executor": "Run",
-    "Maven.hubparkour [clean,package].executor": "Run",
-    "Maven.hubparkour [javadoc:javadoc].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "custom__models",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "E:/Programming Projects/Java/HubParkour",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "AtomSelectConfig",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Maven.hubparkour [clean,javadoc:javadoc].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package,-U].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package,deploy,-pl...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package,deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [javadoc:javadoc].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Programming Projects/Java/HubParkour&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;AtomSelectConfig&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="Push.Settings">
     <force-push-targets>
       <force-push-target remote-path="origin" branch="community" />
       <force-push-target remote-path="origin" branch="develop/2.8" />
+      <force-push-target remote-path="origin" branch="custom_models" />
     </force-push-targets>
+  </component>
+  <component name="RecapSpentCounter">
+    <option name="endsOfQuotaMs" value="1772280119430" />
+    <option name="spentUsd" value="0.0155683495" />
+  </component>
+  <component name="RecapUselessUpdatesCounter">
+    <option name="suspendCountdown" value="6" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -303,6 +352,7 @@
       <command value="mvn javadoc:javadoc" />
       <command value="mvn clean javadoc:javadoc" />
       <command value="mvn clean package" />
+      <command value="mvn clean package -U" />
     </option>
   </component>
   <component name="RunManager" selected="Maven.hubparkour [clean,package]">
@@ -368,8 +418,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.26053.27" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.26053.27" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
       </set>
     </attachedChunks>
   </component>
@@ -787,6 +837,18 @@
       <workItem from="1741679060289" duration="399000" />
       <workItem from="1741865843161" duration="3000" />
       <workItem from="1743172768559" duration="2548000" />
+      <workItem from="1743257680745" duration="24000" />
+      <workItem from="1747512431865" duration="60000" />
+      <workItem from="1748100607904" duration="9000" />
+      <workItem from="1748272969742" duration="19000" />
+      <workItem from="1748273129543" duration="67000" />
+      <workItem from="1748273230887" duration="10000" />
+      <workItem from="1753900832904" duration="702000" />
+      <workItem from="1753909665221" duration="706000" />
+      <workItem from="1757784061688" duration="427000" />
+      <workItem from="1759513025019" duration="2000" />
+      <workItem from="1770658090563" duration="5757000" />
+      <workItem from="1771620909717" duration="1347000" />
     </task>
     <task id="LOCAL-00026" summary="Updating readme.md">
       <created>1588429523231</created>

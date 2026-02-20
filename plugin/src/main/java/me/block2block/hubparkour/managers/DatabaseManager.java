@@ -652,47 +652,55 @@ public class DatabaseManager {
                 Location location = new Location(world, result.getInt(3), result.getInt(4), result.getInt(5));
                 if (!location.getBlock().getType().name().equals("SIGN") && !location.getBlock().getType().name().equals("WALL_SIGN") && HubParkour.isPre1_13() && !location.getBlock().getType().name().equals("SIGN_POST")) {
                     HubParkour.getInstance().getLogger().info("A registered sign has been removed from the world. Placing a sign back. It is recommended you remove then replace the sign.");
-                    location.getBlock().setType(((result.getBoolean(9)?Material.matchMaterial("WALL_SIGN"): ((HubParkour.isPre1_13())?Material.matchMaterial("SIGN_POST"):Material.matchMaterial("SIGN")))));
-                    org.bukkit.material.Sign sign = (org.bukkit.material.Sign) location.getBlock().getState().getData();
-                    String face = result.getString(8);
-                    if (face == null || face.equals("")) {
-                        face = "NORTH";
-                    }
-                    sign.setFacingDirection(BlockFace.valueOf(face));
+                    try {
+                        location.getBlock().setType(((result.getBoolean(9)?Material.matchMaterial("WALL_SIGN"): ((HubParkour.isPre1_13())?Material.matchMaterial("SIGN_POST"):Material.matchMaterial("SIGN")))));
+                        org.bukkit.material.Sign sign = (org.bukkit.material.Sign) location.getBlock().getState().getData();
+                        String face = result.getString(8);
+                        if (face == null || face.equals("")) {
+                            face = "NORTH";
+                        }
+                        sign.setFacingDirection(BlockFace.valueOf(face));
 
-                    if (HubParkour.isPre1_13()) {
-                        Method method = Block.class.getMethod("setData", byte.class, boolean.class);
-                        method.invoke(location.getBlock(), sign.getData(), true);
-                    } else {
-                        location.getBlock().getState().setData(sign);
+                        if (HubParkour.isPre1_13()) {
+                            Method method = Block.class.getMethod("setData", byte.class, boolean.class);
+                            method.invoke(location.getBlock(), sign.getData(), true);
+                        } else {
+                            location.getBlock().getState().setData(sign);
+                        }
+                        location.getBlock().getState().update(true);
+                    } catch (ClassCastException e) {
+                        HubParkour.getInstance().getLogger().log(Level.SEVERE, "A sign could not be placed back into the world. the sign will be ignored. Please place the sign back in the world manually", e);
+                        continue;
                     }
-                    location.getBlock().getState().update(true);
-
                 } else {
                     updateFacingWall(result.getInt(1), ((org.bukkit.material.Sign) location.getBlock().getState().getData()).getFacing(), location.getBlock().getType() == Material.matchMaterial("WALL_SIGN"));
                 }
-                switch (result.getInt(7)) {
-                    case 0: {
-                        TeleportClickableSign sign = new TeleportClickableSign(parkour, (Sign) location.getBlock().getState());
-                        sign.setId(result.getInt(1));
-                        CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
-                        sign.refresh();
-                        break;
+                try {
+                    switch (result.getInt(7)) {
+                        case 0: {
+                            TeleportClickableSign sign = new TeleportClickableSign(parkour, (Sign) location.getBlock().getState());
+                            sign.setId(result.getInt(1));
+                            CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
+                            sign.refresh();
+                            break;
+                        }
+                        case 1: {
+                            StatsClickableSign sign = new StatsClickableSign(parkour, (Sign) location.getBlock().getState());
+                            sign.setId(result.getInt(1));
+                            CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
+                            sign.refresh();
+                            break;
+                        }
+                        case 2: {
+                            StartClickableSign sign = new StartClickableSign(parkour, (Sign) location.getBlock().getState());
+                            sign.setId(result.getInt(1));
+                            CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
+                            sign.refresh();
+                            break;
+                        }
                     }
-                    case 1: {
-                        StatsClickableSign sign = new StatsClickableSign(parkour, (Sign) location.getBlock().getState());
-                        sign.setId(result.getInt(1));
-                        CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
-                        sign.refresh();
-                        break;
-                    }
-                    case 2: {
-                        StartClickableSign sign = new StartClickableSign(parkour, (Sign) location.getBlock().getState());
-                        sign.setId(result.getInt(1));
-                        CacheManager.getSigns().put(location.getBlock().getLocation(), sign);
-                        sign.refresh();
-                        break;
-                    }
+                } catch (ClassCastException e) {
+                    HubParkour.getInstance().getLogger().log(Level.SEVERE, "A sign could not be initiated and will be ignored at location: world=" + location.getBlock().getWorld().getName() + ", x=" + location.getBlock().getX() + ", y=" + location.getBlock().getY() + ", z=" + location.getBlock().getZ(), e);
                 }
             }
         } catch (SQLException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

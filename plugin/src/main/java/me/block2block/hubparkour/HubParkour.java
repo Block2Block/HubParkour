@@ -2,6 +2,7 @@ package me.block2block.hubparkour;
 
 import me.block2block.hubparkour.api.BackendAPI;
 import me.block2block.hubparkour.api.db.DatabaseSchemaUpdate;
+import me.block2block.hubparkour.api.hologram.HologramFactory;
 import me.block2block.hubparkour.api.plates.PressurePlate;
 import me.block2block.hubparkour.commands.CommandParkour;
 import me.block2block.hubparkour.commands.ParkourTabComplete;
@@ -9,6 +10,8 @@ import me.block2block.hubparkour.dbschema.*;
 import me.block2block.hubparkour.entities.HubParkourPlayer;
 import me.block2block.hubparkour.entities.LeaderboardHologram;
 import me.block2block.hubparkour.entities.Parkour;
+import me.block2block.hubparkour.entities.hologram.DHHologramFactory;
+import me.block2block.hubparkour.entities.hologram.FHHologramFactory;
 import me.block2block.hubparkour.listeners.*;
 import me.block2block.hubparkour.managers.CacheManager;
 import me.block2block.hubparkour.managers.DatabaseManager;
@@ -41,7 +44,6 @@ public class HubParkour extends JavaPlugin {
 
     private static HubParkour instance;
 
-    private static boolean holograms;
     private static boolean placeholders = false;
     private static DatabaseManager dbManager;
 
@@ -49,6 +51,8 @@ public class HubParkour extends JavaPlugin {
     private static boolean post1_8 = true;
     private static boolean post1_9 = false;
     private static boolean post1_14 = false;
+
+    private static HologramFactory hologramFactory;
 
     private static UUID serverUuid;
 
@@ -184,10 +188,12 @@ public class HubParkour extends JavaPlugin {
             return;
         }
 
-        holograms = Bukkit.getPluginManager().isPluginEnabled("DecentHolograms");
-
-        if (holograms) {
+        if (Bukkit.getPluginManager().isPluginEnabled("DecentHolograms")) {
+            hologramFactory = new DHHologramFactory();
             getLogger().info("DecentHolograms has been detected.");
+        } else if (Bukkit.getPluginManager().isPluginEnabled("FancyHolograms")) {
+            hologramFactory = new FHHologramFactory();
+            getLogger().info("FancyHolograms has been detected.");
         }
 
         dbManager = new DatabaseManager();
@@ -247,6 +253,7 @@ public class HubParkour extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ItemClickListener(), this);
         Bukkit.getPluginManager().registerEvents(new DropListener(), this);
         Bukkit.getPluginManager().registerEvents(new LeaveListener(), this);
+        Bukkit.getPluginManager().registerEvents(new JoinListener(), this);
         Bukkit.getPluginManager().registerEvents(new MountListener(), this);
         Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
         Bukkit.getPluginManager().registerEvents(new SignListener(), this);
@@ -347,7 +354,9 @@ public class HubParkour extends JavaPlugin {
         return ChatColor.translateAlternateColorCodes('&',((prefix)?ConfigUtil.getString("Messages.Prefix", "&2Parkour>> &r"):"&r") + message);
     }
 
-    public static boolean isHolograms(){return holograms;}
+    public static boolean isHolograms() { return hologramFactory != null; }
+
+    public static HologramFactory getHologramFactory() { return hologramFactory; }
 
     private boolean loadTypes() {
 

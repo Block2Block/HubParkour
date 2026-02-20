@@ -1,6 +1,8 @@
 package me.block2block.hubparkour.api;
 
 import me.block2block.hubparkour.api.gui.GUI;
+import me.block2block.hubparkour.api.hologram.IHologram;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -115,5 +117,17 @@ public abstract class BackendAPI {
      * @return true if the server version is 1.14 or above
      */
     public abstract boolean isPost1_14();
+
+    /**
+     * Creates a new hologram associated with a specific parkour, having a unique name
+     * and a specified location in the world.
+     *
+     * @param parkour the parkour instance to associate with the hologram. Must not be null.
+     * @param name the unique internal name for the hologram. Must not be null.
+     * @param location the location in the world where the hologram will be created. Must not be null.
+     * @return the created hologram instance.
+     * @throws NullPointerException if any of the parameters are null.
+     */
+    public abstract IHologram createHologram(IParkour parkour, String name, Location location);
 
 }

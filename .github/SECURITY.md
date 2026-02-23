@@ -6,10 +6,10 @@ Here is a list of all supported versions of HubParkour:
 
 | Version       | Supported                           |
 |---------------|-------------------------------------|
-| 2.7.8         | :white_check_mark:                  |
-| 2.7.7         | :white_check_mark:                  |
-| 2.7.0 - 2.7.6 | :heavy_exclamation_mark: Deprecated |
-| < 2.7.0       | :x:                                 |
+| 2.9.1         | :white_check_mark:                  |
+| 2.9.0         | :white_check_mark:                  |
+| 2.8.2         | :heavy_exclamation_mark: Deprecated |
+| < 2.8.2       | :x:                                 |
 
 ## Reporting a Vulnerability
 

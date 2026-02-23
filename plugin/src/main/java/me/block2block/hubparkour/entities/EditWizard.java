@@ -495,6 +495,7 @@ public class EditWizard {
                     returnToCheckpointMenu();
                     return true;
                 }
+                break;
             }
             case CHECKPOINTS_ADD_REWARDS: {
                 if (message.equalsIgnoreCase("cancel")) {
@@ -502,7 +503,14 @@ public class EditWizard {
                     return true;
                 }
                 if (message.equalsIgnoreCase("done")) {
-                    parkour.addCheckpoint(checkpoint, after + 1);
+                    Checkpoint finalCheckpoint = checkpoint;
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            //Use final checkpoint as checkpoint gets set to null in the returnToCheckpointMenu call.
+                            parkour.addCheckpoint(finalCheckpoint, after + 1);
+                        }
+                    }.runTask(HubParkour.getInstance());
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Checkpoints.Add.Success", "The checkpoint has been successfully added!", true, Collections.emptyMap());
                     returnToCheckpointMenu();
                     return true;
@@ -521,10 +529,11 @@ public class EditWizard {
             case BORDER_POINT_B:
             case BORDER_POINT_A: {
                 if (message.equalsIgnoreCase("done")) {
-                    parkour.setBorders(Collections.emptyList());
+                    parkour.setBorders(new ArrayList<>());
                     ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Border-Updated", "Border successfully updated!", true, Collections.emptyMap());
                     returnToMainMenu();
                 }
+                break;
             }
             case REWARD_COOLDOWN: {
                 String cooldowns = message;
@@ -595,6 +604,7 @@ public class EditWizard {
                 if (borderCheck(location)) return;
                 checkpoint = new Checkpoint(location, after + 1, null);
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Checkpoints.Add.Type-Rewards", "If you wish to add rewards for this particular checkpoint, type them in chat or type it with /parkour input [command]. You can specify more than one by submitting commands several times. Once you're finished, type 'done'.", true, Collections.emptyMap());
+                currentModification = WizardStep.CHECKPOINTS_ADD_REWARDS;
                 break;
             }
             case BORDER_POINT_A: {
@@ -658,7 +668,6 @@ public class EditWizard {
             case EXIT_POINT: {
                 ExitPoint exitPoint = new ExitPoint(location);
 
-                if (borderCheck(location)) return;
                 parkour.setExitPoint(exitPoint, parkour.getExitPoint() != null);
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Edit.Exit-Point-Set", "Your new exit point has been set!", true, Collections.emptyMap());
                 returnToMainMenu();

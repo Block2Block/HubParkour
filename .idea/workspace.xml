@@ -30,30 +30,14 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.8.3: Bugfixes&#10; - Fixed some issues with null references in parkours&#10; - Fixed an issue where, if DecentHolograms was not installed, you could not delete a parkour.&#10; - Made loading the plugin more robust by catching some exceptions that could be thrown when loading signs. These are not blocking errors so should be ignored during startup.">
-      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/hologram/HologramFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/hologram/IHologram.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/hologram/DHHologram.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/hologram/DHHologramFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/hologram/FHHologram.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/hologram/FHHologramFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+    <list default="true" id="7b53f693-728c-414c-8031-dbb84f846e1e" name="Default Changelist" comment="v2.9: FancyHolograms support and bugfixes&#10; - Fixed some issues with null references in parkours&#10; - Fixed an issue where, if DecentHolograms was not installed, you could not delete a parkour.&#10; - Made loading the plugin more robust by catching some exceptions that could be thrown when loading signs. These are not blocking errors so should be ignored during startup.&#10; - Added support for FancyHolograms&#10; - Updated how holograms are handled and exposed holograms to the API. Holograms should be significantly more robust.&#10; - You can now block inventory clicks while in a parkour, added by Vihara&#10; - Fixed some issues with split times.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/BackendAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/BackendAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/HubParkourAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/HubParkourAPI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/ILeaderboardHologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/hologram/ILeaderboardHologram.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/IParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/hubparkour-api/src/main/java/me/block2block/hubparkour/api/IParkour.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkourAPIImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/HubParkourAPIImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/commands/CommandParkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/HubParkourPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/LeaderboardHologram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/EditWizard.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/EditWizard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/Parkour.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/CacheManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/managers/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/SetupWizard.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/entities/SetupWizard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/java/me/block2block/hubparkour/listeners/PressurePlateListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -113,7 +97,7 @@
     <select />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="366" />
+    <option name="cachedIndexableFilesCount" value="443" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -287,11 +271,14 @@
     &quot;Maven.hubparkour [clean,package,deploy,-pl...].executor&quot;: &quot;Run&quot;,
     &quot;Maven.hubparkour [clean,package,deploy].executor&quot;: &quot;Run&quot;,
     &quot;Maven.hubparkour [clean,package].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.hubparkour [javadoc:javadoc,-pl...].executor&quot;: &quot;Run&quot;,
     &quot;Maven.hubparkour [javadoc:javadoc].executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
     &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
@@ -321,10 +308,10 @@
   </component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1772280119430" />
-    <option name="spentUsd" value="0.0155683495" />
+    <option name="spentUsd" value="0.027894098" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="6" />
+    <option name="suspendCountdown" value="4" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -347,12 +334,13 @@
     <option name="myCommands">
       <command value="mvn deploy" />
       <command value="mvn clean package -Xlint:deprecation" />
-      <command value="mvn clean package deploy -pl hubparkour-api -am" />
       <command value="mvn clean package deploy" />
       <command value="mvn javadoc:javadoc" />
-      <command value="mvn clean javadoc:javadoc" />
-      <command value="mvn clean package" />
       <command value="mvn clean package -U" />
+      <command value="mvn clean package deploy -pl hubparkour-api -am" />
+      <command value="mvn clean javadoc:javadoc" />
+      <command value="mvn javadoc:javadoc -pl hubparkour-api -am" />
+      <command value="mvn clean package" />
     </option>
   </component>
   <component name="RunManager" selected="Maven.hubparkour [clean,package]">
@@ -418,8 +406,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
       </set>
     </attachedChunks>
   </component>
@@ -848,7 +836,8 @@
       <workItem from="1757784061688" duration="427000" />
       <workItem from="1759513025019" duration="2000" />
       <workItem from="1770658090563" duration="5757000" />
-      <workItem from="1771620909717" duration="1347000" />
+      <workItem from="1771620909717" duration="3253000" />
+      <workItem from="1771879518206" duration="3156000" />
     </task>
     <task id="LOCAL-00026" summary="Updating readme.md">
       <created>1588429523231</created>
@@ -1193,7 +1182,7 @@
       <option name="project" value="LOCAL" />
       <updated>1681495150549</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1238,9 +1227,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
-    <MESSAGE value="v2.6.7: Metrics bugfix&#10; - Fixed an issue where metrics would prevent the plugin from loading.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
-    <MESSAGE value="Start work on 2.7&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
-    <MESSAGE value="Implement all features, awaiting testing" />
     <MESSAGE value="A ton of bugfixes" />
     <MESSAGE value="v2.7.1: Permission bugfix&#10; - Fixed a bug where the import permission did not exist." />
     <MESSAGE value="v2.7.2: Bugfixes&#10; - Fixed a bug where when updating the database schema from older versions, the internal YML file would not update correctly resulting in errors when attempting to update again. You will see 1 more error when loading the plugin while the plugin updates the internal values, once it has been updated it should no longer error out.&#10; - Fixed a bug where signs would not always be loaded correctly and prevent plugin loading.&#10; - If a sign has been removed from the world, the plugin will automatically place it back. It is recommended to delete the replaced sign and place a new one as it will default to a wall sign facing north.&#10; - Fixed a wrong message where it said Holographic Displays was still required.&#10; - Fixed an issue where sometimes holograms would not load due to a missing soft dependency." />
@@ -1263,7 +1249,10 @@
     <MESSAGE value="v2.8.2-SNAPSHOT: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14." />
     <MESSAGE value="v2.8.2-SNAPSHOT: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14.&#10; - Fixed an issue where the MySQL tables would generate incorrectly and resultantly cause issues loading parkours.&#10; - Fixed an issue where MySQL would reject a database schema update due to incorrect query.&#10; - Fixed an issue where players could put items in the cursor to prevent them being removed when players inventory is cleared.&#10; - Hopefully resolved issues with holograms not disappearing until a server restart if a parkour is deleted&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
     <MESSAGE value="v2.8.2: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14.&#10; - Fixed an issue where the MySQL tables would generate incorrectly and resultantly cause issues loading parkours.&#10; - Fixed an issue where MySQL would reject a database schema update due to incorrect query.&#10; - Fixed an issue where you couldn't delete parkours that were in a world that didn't exist anymore.&#10; - Fixed an exploit where players could put items in the cursor to prevent them being removed when players inventory is cleared.&#10; - Hopefully resolved issues with holograms not disappearing until a server restart if a parkour is deleted&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="v2.8.2: Add support for custom model data&#10; - Added support for custom model data in parkour items (1.14+)&#10; - Internal Spigot API version has been updated to 1.14.&#10; - Fixed an issue where the MySQL tables would generate incorrectly and resultantly cause issues loading parkours.&#10; - Fixed an issue where MySQL would reject a database schema update due to incorrect query.&#10; - Fixed an issue where you couldn't delete parkours that were in a world that didn't exist anymore.&#10; - Fixed an exploit where players could put items in the cursor to prevent them being removed when players inventory is cleared.&#10; - Hopefully resolved issues with holograms not disappearing until a server restart if a parkour is deleted&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <MESSAGE value="v2.9: Bugfixes&#10; - Fixed some issues with null references in parkours&#10; - Fixed an issue where, if DecentHolograms was not installed, you could not delete a parkour.&#10; - Made loading the plugin more robust by catching some exceptions that could be thrown when loading signs. These are not blocking errors so should be ignored during startup.&#10; - Added support for FancyHolograms &#10; - Updated how holograms are handled and exposed holograms to the API. Holograms should be significantly more robust.&#10; - You can now block inventory clicks while in a parkour, added by Vihara&#10; - Fixed some issues with split times." />
+    <MESSAGE value="v2.9: Bugfixes&#10; - Fixed some issues with null references in parkours&#10; - Fixed an issue where, if DecentHolograms was not installed, you could not delete a parkour.&#10; - Made loading the plugin more robust by catching some exceptions that could be thrown when loading signs. These are not blocking errors so should be ignored during startup.&#10; - Added support for FancyHolograms&#10; - Updated how holograms are handled and exposed holograms to the API. Holograms should be significantly more robust.&#10; - You can now block inventory clicks while in a parkour, added by Vihara&#10; - Fixed some issues with split times.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <MESSAGE value="v2.9: FancyHolograms support and bugfixes&#10; - Fixed some issues with null references in parkours&#10; - Fixed an issue where, if DecentHolograms was not installed, you could not delete a parkour.&#10; - Made loading the plugin more robust by catching some exceptions that could be thrown when loading signs. These are not blocking errors so should be ignored during startup.&#10; - Added support for FancyHolograms&#10; - Updated how holograms are handled and exposed holograms to the API. Holograms should be significantly more robust.&#10; - You can now block inventory clicks while in a parkour, added by Vihara&#10; - Fixed some issues with split times.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="v2.9: FancyHolograms support and bugfixes&#10; - Fixed some issues with null references in parkours&#10; - Fixed an issue where, if DecentHolograms was not installed, you could not delete a parkour.&#10; - Made loading the plugin more robust by catching some exceptions that could be thrown when loading signs. These are not blocking errors so should be ignored during startup.&#10; - Added support for FancyHolograms&#10; - Updated how holograms are handled and exposed holograms to the API. Holograms should be significantly more robust.&#10; - You can now block inventory clicks while in a parkour, added by Vihara&#10; - Fixed some issues with split times.&#10;&#10;Signed-off-by: Block2Block &lt;accounts@block2block.me&gt;" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

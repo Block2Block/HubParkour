@@ -266,7 +266,6 @@ public class Parkour implements IParkour {
         }
 
         if (getExitPoint() != null) {
-            HubParkour.getInstance().getLogger().info("Teleporting to exit point");
             Location location = getExitPoint().getLocation().clone();
             location.setY(location.getY() + 0.5);
             location.setZ(location.getZ() + 0.5);
@@ -406,7 +405,6 @@ public class Parkour implements IParkour {
 
     public void addCheckpoint(Checkpoint point, int checkNo) {
         point.setParkour(this);
-        CacheManager.addPoint(point);
         List<Checkpoint> checkpoints = new ArrayList<>(this.checkpoints);
         this.checkpoints.clear();
         for (Checkpoint checkpoint : checkpoints) {
@@ -435,6 +433,9 @@ public class Parkour implements IParkour {
             public void run() {
                 HubParkour.getInstance().getDbManager().addCheckpoint(id, point);
                 HubParkour.getInstance().getDbManager().resetSplitTimes(id);
+
+
+                CacheManager.addPoint(point);
             }
         }.runTaskAsynchronously(HubParkour.getInstance());
 

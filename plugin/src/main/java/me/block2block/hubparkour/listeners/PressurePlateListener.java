@@ -35,6 +35,55 @@ public class PressurePlateListener implements Listener {
     @SuppressWarnings("unused")
     @EventHandler
     public void onPressurePlate(PlayerMoveEvent e) {
+        if (CacheManager.isParkour(e.getPlayer())) {
+            Player p = e.getPlayer();
+            HubParkourPlayer player = CacheManager.getPlayer(p);
+            Parkour parkour = player.getParkour();
+            if (parkour.getBorders().size() == 2) {
+                Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
+
+                double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
+                if (borderA.getX() > borderB.getX()) {
+                    highX = borderA.getX();
+                    lowX = borderB.getX();
+                } else {
+                    highX = borderB.getX();
+                    lowX = borderA.getX();
+                }
+
+                if (borderA.getY() > borderB.getY()) {
+                    highY = borderA.getY();
+                    lowY = borderB.getY();
+                } else {
+                    highY = borderB.getY();
+                    lowY = borderA.getY();
+                }
+
+                if (borderA.getZ() > borderB.getZ()) {
+                    highZ = borderA.getZ();
+                    lowZ = borderB.getZ();
+                } else {
+                    highZ = borderB.getZ();
+                    lowZ = borderA.getZ();
+                }
+
+                if ((highX < p.getLocation().getX() || lowX > p.getLocation().getX()) || (highY < p.getLocation().getY() || lowY > p.getLocation().getY()) || (highZ < p.getLocation().getZ() || lowZ > p.getLocation().getZ())) {
+                    Location l = parkour.getRestartPoint().getLocation().clone();
+                    if (player.getLastReached() != 0) {
+                        l = parkour.getCheckpoint(player.getLastReached()).getLocation().clone();
+                    }
+                    l.setX(l.getX() + 0.5);
+                    l.setY(l.getY() + 0.5);
+                    l.setZ(l.getZ() + 0.5);
+                    e.getPlayer().setFallDistance(0);
+                    e.getPlayer().setVelocity(new Vector(0, 0, 0));
+                    e.getPlayer().teleport(l);
+                    ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
+                    return;
+                }
+            }
+        }
+
         if (e.getFrom().getBlock().getType().equals(e.getTo().getBlock().getType())) {
             if (CacheManager.isParkour(e.getPlayer())) {
                 if (e.getPlayer().isOnGround()) {
@@ -162,52 +211,6 @@ public class PressurePlateListener implements Listener {
                         e.getPlayer().teleport(l);
                         ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                         return;
-                    }
-                }
-            }
-            {
-                Player p = e.getPlayer();
-                HubParkourPlayer player = CacheManager.getPlayer(p);
-                Parkour parkour = player.getParkour();
-                if (parkour.getBorders().size() == 2) {
-                    Location borderA = parkour.getBorders().get(0).getLocation(), borderB = parkour.getBorders().get(1).getLocation();
-
-                    double highX = 0, lowX = 0, highY = 0, lowY = 0, highZ = 0, lowZ = 0;
-                    if (borderA.getX() > borderB.getX()) {
-                        highX = borderA.getX();
-                        lowX = borderB.getX();
-                    } else {
-                        highX = borderB.getX();
-                        lowX = borderA.getX();
-                    }
-
-                    if (borderA.getY() > borderB.getY()) {
-                        highY = borderA.getY();
-                        lowY = borderB.getY();
-                    } else {
-                        highY = borderB.getY();
-                        lowY = borderA.getY();
-                    }
-
-                    if (borderA.getZ() > borderB.getZ()) {
-                        highZ = borderA.getZ();
-                        lowZ = borderB.getZ();
-                    } else {
-                        highZ = borderB.getZ();
-                        lowZ = borderA.getZ();
-                    }
-                    if ((highX < p.getLocation().getX() || lowX > p.getLocation().getX()) || (highY < p.getLocation().getY() || lowY > p.getLocation().getY()) || (highZ < p.getLocation().getZ() || lowZ > p.getLocation().getZ())) {
-                        Location l = parkour.getRestartPoint().getLocation().clone();
-                        if (player.getLastReached() != 0) {
-                            l = parkour.getCheckpoint(player.getLastReached()).getLocation().clone();
-                        }
-                        l.setX(l.getX() + 0.5);
-                        l.setY(l.getY() + 0.5);
-                        l.setZ(l.getZ() + 0.5);
-                        e.getPlayer().setFallDistance(0);
-                        e.getPlayer().setVelocity(new Vector(0, 0, 0));
-                        e.getPlayer().teleport(l);
-                        ConfigUtil.sendMessageOrDefault(e.getPlayer(), "Messages.Parkour.Teleport", "You have been teleported to your last checkpoint.", true, Collections.emptyMap());
                     }
                 }
             }

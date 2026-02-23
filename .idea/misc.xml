@@ -14,7 +14,7 @@
     <option name="OPTION_DOCUMENT_TAG_USE" value="true" />
     <option name="OPTION_DOCUMENT_TAG_AUTHOR" value="true" />
     <option name="OPTION_DOCUMENT_TAG_VERSION" value="true" />
-    <option name="OTHER_OPTIONS" value="-link https://docs.oracle.com/javase/8/docs/api/ -link https://hub.spigotmc.org/javadocs/spigot" />
+    <option name="OTHER_OPTIONS" value="-link https://hub.spigotmc.org/javadocs/spigot" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">

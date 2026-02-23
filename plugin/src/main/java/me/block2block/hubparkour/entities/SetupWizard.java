@@ -305,6 +305,7 @@ public class SetupWizard {
                         return;
                     }
                 }
+                borderPoints.add(new BorderPoint(location));
                 currentStage = SetupStage.NAME;
                 ConfigUtil.sendMessageOrDefault(player, "Messages.Commands.Admin.Setup.Please-Set-Name", "Now, you need to set a name for your parkour! Please enter a name for your parkour into chat or type it with /parkour input [name]. It must be one word and not a duplicate. Names are compatible with formatting codes.", true, Collections.emptyMap());
                 break;
